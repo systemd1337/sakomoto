@@ -1,0 +1,3 @@
+Contains a few nameless banners from 7chan's banner board and other places...
+
+index.php forwards a random image from this directory.

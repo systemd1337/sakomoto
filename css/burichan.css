@@ -1,0 +1,30 @@
+body{background-color:#eef2ff;}
+.postNum a{color:black;}
+a,a:visited{color:#34345c;}
+a:hover{color:#d00;}
+.thread_nav,#repod_thread_stats_container,.navtopright{float:right;}
+.postblock,.postlists th{
+        background-color:#98e;
+        width:4.5em;
+        white-space:nowrap;
+}
+.subject{color:#0f0c5d;}
+.nameBlock{color:#117743;}
+.postlists tr:nth-of-type(odd),.reply{background-color:#d6daf0;}
+.postlists tr:target,table:target .post.reply{background-color:#d6bad0;}
+.post.reply{padding-right:8px;}
+#catalog td center{
+        overflow:hidden;
+        max-height:250px;
+        max-width:100px;
+        word-wrap:break-word;
+}
+#errormsg{color:red}
+.omittedposts{color:#707070}
+.replymode{
+        background-color:#0010E0;
+        color:#fff;
+        display:block;
+        padding:2px;
+}
+.unkfunc{color:#789922;}

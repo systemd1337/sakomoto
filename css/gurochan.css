@@ -1,0 +1,33 @@
+body{background:#EDDAD2;}
+input,textarea,button{
+        background-color:#E6CBC0;
+        border-color:#CA927B;
+}
+input,textarea,.postblock,.reply,button,hr{
+        border-style:solid;
+        border-width:1px;
+}
+a,a:visited{color:#34345C;}
+a:hover{color:#D00;}
+.logo{color:#AF0A0F;}
+.postlists tr:nth-of-type(odd),.reply{
+        background-color:#E6CBC0;
+        border-color:#D9AF9E;
+        padding:2px;
+}
+.postlists tr:target,table:target .reply,.postblock,.postlists th{
+        border-color:#CA927B;
+        background-color:#D9AF9E;
+}
+.unkfunc{color:#789922;}
+.subject{color:#0F0C5D;}
+.postername{color:#117743;}
+.postertrip{color:#228854;}
+.omittedposts{color:#070707;}
+.postNum a{text-decoration:none;}
+.name{color:#117743;}
+.navtopright,#repod_thread_stats_container{float:right;}
+hr{
+        border-color: #888;
+        height: 2px;
+}
