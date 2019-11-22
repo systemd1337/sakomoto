@@ -287,9 +287,14 @@ function regist($ip,$name,$capcode,$email,$sub,$com,$url,$pwd,$resto,$spoiler) {
         
         $country=$country_name='';
         if(COUNTRY_FLAGS){
-                $geo=json_decode(file_get_contents("http://www.geoplugin.net/json.gp?ip=".$_SERVER["REMOTE_ADDR"]));
+                /*$geo=json_decode(file_get_contents("http://www.geoplugin.net/json.gp?ip=".$_SERVER["REMOTE_ADDR"]));
                 $country=$geo->geoplugin_countryCode;
-                $country_name=$geo->geoplugin_countryName;
+                $country_name=$geo->geoplugin_countryName;*/
+                
+                require_once("include/lib/geoip/geoip.inc.php");
+                $gi=geoip\geoip_open('include/lib/geoip/GeoIPv6.dat', GEOIP_STANDARD);
+                $country=geoip\geoip_country_code_by_addr_v6($gi, ipv4to6($_SERVER['REMOTE_ADDR']));
+		$country_name=geoip\geoip_country_name_by_addr_v6($gi, ipv4to6($_SERVER['REMOTE_ADDR']));
                 if(!$country)$country="XX";
         }
         

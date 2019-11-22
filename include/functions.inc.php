@@ -14,6 +14,18 @@ function humantime($time) {
 	return gmdate("y/m/d",$time+9*60*60)."(".(string)$yd.")".gmdate("H:i",$time+9*60*60);
 }
 
+function ipv4to6($ip) { //Credit to tinyboard/vichan
+        if (strpos($ip, ':') !== false) {
+                if (strpos($ip, '.') > 0)
+                        $ip = substr($ip, strrpos($ip, ':')+1);
+                else return $ip;  //native ipv6
+        }
+        $iparr = array_pad(explode('.', $ip), 4, 0);
+        $part7 = base_convert(($iparr[0] * 256) + $iparr[1], 10, 16);
+        $part8 = base_convert(($iparr[2] * 256) + $iparr[3], 10, 16);
+        return '::ffff:'.$part7.':'.$part8;
+}
+
 /* 
 	joaoptm78@gmail.com
 	http://www.php.net/manual/en/function.filesize.php#100097
