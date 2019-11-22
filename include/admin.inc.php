@@ -58,7 +58,7 @@ function valid($pass) {
         <center>
                 <form action="{$self}" method="POST">
                         <table><tbody><tr><td><fieldset><legend>{$slogin}</legend><table><tbody><tr>
-                                                <td class="postblock"><label for="password">$spassword</label></td>
+                                                <td class="postblock"><label for="password"><b>{$spassword}</b></label></td>
                                                 <td>
                                                         <input type="hidden" name="mode" value="admin">
                                                         <input type="password" id="password" name="pass" size="8"><input type="submit" value="{$ssubmit}">
