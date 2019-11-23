@@ -19,11 +19,12 @@ if (!file_exists('config.inc.php')) {
 require_once("config.inc.php");
 include(CORE_DIR."strings/".LANGUAGE.".inc.php");// String resource file
 
+//This software is free, all I ask in return is that you leave proper credit
 const FOOT="- GazouBBS + ".
 "<a href=\"http://www.2chan.net/\" target=\"_blank\">futaba</a> + ".
 "<a href=\"http://www.1chan.net/futallaby/\" target=\"_blank\">futallaby</a> + ".
 "<a href=\"https://github.com/knarka/fikaba\" target=\"_blank\">fikaba</a> + ".
-"sakomoto -";//This software is free, all I ask in return is that you leave proper credit
+"<a href=\"https://github.com/rileyjamesbell/sakomoto\" target=\"_blank\">sakomoto</a> -";
 
 if (LOCKDOWN||file_exists(".lockdown")) {
 	// if not trying to do something other than managing, die
