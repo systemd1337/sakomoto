@@ -1,4 +1,4 @@
-<?
+<?php
 //Small script to return a random image from current folder
 
 error_reporting(E_ALL);

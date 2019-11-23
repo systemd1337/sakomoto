@@ -1,4 +1,4 @@
-<?
+<?php
 if(basename(__FILE__) == basename($_SERVER["SCRIPT_FILENAME"]))
         die("This file is not to be called directly.");
 
