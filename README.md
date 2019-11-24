@@ -24,7 +24,9 @@ Sakomoto is an imageboard script based on fikaba
 5. Click "[Account Management]" and setup accounts
 You're done!
 ## Seting up multiple boards
-BANTABLE, MANATABLE and BLOTTERTABLE should be configured the same accross all boards. Just doing that would work...
+BANTABLE, MANATABLE and BLOTTERTABLE should be configured the same accross all boards.
+
+Just doing that would work...
 
 But I recomend you change CORE_DIR, JS_DIR, CSS_DIR, FLAGS_DIR, EMOTES_DIR, PHP_PLAYER, PHP_BLOTTER, PHP_BANNED and CAPTCHA_IMG one level up and move those directories/files in accordance.
 
