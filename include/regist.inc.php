@@ -38,7 +38,7 @@ function regist($ip,$name,$capcode,$email,$sub,$com,$url,$pwd,$resto,$spoiler) {
         $file["w"]=$file["h"]=$file["tn_w"]=$file["tn_h"]=[];
         $mes='';
         if($files){
-                require_once("include/thumbnail.inc.php");
+                require_once(CORE_DIR."thumbnail.inc.php");
                 while($files--){
 //                      $filename=$mes=$ext=$md5='';
 //                      $w=$h=$tn_w=$tn_h=$fsize=0;
