@@ -52,10 +52,11 @@ EOF;
         return $blotter;
 }
 
-function buildPost($post){
-	global $res,$cache;
+function buildPost($post,$res=0){
+	global $cache;
+        if(!$res)global $res;
         
-        if(isset($cache["posts"][$post["no"]]))
+        if(isset($cache["posts"][$post["no"]])&&!($res||$post["resto"]))
                 return $cache["posts"][$post["no"]];
         
 	$htm="<".($post["resto"]?"table":"div class=\"post op\"")." id=\"p".$post["no"]."\">";
@@ -162,6 +163,7 @@ function buildPost($post){
         if($post["trip"]||$post["name"])$postinfo.="<span class=\"nameBlock\">";
 	if($post["name"])$postinfo.="<b class=\"name\">".$post["name"]."</b>";
         if($post["trip"])$postinfo.="<span class=\"postertrip\">".$post["trip"]."</span>";
+        if($post["capcode"])$postinfo.=" ".$post["capcode"];
         if($post["trip"]||$post["name"])$postinfo.="</span> ";
         if(DISP_ID){
                 
@@ -183,7 +185,7 @@ function buildPost($post){
                 " onclick=\"insert('".$post["no"]."');\" class=\"qu\" title=\"".lang("Quote")."\">".$post["no"]."</a></span>";
         if($post["sticky"])$postinfo.=" <img src=\"sticky.gif\" alt=\"".lang("Sticky")."\" title=\"".lang("Sticky")."\" class=\"retina\"/>";
         if($post["closed"])$postinfo.=" <img src=\"closed.gif\" alt=\"".lang("Closed")."\" title=\"".lang("Closed")."\" class=\"retina\"/>";
-	if(!$post["resto"]&&!$res)$postinfo.="&nbsp;[<a href=\"".RES_DIR.$post["no"].PHP_EXT."\">".lang("Reply")."</a>]";
+	if(!($post["resto"]||$res))$postinfo.="&nbsp;[<a href=\"".RES_DIR.$post["no"].PHP_EXT."\">".lang("Reply")."</a>]";
         $postinfo.="&nbsp;<small class=\"backlink\">";
         $results=mysqli_call("SELECT no,resto FROM ".POSTTABLE." WHERE com LIKE '%&gt;&gt;".$post["no"]."%'");
         while($link=mysqli_fetch_assoc($results)){
@@ -245,7 +247,7 @@ function updatelog($resno=0){
                 $t=PAGE_DEF;
                 while(($t--)&&($thread=mysqli_fetch_assoc($threads))){
                         $dat.="<div class=\"thread\" id=\"t".$thread["no"]."\">";
-                        $dat.=buildPost($thread);
+                        $dat.=buildPost($thread,$resno);
                         $replies=mysqli_call("SELECT * FROM ".POSTTABLE." WHERE `resto`=".$thread["no"]." ORDER BY `no` ASC");
                         $omit=0;
                         $num_replies=mysqli_num_rows($replies);
@@ -254,7 +256,7 @@ function updatelog($resno=0){
                                 $dat.="<small class=\"omittedposts\">".$omit.lang(" post(s) omitted. ")."<a href=\"".RES_DIR.$thread["no"].PHP_EXT."\">".lang("Click here")."</a>".lang(" to view.")."</small>";
                         }
                         while($reply=mysqli_fetch_assoc($replies)){
-                                if(!$omit)$dat.=buildPost($reply);
+                                if(!$omit)$dat.=buildPost($reply,$resno);
                                 else $omit--;
                         }
                         $dat.="<br clear=\"all\"/></div><hr/>";
@@ -405,6 +407,7 @@ EOF;
         if(ICON){
                 $dat.="<link rel=\"apple-touch-icon\" href=\"".ICON."\"/>";
                 $dat.="<link rel=\"shortcut icon\" href=\"".ICON."\"/>";
+                $dat.="<link rel=\"icon\" href=\"".ICON."\"/>";
         }
         $dat.="<meta property=\"og:url\" content=\"".HERE."\"/>";
         if(HEAD_EXTRA)$dat.=HEAD_EXTRA;
@@ -744,7 +747,7 @@ EOF;
 }
 
 function rebuild($output_started=false,$echo=true){
-        global $q,$res;
+        global $q;
         $q=false;
         if($echo){
                 if(!$output_started)echo "<html><body>";
@@ -754,7 +757,6 @@ function rebuild($output_started=false,$echo=true){
         updatelog();
         if($echo)echo lang("Index pages created")."<br>";
         
-        $res=-1;
         if(!$threads=mysqli_call("SELECT * FROM ".POSTTABLE." WHERE `resto`=0".
                 " ORDER BY `sticky` DESC,`root` DESC"))error(lang("Critical SQL problem!"));
         while($thread=mysqli_fetch_assoc($threads)){
@@ -780,7 +782,7 @@ function rebuild($output_started=false,$echo=true){
         
         if(!$echo)return;
         if(error_get_last())
-                echo lang("An error occured&hellip;")."<br/></body><head>";
+                echo lang("An error has occured&hellip;")."<br/></body><head>";
         else if(!$output_started){
                 echo lang("Redirecting back to board.")."<br/>";
                 echo "</body><head><meta http-equiv=\"refresh\" content=\"0;URL=".PHP_SELF2."\"/>";
