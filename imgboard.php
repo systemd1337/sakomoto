@@ -314,7 +314,7 @@ EOF;
 	case "rebuild":
 	case "rebuildall":
 	default:
-		if($res)die(updatelog($res));
+		if($res)die(updatelog((int)$res));
 		rebuild();
                 break;
 }
