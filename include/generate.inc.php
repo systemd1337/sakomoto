@@ -80,7 +80,9 @@ function buildPost($post,$res=0){
                 if(file_exists($src)){
                         $f=explode('/',$src);
                         $file.="<".($post["num_files"]>1?"td width=\"150\" valign=\"top\" align=\"center\"":"div")." class=\"file\">".
-                        "<div class=\"fileText\">".lang("File").": <a href=\"".$src."\"";
+                        "<div class=\"fileText\">".lang("File").": ";
+                        $file.="<a class=\"fileDownload\" href=\"".$src."\" download=\"".$filename.$ext."\">&#x1F4BE;</a> ";
+                        $file.="<a href=\"".$src."\"";
                         if(!stristr($filename,"<font")){
                                 $trunclimit=($post["num_files"]>1?15:40);
                                 $truncated=(strlen($filename)>$trunclimit?
@@ -90,7 +92,6 @@ function buildPost($post,$res=0){
                                 $file.="onmouseout=\"this.innerText='".$truncated."';\"";
                         }else{$truncated=$filename;}
                         $file.=">".$truncated."</a> ";
-                        $file.="<a class=\"fileDownload\" href=\"".$src."\" download=\"".$filename.$ext."\">&#x1F4BE;</a> ";
                         $file.="<span class=\"filesize\">(".$hfsize;
                         if($w*$h)$file.=", ".$w."x".$h;
                         $file.=")</span></div>";
@@ -642,7 +643,7 @@ function error($mes) { /* Basically a fancy die() */
 }
 
 function auto_link($proto) {
-	$proto = preg_replace("#(https?|ftp|news|irc|gopher|telnet|ssh)(://[[:alnum:]\+\$\;\?\.%,!\#~*/:@&=_-]+)#","<a href=\"\\1\\2\" target=\"_blank\">\\1\\2</a>",$proto);
+	$proto = preg_replace("#(https?|ftp|news|irc|gopher|telnet|ssh)(://[[:alnum:]\+\$\;\?\.%,!\#~*/:@&=_-]+)#","<a href=\"\\1\\2\" rel=”noreferrer” target=\"_blank\">\\1\\2</a>",$proto);
 	return $proto;
 }
 
