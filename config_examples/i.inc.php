@@ -84,6 +84,9 @@ const EMOTES = [
 "longcat"=>"longcat.gif",
 "tacgnol"=>"tacgnol.gif",
 ];
+const TRIPCAP = [ //Custom tripcode capcodes
+//Trip => cap
+];
 //Default posting values
 const DEFAULT_SUBJECT = "";
 const DEFAULT_NAME = "Anonymous";

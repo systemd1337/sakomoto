@@ -85,6 +85,9 @@ const EMOTES = [
 //emote=>file
 "sage"=>"sage.gif",
 ];
+const TRIPCAP = [ //Custom tripcode capcodes
+//Trip => cap
+];
 //Default posting values
 const DEFAULT_SUBJECT = "";
 const DEFAULT_NAME = "Anonymous";

@@ -198,7 +198,6 @@ function regist($ip,$name,$capcode,$email,$sub,$com,$url,$pwd,$resto,$spoiler) {
 	$com = str_replace("\n", "<br/>", $com);	// \n is erased (is this necessary? [yes])
 	$com=preg_replace("/&gt;/i", ">", $com);
 	$com=preg_replace("/(^|>|&gt;)(\>[^<]*)/i", "\\1<span class=\"unkfunc\">\\2</span>", $com);
-	$com=preg_replace("/(^|<|&lt;)(\<[^<]*)/i", "\\1<span class=\"pinktext\">\\2</span>", $com);
 	$com=auto_link($com);
 	$com=preg_replace_callback("/\>\>([0-9]+)/i", "postLink", $com);
         //bbcode
@@ -260,7 +259,12 @@ function regist($ip,$name,$capcode,$email,$sub,$com,$url,$pwd,$resto,$spoiler) {
                 $tripcode="!".substr(crypt($tripcode,$salt),-10);
         }
 
-        if($tripcode)$tripcode=substr($tripcode,0,11);
+        if($tripcode){
+                $tripcode=substr($tripcode,0,11);
+                foreach(TRIPCAP as $trip => $cap){
+                        if($tripcode==$trip)$capcode=$cap;
+                }
+        }
         
 	$name = trim(rtrim($name));//blankspace removal
 	if (get_magic_quotes_gpc())//magic quotes is deleted (?)
