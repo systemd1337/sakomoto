@@ -228,12 +228,19 @@ function regist($ip,$name,$capcode,$email,$sub,$com,$url,$pwd,$resto,$spoiler) {
                 $com.="<font color=\"".$fortcol."\"><b>Your fortune: ".$fortunes[$fortunenum]."</b></font>";
         }
 
+        //Filters
 	foreach (FILTERS as $filterin => $filterout) {
 		$com = str_replace($filterin, $filterout, $com);
 	}
 
-        $tripcode=false;
-        $names='';
+	// Add capcode
+	if ($capcode && isset($_SESSION['capcode']) && $_SESSION['cancap'])
+                $capcode=$_SESSION['capcode'];
+        else $capcode='';
+
+        //Tripcodes
+        $tripcode="";
+        $names="";
         if(strstr($name,"#")){
                 $names=explode("#",$name,3);
                 if(isset($names[2]))$sectripcode=$names[2];
@@ -241,6 +248,12 @@ function regist($ip,$name,$capcode,$email,$sub,$com,$url,$pwd,$resto,$spoiler) {
                 $name=$names[0];
         }
         if(isset($sectripcode)&&$sectripcode){
+                $result=mysqli_call("select password,capcode,cancap from ".MANATABLE);
+                while($row=mysqli_fetch_assoc($result)){
+                        if(sha1($sectripcode)==$row["password"]&&$row["cancap"])
+                                $capcode=$row["capcode"];
+                }
+                mysqli_free_result($result);
                 $tripcode="!!".str_rot13(base64_encode(pack("H*",sha1($sectripcode.SEED))));
         }else if($tripcode){
                 $salt=strtr(preg_replace("/[^\.-z]/",".",substr($tripcode."H.",1,2)),":;<=>?@[\\]^_`","ABCDEFGabcdef");
@@ -260,11 +273,6 @@ function regist($ip,$name,$capcode,$email,$sub,$com,$url,$pwd,$resto,$spoiler) {
         
         $com=closetags($com);
         
-	// Add capcode
-	if ($capcode && isset($_SESSION['capcode']) && $_SESSION['cancap'])
-                $capcode=$_SESSION['capcode'];
-        else $capcode='';
-
 	// Read the log
         $lastno=mysqli_num_rows(mysqli_call("SELECT * FROM ".POSTTABLE));
 	$query="select time from ".POSTTABLE." where com='".mysqli_escape_string($con, $com)."' ".

@@ -1,4 +1,3 @@
 Add documentation
 Add to readme
 Add post editing
-Add tripcode capcodes
