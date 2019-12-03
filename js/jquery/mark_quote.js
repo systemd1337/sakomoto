@@ -41,7 +41,9 @@ repod.mark_quote = {
                 config:{},
                 update:function(){
                         $(".quotelink").each(function(){
-                                postNo=$(this).parent().parent().parent().children(".postInfo").children(".postNum").children("a:contains('No.')").attr("href").split("#p")[1];
+                                postNo=$(this).parent().parent().parent().children(".postInfo").children(".postNum").children("a:contains('No.')").attr("href");
+                                if(!postNo)return;
+                                postNo=postNo.split("#p")[1];
                                 resto=$("#p"+postNo).parent().attr("id").slice(1);
                                 refno=$(this).attr("href").split("#p")[1];
                                 if($("#p"+refno).length&&$("#p"+refno).parent().attr("id").slice(1)==resto)return;
