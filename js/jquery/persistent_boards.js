@@ -23,6 +23,7 @@ repod.persistent_board_titles = {
                                 $(this).css("padding","2px");
                                 $(this).css("padding-right","4px");
                                 $(this).css("padding-left","4px");
+                                $(this).css("box-shadow","0 1px 2px rgba(0,0,0,0.15)")
                                 $(this).addClass("reply");
                                 $("body").css("padding-top",$(this).height()+"px");
                         });
