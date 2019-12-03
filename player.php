@@ -187,7 +187,7 @@ if (window.addEventListener) window.addEventListener("load", function(e) {
             </div>
             <div id="playercontent">
                 <video controls<?php if ($loop) echo ' loop'; ?> src="<?php echo htmlspecialchars($v); ?>">
-                    Your browser does not support HTML5 video. <a href="<?php echo htmlspecialchars($v); ?>">[Download]</a>
+                    Your browser does not support HTML5 video. [<a href="<?php echo htmlspecialchars($v); ?>">Download</a>]
                 </video>
             </div>
         </body>
