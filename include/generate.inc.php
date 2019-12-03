@@ -240,7 +240,46 @@ function updatelog($resno=0){
         for($page=$pages;$page;$page--){
                 $dat='';
                 head($dat,"<meta name=\"robots\" content=\"".($resno?"no":'')."index, follow\"/>");
+//                if(!$resno)$dat.="<table width=\"100%\"><tbody><tr><td valign=\"top\">";
                 form($dat,$resno);
+/*                if(!$resno){
+                        $stlist=lang("Thread list");
+                        $tlist="";
+                        $threads2=mysqli_call("SELECT * FROM ".POSTTABLE." WHERE ".($resno?"`no`=".$resno:"`resto`=0").
+                                " ORDER BY `sticky` DESC,`root` DESC");
+                        while($thread=mysqli_fetch_assoc($threads2)){
+                                $tlist.="<tr>";
+                                $tlist.="<td>".$thread["no"]."</td>";
+                                $tlist.="<td>".$thread["name"]."</td>";
+                                $tlist.="<td>".$thread["sub"]."</td>";
+                                $tlist.="<td>".$thread["filename"].$thread["ext"]."</td>";
+                                $tlist.="<td>".$thread["now"]."</td>";
+                                $tlist.="</tr>";
+                        }
+                        $dat.= <<<EOF
+                        </td>
+                        <td valign="top">
+                                <table class="postlists">
+                                        <thead>
+                                                <tr><th colspan="5"><center class="replymode"><b>{$stlist}</b></center></th></tr>
+                                                <tr>
+                                                        <th>No.</th>
+                                                        <th>Name</th>
+                                                        <th>Subject</th>
+                                                        <th>File</th>
+                                                        <th>Date</th>
+                                                </tr>
+                                        </thead>
+                                        <tbody>
+                                                {$tlist}
+                                        </tbody>
+                                </table>
+                        </td>
+                </tr>
+        </tbody>
+</table>
+EOF;
+                }*/
                 if(stristr($mode,"rand"))$dat.="<center><h2>".lang("Random thread selected")."</h2></center><hr/>";
                 $dat.=ctrlnav(($resno?"thread":"page"),true);
                 $dat.="<form action=\"".PHP_SELF."\" method=\"post\" id=\"delform\">";
@@ -477,7 +516,7 @@ function form(&$dat,$resno=0,$admin="",$manapost=false,$paintcom=false) {
                 case "saguaro":
                         $inputs.="<tr><td class=\"postblock\"><label for=\"verif\"><b>".lang("Verification")."</b></label></td>";
                         $inputs.="<td><div><img id=\"verifimg\" src=\"".CAPTCHA_IMG."\" alt=\"Captcha\" onclick=\"this.src=this.src+'?'+Date.now();this.style.opacity=0.5;\" onload=\"this.style.opacity=1;\"/>";
-                        $inputs.="<script type=\"text/javascript\">/*<!--*/document.write(\"&nbsp;".lang("(Click for new captcha)")."\");/*-->*/</script></div>";
+                        $inputs.="<script type=\"text/javascript\"  async=\"async\">/*<!--*/document.write(\"&nbsp;".lang("(Click for new captcha)")."\");/*-->*/</script></div>";
                         $inputs.="<input type=\"text\" id=\"verif\" tabindex=\"7\" name=\"verif\" value=\"\"/></td></tr>";
                         break;
                 case "":
@@ -491,7 +530,7 @@ function form(&$dat,$resno=0,$admin="",$manapost=false,$paintcom=false) {
                 while($files--){
                         $inputs.="<div ".($files?"class=\"unimportant\"":"style=\"display:table-row;\"")."><input type=\"file\" name=\"upfile".$files."\" ".(MAX_FILES>1?"class":"id")."=\"upfile\" tabindex=\"8\"/>";
                         $inputs.= <<<EOF
-        <script type="text/javascript">
+        <script type="text/javascript" async="async">
 /*<!--*/
 document.write('<button type="button" onclick="document.querySelector(\'input[name=upfile{$files}]\').value=\'\';">X</button>');
 /*-->*/
@@ -526,7 +565,7 @@ EOF;
                                         $inputs.=$needjsdraw. <<<EOF
 <link rel="stylesheet" href="js/tegaki/tegaki.css"/>
 <script type="text/javascript" src="js/tegaki/tegaki.js"></script>
-<script type="text/javascript">
+<script type="text/javascript"  async="async">
 /*<!--*/
 document.write(`{$ssize}
  <input type="number" class="dim" value="400" size="6" maxlength="4" id="tWidth"> &times;
@@ -553,7 +592,7 @@ EOF;
         }
         //Toggle unimportant
         $inputs.= <<<EOF
-<tr><td colspan="2"><script type="text/javascript">
+<tr><td colspan="2"><script type="text/javascript" async="async">
 /*<!--*/
 document.write('<button type="button" onclick="toggleHidden();">Toggle hidden feilds</button>');
 /*-->*/
@@ -567,7 +606,7 @@ EOF;
         <td>
                 <input type="password" name="pwd" id="pwd" size="8" tabindex="9"/> 
                 <small>{$passtxt}</small>
-                <script type="text/javascript">
+                <script type="text/javascript" async="async">
 /*<!--*/
 document.write('<br/><label><input type="checkbox" class="noqr" onchange="document.getElementById(\'pwd\').type=(this.checked?\'text\':\'password\');"/> Show password</label>');
 /*-->*/
@@ -598,7 +637,7 @@ EOF;
 function fakefoot() {
 	$dat = '';
         $dat.= <<<EOF
-        <script type="text/javascript">
+        <script type="text/javascript" async="async">
 /*<!--*/
 document.write('<div align="right"><table id="delSub" align="right"><tbody></tbody></table></div>');
 /*-->*/
