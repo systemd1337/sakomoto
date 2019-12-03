@@ -437,8 +437,8 @@ EOF;
 	}
         if(USE_RSS)$dat.="<link rel=\"alternate\" type=\"application/rss+xml\" href=\"".RSS."\"/>";
         $dat.="<meta name=\"distribution\" content=\"".($mode=="admin"?"iu":"global")."\"/>";
-        $dat.="<link rel=\"preload\" href=\"".TITLEIMG."\"/>";
-        $dat.="<link rel=\"preload\" href=\"".CAPTCHA_IMG."\"/>";
+        $dat.="<link rel=\"preload\" as=\"image\" href=\"".TITLEIMG."\"/>";
+        $dat.="<link rel=\"preload\" as=\"image\" href=\"".CAPTCHA_IMG."\"/>";
         $dat.="<title>".TITLE."</title>";
         $dat.="<meta property=\"og:title\" content=\"".TITLE."\"/>";
         $dat.="<meta name=\"twitter:title\" content=\"".TITLE."\"/>";
