@@ -15,7 +15,7 @@ a:hover{color:#D00;}
         border-color:#D9AF9E;
         padding:2px;
 }
-.postlists tr:target,table:target .reply,.postblock,.postlists th{
+.replymode,.postlists tr:target,table:target .reply,.postblock,.postlists th{
         border-color:#CA927B;
         background-color:#D9AF9E;
 }
