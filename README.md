@@ -28,6 +28,6 @@ BANTABLE, MANATABLE and BLOTTERTABLE should be configured the same accross all b
 
 Just doing that would work...
 
-But I recomend you change CORE_DIR, JS_DIR, CSS_DIR, FLAGS_DIR, EMOTES_DIR, PHP_PLAYER, PHP_BLOTTER, PHP_BANNED and CAPTCHA_IMG one level up and move those directories/files in accordance.
+But I recomend you change CORE_DIR, JS_DIR, CSS_DIR, FLAGS_DIR, EMOTES_DIR, PHP_BLOTTER, PHP_BANNED and CAPTCHA_IMG one level up and move those directories/files in accordance.
 
 ...
