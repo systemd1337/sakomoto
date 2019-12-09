@@ -341,7 +341,7 @@ function regist($ip,$name,$capcode,$email,$sub,$com,$url,$pwd,$resto,$spoiler,$s
                         ((int)$resto).",".
                         "'".$_SERVER["REMOTE_ADDR"]."',".
                         "'".$posterid."',".
-                        "'".mysqli_escape_string($con, $steam)."'".
+                        "'".mysqli_escape_string($con, $steam)."',".
                         "0,0".
                         ")"))error(lang("Critical SQL problem!"));// post registration
 
