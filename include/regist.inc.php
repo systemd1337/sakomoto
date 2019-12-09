@@ -191,6 +191,8 @@ function regist($ip,$name,$capcode,$email,$sub,$com,$url,$pwd,$resto,$spoiler,$s
 	$url = CleanStr($url); $url = preg_replace("/[\r\n]/", "", $url);
 	$name=preg_replace("/[\r\n]/", "", $name);
 	$com = CleanStr($com);
+        // Steam check
+        if($steam&&!(strstr($steam,"https://steamcommunity.com/id/")||strstr($steam,"https://steamcommunity.com/profiles/")))error(lang("Given steam profile url is not valid."));
 	// Standardize new character lines
 	$com = str_replace( "\r\n", "\n", $com);
 	$com = str_replace( "\r", "\n", $com);
