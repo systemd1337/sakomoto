@@ -160,7 +160,13 @@ function buildPost($post,$res=0){
 	$postinfo="<span class=\"postInfo\">";
 	$postinfo.="<label><input class=\"del\" id=\"delcheck".$post["no"]."\" type=\"checkbox\" name=\"".$post["no"]."\" value=\"delete\"/>";
 	if($post["sub"])$postinfo.="<font size=\"+1\"><b class=\"subject\">".$post["sub"]."</b></font> ";
-        if($post["steam"])$postinfo.="<a href=\"".$post["steam"]."\" target=\"_blank\"><img src=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAA7DAAAOwwHHb6hkAAABHElEQVQ4jd2SMYrCUBCGvxcWooVC2ngBLQRPoJWIYJc+hxDEwkoEi7Se4HVibyPiGTyBjU16IRCI799icdmwFq5a7cBUM98/8w9jAAcYngsZQE/CAHivwG8R+Hi0sVarEccxxhistVwuF+DreA/dYLFY4HkekjDGMJvNyhuMRiM6nQ7n8xlrbQmuVCpUq1XG4zEASZL8ttDtdhkOh4RhSBAErNdr0jQFYDAY0O/3WS6XSMI5VxogQKvVSsfjUbcoikKHw0GbzUan00nOOV2vV83nc/m+rxv3LVCv1xVFkZrNpuI41na7VZ7nkqQsy7Tf7zWdTn+CZYF72Wg0ZK1VkiTa7XZqtVp/EwDUbrc1mUzU6/Xu1v/BK3u8aOETWfygttVpCfcAAAAASUVORK5CYII=\" alt=\"Steam\"/></a> ";
+        if($post["steam"]){
+                $profid=array_filter(explode("/",$post["steam"]));
+                $tip=false;
+                if($badge=base64_encode(file_get_contents("https://badges.steamprofile.com/profile/default/steam/".end($profid).".png")))
+                        $tip="onmouseover=\"Tip('<img src=\\'data:image/jpg;base64,".$badge."\\' alt=\\'\\'/>');\" onmouseout=\"UnTip();\" ";
+                $postinfo.="<a href=\"".$post["steam"]."\" target=\"_blank\"><img ".$tip."src=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAA7DAAAOwwHHb6hkAAABHElEQVQ4jd2SMYrCUBCGvxcWooVC2ngBLQRPoJWIYJc+hxDEwkoEi7Se4HVibyPiGTyBjU16IRCI799icdmwFq5a7cBUM98/8w9jAAcYngsZQE/CAHivwG8R+Hi0sVarEccxxhistVwuF+DreA/dYLFY4HkekjDGMJvNyhuMRiM6nQ7n8xlrbQmuVCpUq1XG4zEASZL8ttDtdhkOh4RhSBAErNdr0jQFYDAY0O/3WS6XSMI5VxogQKvVSsfjUbcoikKHw0GbzUan00nOOV2vV83nc/m+rxv3LVCv1xVFkZrNpuI41na7VZ7nkqQsy7Tf7zWdTn+CZYF72Wg0ZK1VkiTa7XZqtVp/EwDUbrc1mUzU6/Xu1v/BK3u8aOETWfygttVpCfcAAAAASUVORK5CYII=\" alt=\"Steam\"/></a> ";
+        }
         if($post["email"])$post["name"]="<a href=\"email:".$post["email"]."\">".$post["name"]."</a>";
         if($post["trip"]||$post["name"])$postinfo.="<span class=\"nameBlock\">";
 	if($post["name"])$postinfo.="<b class=\"name\">".$post["name"]."</b>";
