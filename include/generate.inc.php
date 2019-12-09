@@ -195,7 +195,7 @@ function buildPost($post,$res=0){
         if($post["closed"])$postinfo.=" <img src=\"closed.gif\" alt=\"".lang("Closed")."\" title=\"".lang("Closed")."\" class=\"retina\"/>";
 	if(!($post["resto"]||$res))$postinfo.="&nbsp;[<a href=\"".RES_DIR.$post["no"].PHP_EXT."\">".lang("Reply")."</a>]";
         $postinfo.="&nbsp;<small class=\"backlink\">";
-        $results=mysqli_call("SELECT no,resto FROM ".POSTTABLE." WHERE com LIKE '%&gt;&gt;".$post["no"]."%'");
+        $results=mysqli_call("SELECT no,resto FROM ".POSTTABLE." WHERE com LIKE '%&gt;&gt;".$post["no"]."</a>%'");
         while($link=mysqli_fetch_assoc($results)){
                 $postinfo.="<a class=\"quotelink\" href=\"".PHP_SELF."?res=".$link["resto"]."#p".$link["no"]."\">&gt;&gt;".$link["no"]."</a> ";
         }
