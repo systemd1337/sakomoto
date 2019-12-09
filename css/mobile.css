@@ -1,0 +1,24 @@
+@media only screen and (max-width: 600px) {
+    input{font-size:inherit;}
+    a{white-space:nowrap;}
+    .postInfo{clear:both;}
+    .fileText a:not(.fileDownload),.postMenuBtn,#delSub,.logo img[alt=RSS],.sideArrows,span.boardlist{display:none!important;}
+    .navtopright{float:none;}
+    body{
+        font-size:14pt;
+        margin:0;
+        overflow-x:hidden;
+    }
+    .fileDownload img{height:1em;}
+    .postimg,.fileWebm{float:none;}
+    div[align="right"],.ctrl,.navtopright,.fileText,.file a:not(.fileDownload),a.fileThumb{text-align:center;}
+    .thread>table{
+        width:100%;
+        border-style:none;
+    }
+    center.logo{margin-top:1em;}
+    .postInfo input[type=checkbox],.postarea,.logohr{display: none;}
+    .fileText,form.ctrl{font-size:18pt;}
+    .boardNav.reply,.postInfo a,.postMenu,#pager{font-size:20pt;}
+    .postInfo,.nameBlock,.file a:not(.fileDownload){display:block;}
+}

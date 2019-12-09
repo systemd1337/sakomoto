@@ -56,8 +56,8 @@ function buildPost($post,$res=0){
 	global $cache;
         if(!$res)global $res;
         
-        if(isset($cache["posts"][$post["no"]])&&!($res||$post["resto"]))
-                return $cache["posts"][$post["no"]];
+        if(is_file(CACHE_DIR.$post["no"].".inc.html")&&!($post["resto"]||$res))
+                return file_get_contents(CACHE_DIR.$post["no"].".inc.html");
         
 	$htm="<".($post["resto"]?"table":"div class=\"post op\"")." id=\"p".$post["no"]."\">";
 	if($post["resto"])$htm.="<tr><td class=\"sideArrows\" valign=\"top\">&gt;&gt;</td><td class=\"post reply\">";
@@ -158,7 +158,7 @@ function buildPost($post,$res=0){
         }
         if($post["num_files"]>1)$file.="</tr></tbody></table>";
 	$postinfo="<span class=\"postInfo\">";
-	$postinfo.="<label><input type=\"checkbox\" name=\"".$post["no"]."\" value=\"delete\"/>";
+	$postinfo.="<label><input class=\"del\" id=\"delcheck".$post["no"]."\" type=\"checkbox\" name=\"".$post["no"]."\" value=\"delete\"/>";
 	if($post["sub"])$postinfo.="<font size=\"+1\"><b class=\"subject\">".$post["sub"]."</b></font> ";
         if($post["email"])$post["name"]="<a href=\"email:".$post["email"]."\">".$post["name"]."</a>";
         if($post["trip"]||$post["name"])$postinfo.="<span class=\"nameBlock\">";
@@ -199,7 +199,8 @@ function buildPost($post,$res=0){
 	if($post["resto"]) $htm.="</td></tr>";
 	$htm.="</".($post["resto"]?"table":"div").">";
         
-        if(!$res)$cache["posts"][$post["no"]]=$htm;
+        if(!($post["resto"]||$res))
+                file_put_contents(CACHE_DIR.$post["no"].".inc.html",$htm);
 	return $htm;
 }
 
@@ -364,11 +365,16 @@ EOF;
 }
 
 function head(&$dat,$extra='') {
-        global $res,$mode;
+        global $mode;
+        if(is_file(CACHE_DIR."head.inc.html")&&$mode!="admin"&&!$extra){
+                $dat.=file_get_contents(CACHE_DIR."head.inc.html");
+                return;
+        }
 	$lang=LANGUAGE;
 	$keywords=KEYWORDS;
 	$description=DESCRIPTION;
-	$dat.= <<<EOF
+        $head='';
+	$head.= <<<EOF
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html lang="{$lang}" xmlns="http://www.w3.org/1999/xhtml">
 	<head>
@@ -415,70 +421,80 @@ blink,.blink{
                 </style>
                 <script type="text/javascript">var 
 EOF;
-        foreach(JSVARS as $var => $val){$dat.=$var."='".$val."',";}
-        $dat.="bbcodes=".json_encode(BBCODES,JSON_HEX_QUOT).",";
-        $dat.="emotes=".str_replace("\\/","/",json_encode(EMOTES,JSON_HEX_QUOT)).",";
-        $dat.="emotes_dir='".EMOTES_DIR."',";
-        $dat.="phpself='".PHP_SELF."',";
-        $dat.="phpapi='".PHP_API."',";
-        $dat.="phpext='".PHP_EXT."',";
-        $dat.="phpplayer='".PHP_PLAYER."',";
-        $dat.="js_dir='".JS_DIR."',";
-        $dat.="cssdef='".CSSDEFAULT."';";
-        $dat.="</script>";
-        $dat.="<script src=\"".JS_DIR."jquery/jquery.min.js\" type=\"text/javascript\"></script>";
-        $dat.="<script src=\"".JS_DIR."sakomoto.js\" type=\"text/javascript\"></script>";
+        foreach(JSVARS as $var => $val){$head.=$var."='".$val."',";}
+        $head.="bbcodes=".json_encode(BBCODES,JSON_HEX_QUOT).",";
+        $head.="emotes=".str_replace("\\/","/",json_encode(EMOTES,JSON_HEX_QUOT)).",";
+        $head.="emotes_dir='".EMOTES_DIR."',";
+        $head.="phpself='".PHP_SELF."',";
+        $head.="phpapi='".PHP_API."',";
+        $head.="phpext='".PHP_EXT."',";
+        $head.="phpplayer='".PHP_PLAYER."',";
+        $head.="js_dir='".JS_DIR."',";
+        $head.="cssdef='".CSSDEFAULT."';";
+        $head.="</script>";
+        $head.="<script src=\"".JS_DIR."jquery/jquery.min.js\" type=\"text/javascript\"></script>";
+        $head.="<script src=\"".JS_DIR."futaba.js\" type=\"text/javascript\"></script>";
+        $head.="<script src=\"".JS_DIR."sakomoto.js\" type=\"text/javascript\"></script>";
         foreach(JSPLUGINS as $js){
-                $dat.="<script src=\"".JS_DIR.$js."\" type=\"text/javascript\"></script>";
+                $head.="<script src=\"".JS_DIR.$js."\" type=\"text/javascript\"></script>";
         }
 	foreach(STYLES as $stylename => $stylefile) {
-		$dat.="<link rel=\"".($stylename==CSSDEFAULT?'':"alternate ")."stylesheet\" type=\"text/css\" ".
-                        "href=\"".CSS_DIR.$stylefile."\" title=\"".$stylename."\"/>";
+		$head.="<link rel=\"".($stylename==CSSDEFAULT?'':"alternate ")."stylesheet\" type=\"text/css\" ".
+                        "href=\"".CSS_DIR."styles/".$stylefile."\" title=\"".$stylename."\"/>";
 	}
-        if(USE_RSS)$dat.="<link rel=\"alternate\" type=\"application/rss+xml\" href=\"".RSS."\"/>";
-        $dat.="<meta name=\"distribution\" content=\"".($mode=="admin"?"iu":"global")."\"/>";
-        $dat.="<link rel=\"preload\" as=\"image\" href=\"".TITLEIMG."\"/>";
-        $dat.="<link rel=\"preload\" as=\"image\" href=\"".CAPTCHA_IMG."\"/>";
-        $dat.="<title>".TITLE."</title>";
-        $dat.="<meta property=\"og:title\" content=\"".TITLE."\"/>";
-        $dat.="<meta name=\"twitter:title\" content=\"".TITLE."\"/>";
-        $dat.="<meta property=\"og:description\" content=\"".substr(DESCRIPTION,0,255)."\"/>";
-        $dat.="<meta name=\"twitter:description\" content=\"".substr(DESCRIPTION,0,200)."\"/>";
+        $head.="<link rel=\"stylesheet\" type=\"text/css\" href=\"".CSS_DIR."mobile.css\"/>";
+        if(USE_RSS)$head.="<link rel=\"alternate\" type=\"application/rss+xml\" href=\"".RSS."\"/>";
+        $head.="<meta name=\"distribution\" content=\"".($mode=="admin"?"iu":"global")."\"/>";
+        $head.="<link rel=\"preload\" as=\"image\" href=\"".TITLEIMG."\"/>";
+        $head.="<link rel=\"preload\" as=\"image\" href=\"".CAPTCHA_IMG."\"/>";
+        $head.="<title>".TITLE."</title>";
+        $head.="<meta property=\"og:title\" content=\"".TITLE."\"/>";
+        $head.="<meta name=\"twitter:title\" content=\"".TITLE."\"/>";
+        $head.="<meta property=\"og:description\" content=\"".substr(DESCRIPTION,0,255)."\"/>";
+        $head.="<meta name=\"twitter:description\" content=\"".substr(DESCRIPTION,0,200)."\"/>";
         if(ICON){
-                $dat.="<link rel=\"apple-touch-icon\" href=\"".ICON."\"/>";
-                $dat.="<link rel=\"shortcut icon\" href=\"".ICON."\"/>";
-                $dat.="<link rel=\"icon\" href=\"".ICON."\"/>";
+                $head.="<link rel=\"apple-touch-icon\" href=\"".ICON."\"/>";
+                $head.="<link rel=\"shortcut icon\" href=\"".ICON."\"/>";
+                $head.="<link rel=\"icon\" href=\"".ICON."\"/>";
         }
-        $dat.="<meta property=\"og:url\" content=\"".HERE."\"/>";
-        if(HEAD_EXTRA)$dat.=HEAD_EXTRA;
-        $dat.=$extra."</head><body><div id=\"top\"></div>";
-        $dat.="<div class=\"boardNav\">";
-        if(BOARDLINKS)$dat.="<span class=\"boardlist\">".BOARDLINKS."</span>";
-        $dat.="<div align=\"right\" class=\"navtopright\">";
-        if(HOME)$dat.="[<a href=\"".HOME."\" target=\"_top\">".lang("Home")."</a>] ";
-        $dat.="[<a href=\"".PHP_SELF."?mode=admin\">".lang("Manage")."</a>]";
-        $dat.="</div></div>";
+        $head.="<meta property=\"og:url\" content=\"".HERE."\"/>";
+        if(HEAD_EXTRA)$head.=HEAD_EXTRA;
+        $head.=$extra."</head><body><div id=\"top\"></div>";
+        $head.="<div class=\"boardNav\">";
+        if(BOARDLINKS)$head.="<span class=\"boardlist\">".BOARDLINKS."</span>";
+        $head.="<div align=\"right\" class=\"navtopright\">";
+        if(HOME)$head.="[<a href=\"".HOME."\" target=\"_top\">".lang("Home")."</a>] ";
+        $head.="[<a href=\"".PHP_SELF."?mode=admin\">".lang("Manage")."</a>]";
+        $head.="</div></div>";
         if(SHOWTITLEIMG||SHOWTITLETXT){
-                $dat.="<center class=\"logo\">";
-                if(SHOWTITLEIMG)$dat.="<img src=\"".TITLEIMG."\" onload=\"this.style.opacity=1;\" onclick=\"this.style.opacity=0.5;this.src='".TITLEIMG."?'+(new Date().getTime());\" border=\"1\" alt=\"".TITLE."\"/>";
-                if(SHOWTITLETXT)$dat.="<h1>".TITLE.(USE_RSS?" <a href=\"".RSS."\"><img border=\"0\" src=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAJDSURBVHjajJJNSBRhGMd/887MzrQxRSLbFuYhoUhEKsMo8paHUKFLdBDrUIdunvq4RdClOq8Hb0FBSAVCUhFR1CGD/MrIJYqs1kLUXd382N356plZFOrUO/MMz/vO83+e93n+f+1zF+kQBoOQNLBJg0CTj7z/rvWjGbEOIwKp9O7WkhtQc/wMWrlIkP8Kc1lMS8eyFHpkpo5SgWCCVO7Z5JARhuz1Qg29fh87u6/9VWL1/SPc4Qy6n8c0FehiXin6dcCQaylDMhqGz8ydS2hKkmxNkWxowWnuBLHK6G2C8X6UJkBlxUmNqLYyNbzF74QLDrgFgh9LLE0NsPKxjW1Hz2EdPIubsOFdH2HgbwAlC4S19dT13o+3pS+vcSfvUcq9YnbwA6muW9hNpym/FWBxfh0CZkKGkPBZeJFhcWQAu6EN52QGZ/8prEKW+cdXq0039UiLXhUYzdjebOJQQI30UXp6mZn+Dtam32Afu0iyrgUvN0r+ZQbr8HncSpUVJfwRhBWC0hyGV8CxXBL5SWYf9sYBidYLIG2V87/ifVjTWAX6AlxeK2C0X8e58hOr/Qa2XJ3iLMWxB1h72tHs7bgryzHAN2o2gJorTrLxRHVazd0o4TXiyV2Yjs90uzauGvvppmqcLjwmbZ3V7BO2HOrBnbgrQRqWUgTZ5+Snx4WeKfzCCrmb3axODKNH+vvUyWjqyK4DiKQ0eXSpFsgVvLJQWpH+xSpr4otg/HI0TR/t97cxTUS+QxIMRTLi/9ZYJPI/AgwAoc3W7ZrqR2IAAAAASUVORK5CYII=\" alt=\"RSS\"/></a>":"").
+                $head.="<center class=\"logo\">";
+                if(SHOWTITLEIMG)$head.="<img src=\"".TITLEIMG."\" onload=\"this.style.opacity=1;\" onclick=\"this.style.opacity=0.5;this.src='".TITLEIMG."?'+(new Date().getTime());\" border=\"1\" alt=\"".TITLE."\"/>";
+                if(SHOWTITLETXT)$head.="<h1>".TITLE.(USE_RSS?" <a href=\"".RSS."\"><img border=\"0\" src=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAJDSURBVHjajJJNSBRhGMd/887MzrQxRSLbFuYhoUhEKsMo8paHUKFLdBDrUIdunvq4RdClOq8Hb0FBSAVCUhFR1CGD/MrIJYqs1kLUXd382N356plZFOrUO/MMz/vO83+e93n+f+1zF+kQBoOQNLBJg0CTj7z/rvWjGbEOIwKp9O7WkhtQc/wMWrlIkP8Kc1lMS8eyFHpkpo5SgWCCVO7Z5JARhuz1Qg29fh87u6/9VWL1/SPc4Qy6n8c0FehiXin6dcCQaylDMhqGz8ydS2hKkmxNkWxowWnuBLHK6G2C8X6UJkBlxUmNqLYyNbzF74QLDrgFgh9LLE0NsPKxjW1Hz2EdPIubsOFdH2HgbwAlC4S19dT13o+3pS+vcSfvUcq9YnbwA6muW9hNpym/FWBxfh0CZkKGkPBZeJFhcWQAu6EN52QGZ/8prEKW+cdXq0039UiLXhUYzdjebOJQQI30UXp6mZn+Dtam32Afu0iyrgUvN0r+ZQbr8HncSpUVJfwRhBWC0hyGV8CxXBL5SWYf9sYBidYLIG2V87/ifVjTWAX6AlxeK2C0X8e58hOr/Qa2XJ3iLMWxB1h72tHs7bgryzHAN2o2gJorTrLxRHVazd0o4TXiyV2Yjs90uzauGvvppmqcLjwmbZ3V7BO2HOrBnbgrQRqWUgTZ5+Snx4WeKfzCCrmb3axODKNH+vvUyWjqyK4DiKQ0eXSpFsgVvLJQWpH+xSpr4otg/HI0TR/t97cxTUS+QxIMRTLi/9ZYJPI/AgwAoc3W7ZrqR2IAAAAASUVORK5CYII=\" alt=\"RSS\"/></a>":"").
                         "</h1>";
-                $dat.="</center><hr class=\"logohr\"/>";
+                $head.="</center><hr class=\"logohr\"/>";
         }
+        if($mode!="admin"&&!$extra)file_put_contents(CACHE_DIR."head.inc.html",$head);
+        $dat.=$head;
 }
 /* Contribution form */
 function form(&$dat,$resno=0,$admin="",$manapost=false,$paintcom=false) {
 	global $q;
+        if(is_file(CACHE_DIR."form.inc.html")&&!($resno||$admin||$manapost||$paintcom||$q)){
+                $dat.=file_get_contents(CACHE_DIR."form.inc.html");
+                return;
+        }
+        
+        $form='';
         if($resno&&mysqli_fetch_assoc(mysqli_call("SELECT closed FROM ".POSTTABLE." WHERE `no`=".$resno))["closed"]){
-                $dat.="<center><h2 id=\"errormsg\">".lang("Thread closed.")."<br>".lang("You may not reply at this time.")."</h2></center><hr>";
+                $form.="<center><h2 id=\"errormsg\">".lang("Thread closed.")."<br>".lang("You may not reply at this time.")."</h2></center><hr>";
                 return;
         }
 
 	$maxbyte = MAX_KB * 1024;
         
-        $dat.="<center class=\"postarea\">";
-        if($admin)$dat.="<i>".lang("HTML tags are allowed.")."</i>";
-        if($resno&&!$manapost)$dat.="<div class=\"replymode\"><big>".lang("Posting mode: Reply")."</big></div>";
+        $form.="<center class=\"postarea\">";
+        if($admin)$form.="<i>".lang("HTML tags are allowed.")."</i>";
+        if($resno&&!$manapost)$form.="<div class=\"replymode\"><big>".lang("Posting mode: Reply")."</big></div>";
         
         $inputs='';
         //Name
@@ -500,16 +516,21 @@ function form(&$dat,$resno=0,$admin="",$manapost=false,$paintcom=false) {
                 $inputs.="<tr><td class=\"postblock\"><label for=\"resto\"><b>".lang("Reply to")."</b></label></td>";
                 $inputs.="<td><input type=\"number\" name=\"resto\" id=\"resto\" value=\"0\" tabindex=\"3\"/></td></tr>";
         }
+        //Steam
+        if(STEAM){
+                $inputs.="<tr><td class=\"postblock\"><label for=\"steam\"><b>".lang("Steam")."</b></label></td>";
+                $inputs.="<td><input type=\"text\" name=\"steam\" id=\"steam\" value=\"\" size=\"48\" tabindex=\"4\"/></td></tr>";
+        }
         //E-mail
         $inputs.="<tr class=\"unimportant\"><td class=\"postblock\"><label for=\"email\"><b>".lang("E-mail")."</b></label></td>";
-        $inputs.="<td><input type=\"text\" name=\"email\" id=\"email\" value=\"\" size=\"28\" tabindex=\"4\"/></td></tr>";
+        $inputs.="<td><input type=\"text\" name=\"email\" id=\"email\" value=\"\" size=\"28\" tabindex=\"5\"/></td></tr>";
         //Subject
         $inputs.="<tr><td class=\"postblock\"><label for=\"sub\"><b>".lang("Subject")."</b></label></td>";
-        $inputs.="<td><input type=\"text\" name=\"sub\" id=\"sub\" size=\"28\" tabindex=\"5\"/>".
-                "<button type=\"submit\" name=\"post\" value=\"post\" tabindex=\"9\" id=\"postsubmit\">".lang(($resno?"New Reply":"New Topic"))."</button></td></tr>";
+        $inputs.="<td><input type=\"text\" name=\"sub\" id=\"sub\" size=\"28\" tabindex=\"6\"/>".
+                "<button type=\"submit\" name=\"post\" value=\"post\" tabindex=\"11\" id=\"postsubmit\">".lang(($resno?"New Reply":"New Topic"))."</button></td></tr>";
         //Comment
         $inputs.="<tr><td class=\"postblock\"><label for=\"com\"><b>".lang("Comment")."</b></label></td>";
-        $inputs.="<td><textarea name=\"com\" id=\"com\" cols=\"48\" style=\"width:300px\" rows=\"6\" tabindex=\"6\"".
+        $inputs.="<td><textarea name=\"com\" id=\"com\" cols=\"48\" style=\"width:300px\" rows=\"6\" tabindex=\"7\"".
                 ($resno&&$q?" autofocus>&gt;&gt".$q."\n":">")."</textarea></td></tr>";
         //Verification
         switch(CAPTCHA_DRIVER){
@@ -517,7 +538,7 @@ function form(&$dat,$resno=0,$admin="",$manapost=false,$paintcom=false) {
                         $inputs.="<tr><td class=\"postblock\"><label for=\"verif\"><b>".lang("Verification")."</b></label></td>";
                         $inputs.="<td><div><img id=\"verifimg\" src=\"".CAPTCHA_IMG."\" alt=\"Captcha\" onclick=\"this.src=this.src+'?'+Date.now();this.style.opacity=0.5;\" onload=\"this.style.opacity=1;\"/>";
                         $inputs.="<script type=\"text/javascript\"  async=\"async\">/*<!--*/document.write(\"&nbsp;".lang("(Click for new captcha)")."\");/*-->*/</script></div>";
-                        $inputs.="<input type=\"text\" id=\"verif\" tabindex=\"7\" name=\"verif\" value=\"\"/></td></tr>";
+                        $inputs.="<input type=\"text\" id=\"verif\" tabindex=\"8\" name=\"verif\" value=\"\"/></td></tr>";
                         break;
                 case "":
                 default:
@@ -528,7 +549,7 @@ function form(&$dat,$resno=0,$admin="",$manapost=false,$paintcom=false) {
                 $inputs.="<tr id=\"filerow\"><td class=\"postblock\"><label".(MAX_FILES>1?'':" for=\"upfile\"")."><b>".lang("File")."</b></label></td><td>";
                 $files=MAX_FILES;
                 while($files--){
-                        $inputs.="<div ".($files?"class=\"unimportant\"":"style=\"display:table-row;\"")."><input type=\"file\" name=\"upfile".$files."\" ".(MAX_FILES>1?"class":"id")."=\"upfile\" tabindex=\"8\"/>";
+                        $inputs.="<div ".($files?"class=\"unimportant\"":"style=\"display:table-row;\"")."><input type=\"file\" name=\"upfile".$files."\" ".(MAX_FILES>1?"class":"id")."=\"upfile\" tabindex=\"9\"/>";
                         $inputs.= <<<EOF
         <script type="text/javascript" async="async">
 /*<!--*/
@@ -604,7 +625,7 @@ EOF;
         $passtxt=lang("(Password used for file deletion)");
         $inputs.= <<<EOF
         <td>
-                <input type="password" name="pwd" id="pwd" size="8" tabindex="9"/> 
+                <input type="password" name="pwd" id="pwd" size="8" tabindex="10"/> 
                 <small>{$passtxt}</small>
                 <script type="text/javascript" async="async">
 /*<!--*/
@@ -617,11 +638,11 @@ EOF;
         
         $rules = RULES;
         
-        $dat.="<form id=\"postform\" action=\"".PHP_SELF."\" method=\"post\" enctype=\"multipart/form-data\">";
-        $dat.="<input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"".$maxbyte."\"/>";
-	$dat.="<input type=\"hidden\" name=\"mode\" value=\"regist\"/>";
-        if($resno&&!$manapost)$dat.="<input type=\"hidden\" name=\"resto\" value=\"".$resno."\"/>";
-        $dat.= <<<EOF
+        $form.="<form id=\"postform\" action=\"".PHP_SELF."\" method=\"post\" enctype=\"multipart/form-data\">";
+        $form.="<input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"".$maxbyte."\"/>";
+	$form.="<input type=\"hidden\" name=\"mode\" value=\"regist\"/>";
+        if($resno&&!$manapost)$form.="<input type=\"hidden\" name=\"resto\" value=\"".$resno."\"/>";
+        $form.= <<<EOF
                 <table cellspacing="2">
                         <tbody>
                                 {$inputs}
@@ -630,8 +651,11 @@ EOF;
                 </table>
         </form>
 EOF;
-        $dat.=blotter_contents(4);
-        $dat.="</center><hr/>";
+        $form.=blotter_contents(4);
+        $form.="</center><hr/>";
+        if(!($resno||$admin||$manapost||$paintcom||$q))
+                file_put_contents(CACHE_DIR."form.inc.html",$form);
+        $dat.=$form;
 }
 
 function fakefoot() {

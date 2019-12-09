@@ -31,23 +31,18 @@ function valid($pass) {
 	echo $dat;
 	echo "<center class=\"replymode\"><big>".lang("Manager Mode")."</big></center>";
 	if ($pass) {
-		$result = mysqli_call("select name,password,capcode,candel,canban,cancap,canacc from ".MANATABLE);
-		while ($row=mysqli_fetch_row($result)) {
-			list($adminname,$password,$capcode,$candel,$canban,$cancap,$canacc)=$row;
-			if (sha1($pass) == $password) {
-				$_SESSION["name"] = $adminname;
-				$_SESSION["capcode"] = $capcode;
-				$_SESSION["candel"] = $candel;
-				$_SESSION["canban"] = $canban;
-				$_SESSION["cancap"] = $cancap;
-				$_SESSION["canacc"] = $canacc;
+		$result = mysqli_call("select * from ".MANATABLE);
+		while ($row=mysqli_fetch_assoc($result)) {
+			if (sha1($pass) == $row["password"]) {
+                                unset($row["password"]);
+                                foreach($row as $u => $v){$_SESSION[$u]=$v;}
 				echo("<center class='passvalid'>".lang("You are now logged in.")."</center>");
 				echo("<meta http-equiv=\"refresh\" content=\"2;URL=".PHP_SELF."?mode=admin\"/>");
 				die(fakefoot());
 			}
 		}
-		die("<center>".lang("Error: Management password incorrect.")."</center>".fakefoot());
 		mysqli_free_result($result);
+		die("<center>".lang("Error: Management password incorrect.")."</center>".fakefoot());
 	}else{
 		// Manager login form
                 $ssubmit=lang("Submit");$spassword=lang("Password");
@@ -73,8 +68,7 @@ EOF;
 	}
 }
 
-function adminacc($accname,$accpassword,$acccapcode,$accdel,$accban,$acccap,$accacc) {
-	if (!$_SESSION['canacc']) die(lang("You do not have the necessary permissions to do that."));
+function adminacc($accname,$accpassword,$acccapcode,$accdel,$accban,$acccap,$accacc,$accedit,$accflag) {
 	if (!$accname) {
 		$self=PHP_SELF;
                 $snewacc=lang("Create a new account");$snewaccmsg=lang("Enter existing account name to modify");
@@ -89,6 +83,8 @@ function adminacc($accname,$accpassword,$acccapcode,$accdel,$accban,$acccap,$acc
                 $saccdel=lang("Can delete posts?");
                 $saccban=lang("Can ban users?");
                 $sacccap=lang("Can post with capcode?");
+                $saccflag=lang("Can flag posts?");
+                $saccedit=lang("Can edit posts?");
                 $saccacc=lang("Can create new accounts?");
                 $schangepass=lang("Change your password");$snewpass=lang("New password");
                 $sconfnewpass=lang("Confirm new password");$schangesub=lang("Change password");
@@ -120,6 +116,10 @@ function adminacc($accname,$accpassword,$acccapcode,$accdel,$accban,$acccap,$acc
                                                                                 <td><input type="checkbox" name="acccap" id="acccap" value="1"></td></tr>
                                                                                 <tr><td class="postblock"><label for="accacc"><b>{$saccacc}</b></label></td>
                                                                                 <td><input type="checkbox" name="accacc" id="accacc" value="1"></td></tr>
+                                                                                <tr><td class="postblock"><label for="accedit"><b>{$saccedit}</b></label></td>
+                                                                                <td><input type="checkbox" name="accedit" id="accedit" value="1"></td></tr>
+                                                                                <tr><td class="postblock"><label for="accflag"><b>{$saccflag}</b></label></td>
+                                                                                <td><input type="checkbox" name="accflag" id="accflag" value="1"></td></tr>
                                                                         </tbody>
                                                                 </table>
                                                         </form>
@@ -152,10 +152,13 @@ function adminacc($accname,$accpassword,$acccapcode,$accdel,$accban,$acccap,$acc
 EOF;
 		die(fakefoot());
 	}
+	if (!$_SESSION['canacc']) die(lang("You do not have the necessary permissions to do that."));
 	if (!$accdel) $accdel=0;
 	if (!$accban) $accban=0;
 	if (!$acccap) $acccap=0;
 	if (!$accacc) $accacc=0;
+	if (!$accedit) $accedit=0;
+	if (!$accflag) $accflag=0;
         
         if(mysqli_fetch_assoc(mysqli_call("SELECT name FROM ".MANATABLE." WHERE `name`='".$accname."'"))){
                 $query="UPDATE ".MANATABLE." SET ".
@@ -164,18 +167,22 @@ EOF;
                         "candel=".$accdel.",".
                         "canban=".$accban.",".
                         "cancap=".$acccap.",".
-                        "canacc=".$accacc." ".
+                        "canacc=".$accacc.",".
+                        "canedit=".$accedit.",".
+                        "canflag=".$accflag." ".
                         "WHERE name='".$accname."'";
                 echo lang("Modifying account: ").$accname;
         }else{
-                $query="insert into ".MANATABLE." (name,password,capcode,candel,canban,cancap,canacc) values (
+                $query="insert into ".MANATABLE." (name,password,capcode,candel,canban,cancap,canacc,canedit,canflag) values (
                         '".$accname."',
                         '".sha1($accpassword)."',
                         '".$acccapcode."',
                         ".$accdel.",
                         ".$accban.",
                         ".$acccap.",
-                        ".$accacc.")";
+                        ".$accacc.",
+                        ".$accedit.",
+                        ".$accflag.")";
                 echo lang("Creating account: ").$accname;
         }
         if (!$result=mysqli_call($query))error(lang("Critical SQL problem!"));
@@ -256,8 +263,10 @@ function admindel() {
 	echo '
 <form action="'.PHP_SELF.'?mode=admin" method="post">
 	<table class="postlists">
-		<thead><tr class="managehead"><th>'.lang("Delete?").'</th><th>'.lang("Sticky?").'</th>
-                <th>'.lang("Closed?").'</th><th>'.lang("Post No.").'</th><th>'.lang("Time").'</th><th>'.lang("Subject").'</th>
+		<thead><tr class="managehead"><th>'.lang("Delete?").'</th>';
+        if($_SESSION['canflag'])echo '<th>'.lang("Sticky?").'</th>
+                <th>'.lang("Closed?").'</th>';
+        echo '<th>'.lang("Post No.").'</th><th>'.lang("Time").'</th><th>'.lang("Subject").'</th>
                 <th>'.lang("Name").'</th><th>'.lang("IP").'</th><th>'.lang("Comment").'</th><th>'.lang("Host").
                 '</th><th>'.lang("Filename").'</th><th>'.lang("Size").'<br />'.lang("(Bytes)").'</th>
                 <th>'.lang("md5").'</th><th>'.lang("Reply #").'</th><th>'.lang("Timestamp (s)").'</th><th>'.lang("Timestamp (ms)").'</th></tr></thead>
@@ -272,15 +281,19 @@ function admindel() {
 				if(is_file(IMG_DIR.$row["tim"].'.'.$row["ext"]))unlink(IMG_DIR.$row["tim"].'.'.$row["ext"]);
 				continue;
 			}
-			mysqli_call("UPDATE ".POSTTABLE." SET `sticky`=".(isset($_POST['s'.$row["no"]])&&$_POST['s'.$row["no"]]=="sticky"?1:0)." WHERE `no`=".$row["no"]);
-			mysqli_call("UPDATE ".POSTTABLE." SET `closed`=".(isset($_POST['c'.$row["no"]])&&$_POST['c'.$row["no"]]=="closed"?1:0)." WHERE `no`=".$row["no"]);
-			$row=mysqli_fetch_assoc(mysqli_call("SELECT * FROM ".POSTTABLE." WHERE `no`=".$row["no"]));
+                        if($_SESSION['canflag']){
+                                mysqli_call("UPDATE ".POSTTABLE." SET `sticky`=".(isset($_POST['s'.$row["no"]])&&$_POST['s'.$row["no"]]=="sticky"?1:0)." WHERE `no`=".$row["no"]);
+                                mysqli_call("UPDATE ".POSTTABLE." SET `closed`=".(isset($_POST['c'.$row["no"]])&&$_POST['c'.$row["no"]]=="closed"?1:0)." WHERE `no`=".$row["no"]);
+                                $row=mysqli_fetch_assoc(mysqli_call("SELECT * FROM ".POSTTABLE." WHERE `no`=".$row["no"]));
+                        }
 		}
 		echo '
 			<tr id="'.$row["no"].'">
-				<td><label><center><input type="checkbox" name="d'.$row["no"].'" value="delete"></center></label></td>
+				<td><label><center><input type="checkbox" name="d'.$row["no"].'" value="delete"></center></label></td>';
+                if($_SESSION['canflag'])echo '
 				<td><label><center><input type="checkbox" name="s'.$row["no"].'"'.($row["sticky"]?" checked":'').' value="sticky"></center></label></td>
-				<td><label><center><input type="checkbox" name="c'.$row["no"].'"'.($row["closed"]?" checked":'').' value="closed"></center></label></td>
+				<td><label><center><input type="checkbox" name="c'.$row["no"].'"'.($row["closed"]?" checked":'').' value="closed"></center></label></td>';
+		echo '
 				<td>'.$row["no"].'</td>
 				<td>'.$row["now"].'</td>
 				<td>'.$row["sub"].'</td>

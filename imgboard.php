@@ -17,7 +17,7 @@ switch(strtolower($mode)){
 	case 'regist':
 	case "post":
                 require_once(CORE_DIR."regist.inc.php");
-		regist($ip,$name,$capcode,$email,$sub,$com,'',$pwd,$resto,$spoiler);
+		regist($ip,$name,$capcode,$email,$sub,$com,'',$pwd,$resto,$spoiler,$steam);
 		break;
 	case 'admin':
                 require_once(CORE_DIR."admin.inc.php");
@@ -113,7 +113,9 @@ EOF;
                                         (isset($accdel)?$accdel:false),
                                         (isset($accban)?$accban:false),
                                         (isset($acccap)?$acccap:false),
-                                        (isset($accacc)?$accacc:false));
+                                        (isset($accacc)?$accacc:false),
+                                        (isset($accedit)?$accedit:false),
+                                        (isset($accflag)?$accflag:false));
                                 break;
                         case "pass":
                                 if(!$newpass)die(lang("Password cannot be empty"));
@@ -298,6 +300,10 @@ EOF;
         case "rss":
                 if(!USE_RSS)error(lang("Error: RSS is disabled."));
                 die(rss());
+                break;
+        case "sam":
+        case "thumblist":
+                require_once(CORE_DIR."sam.inc.php");
                 break;
         case "random":
         case "randomthread":

@@ -6,7 +6,7 @@
 if(basename(__FILE__) == basename($_SERVER["SCRIPT_FILENAME"]))
         die("This file is not to be called directly.");
 
-function regist($ip,$name,$capcode,$email,$sub,$com,$url,$pwd,$resto,$spoiler) {
+function regist($ip,$name,$capcode,$email,$sub,$com,$url,$pwd,$resto,$spoiler,$steam) {
 	global $con,$path,$pwdc,$textonly,$admin,$time,$tim,$upfiles,$upfiles_names,$upfiles_errors,$upfiles_count,$verif,$json_response;
         $resto=(int)$resto;
         
@@ -26,8 +26,8 @@ function regist($ip,$name,$capcode,$email,$sub,$com,$url,$pwd,$resto,$spoiler) {
                 if(mysqli_fetch_assoc($result)["time"]>($time-RENZOKU3))error(lang("You must wait longer before making another thread."));
         }
 	foreach(BADSTRING as $value){
-                if(strpos(' '.$value,$com) ||strpos(' '.$value,$sub)||
-                   strpos(' '.$value,$name)||strpos(' '.$value,$email))
+                if(($com&&strpos(' '.$value,$com)) ||($sub&&strpos(' '.$value,$sub))||
+                   ($name&&strpos(' '.$value,$name))||($email&&strpos(' '.$value,$email)))
                         error(lang("Error: String refused."));
         }
         
@@ -186,6 +186,7 @@ function regist($ip,$name,$capcode,$email,$sub,$com,$url,$pwd,$resto,$spoiler) {
 	$posterid = substr(crypt(md5($_SERVER["REMOTE_ADDR"].'id'.gmdate("Ymd", $time+9*60*60)),'id'),-8);
 	// Text plastic surgery (rorororor)
 	$email = CleanStr($email); $email = preg_replace("/[\r\n]/", "", $email);
+	$steam = CleanStr($steam); $steam = preg_replace("/[\r\n]/", "", $steam);
 	$sub = CleanStr($sub); $sub = preg_replace("/[\r\n]/", "", $sub);
 	$url = CleanStr($url); $url = preg_replace("/[\r\n]/", "", $url);
 	$name=preg_replace("/[\r\n]/", "", $name);
@@ -313,7 +314,7 @@ function regist($ip,$name,$capcode,$email,$sub,$com,$url,$pwd,$resto,$spoiler) {
 	if(!$result=mysqli_call("INSERT INTO ".POSTTABLE.
                 " (no,now,name,trip,capcode,email,sub,com,host,pwd,country,country_name,".
                 "filedeleted,filename,ext,w,h,tn_w,tn_h,spoiler,time,tim,md5,fsize,num_files,".
-                "root,resto,ip,id,sticky,closed) VALUES (".
+                "root,resto,ip,id,steam,sticky,closed) VALUES (".
                         "0,".
                         "'".$now."',".
                         "'".mysqli_escape_string($con, $name)."',".
@@ -340,6 +341,7 @@ function regist($ip,$name,$capcode,$email,$sub,$com,$url,$pwd,$resto,$spoiler) {
                         ((int)$resto).",".
                         "'".$_SERVER["REMOTE_ADDR"]."',".
                         "'".$posterid."',".
+                        "'".mysqli_escape_string($con, $steam)."'".
                         "0,0".
                         ")"))error(lang("Critical SQL problem!"));// post registration
 

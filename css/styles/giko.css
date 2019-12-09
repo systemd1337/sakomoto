@@ -1,0 +1,73 @@
+table{
+        border-spacing:0;
+        border-collapse:separate;
+}
+#repod_thread_stats_container,.navtopright,.thread_nav{float:right;}
+.postblock,.postlists th{
+        width:30%;
+        white-space:nowrap;
+}
+#postform td,.reply{
+        border-style:solid;
+        border-width:1px;
+        border-color:#ccc;
+}
+#postform td{padding:5px;}
+#postform table{width:100%}
+.postertrip{font-weight:400;}
+.reply{background-color:#f0f8ff}
+table:target .post.reply{background-color:#ffe7dc}
+#catalog td center{
+        overflow:hidden;
+        max-height:250px;
+        max-width:100px;
+        word-wrap:break-word;
+}
+.replymode{padding:2px;}
+.unkfunc{color:#789922;}
+body{
+        background-color:#f8fdff;
+        margin:0;
+        padding-top:5px;
+        padding-bottom:5px;
+        background-image:linear-gradient(#eff,transparent 200px);
+        font-family:arial,helvetica,sans-serif;
+        font-size:10pt;
+        background-repeat:repeat-x;
+}
+#pager,button,input,select{
+        border-style:solid;
+        border-width:1px;
+        border-color:#aaa;
+}
+button,input,select{
+        font-size:inherit;
+        background-color:#ddd;
+}
+.postblock,.postlists th,button:hover,input:hover,select:hover{background-color:#eee;}
+.logo{padding-top:1em;}
+hr{
+        height:2px;
+        background-color:#ccc;
+}
+#postform {
+        max-width:720px;
+        padding:1em 5px;
+}
+.thread>table{margin-top:1em;}
+#pager{margin:5px;}
+#pager td,hr,input[type=file]{border-style:none;}
+.ctrl input[type=submit]{border-left:none;}
+.post.reply{padding-right:2px;}
+a,a:visited{color:#673ab7;}
+a:hover{color:red;}
+.quotelink{color:#9c4d9c;}
+.thread{
+        margin:10px;
+        padding-top:1em;
+}
+.omittedposts{color:#444;}
+.subject{color:#e84563;}
+.nameBlock{color:#328832;}
+.logo{color:#ea3636;}
+.sideArrows{padding-right:5px;}

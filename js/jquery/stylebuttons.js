@@ -23,6 +23,7 @@ repod.buttons = {
                                 "watch_thread_off":"&star;"
                         },
                         switch:{
+                                "giko":"burichan",
                                 "yotsuba":"futaba",
                                 "yotsuba_b":"burichan",
                                 "miku":"burichan"

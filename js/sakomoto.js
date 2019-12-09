@@ -102,6 +102,12 @@ function closeWebm(thisclose){
         thisclose.parentNode.parentNode.removeChild(thisclose.parentNode);
 }
 
+function insert(pn){
+        combox=document.getElementById("com");
+        combox.value+=">>"+pn+"\n";
+        combox.focus();
+}
+
 window.onload=function(){
         /*//Use jQuery version instead
 	[].slice.call(document.getElementsByClassName("fileThumb")).forEach(function(thumblink){
@@ -172,8 +178,8 @@ window.onload=function(){
                         this.parentNode.parentNode.appendChild(closespan);
                         
                         player.onload=function(){
-                                player.style.width=player.contentWindow.document.querySelector("#playercontent video").videoWidth+"px";
-                                player.style.height=player.contentWindow.document.querySelector("#playercontent video").videoHeight+"px";
+//                                player.style.width=player.contentWindow.document.querySelector("#playercontent video").videoWidth+"px";
+//                                player.style.height=player.contentWindow.document.querySelector("#playercontent video").videoHeight+"px";
                                 player.style.minWidth="calc( 200px + 1.6em )";
                                 player.style.margin="5px";
                         }
@@ -181,4 +187,29 @@ window.onload=function(){
         });
         
         getUserFav(cssdef);
+        /*
+        var postForm=document.getElementById("postform");
+        [].slice.call(document.getElementsByClassName("thread")).forEach(function(thread){
+                thisqr=document.createElement("div");
+                thisqr.className="postarea";
+                thisform=document.getElementById("postform").cloneNode(true);
+                thisform.id="qr"+thread.id.slice(1);
+                thisform.style.display="none";
+                thisform.innerHTML+="<input type=\"hidden\" name=\"resto\" value=\""+thread.id.slice(1)+"\"/>";
+                thisqr.appendChild(thisform);
+                thisexpand=document.createElement("div");
+                thisexpand.className="reply";
+                thisexpand.innerHTML="[<a href=\"javascript:void(0);\" onclick=\"qrexpand(this)\">Reply</a>]";
+                thisexpand.style.display="inline-block";
+                thisexpand.style.padding="2px";
+                thisqr.appendChild(thisexpand);
+                thread.appendChild(thisqr);
+        });*/
 }
+/*
+function qrexpand(ex){console.log();
+        document.getElementById("qr"+ex.parentNode.parentNode.parentNode.id.slice(1)).style.display="initial";
+        ex.parentNode.style.display="none";
+        ex.parentNode.parentNode.querySelector("#verifimg").click();
+}
+*/

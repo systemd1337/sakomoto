@@ -88,6 +88,7 @@ const EMOTES = [
 const TRIPCAP = [ //Custom tripcode capcodes
 //Trip => cap
 ];
+const STEAMA = false;
 //Default posting values
 const DEFAULT_SUBJECT = "";
 const DEFAULT_NAME = "Anonymous";

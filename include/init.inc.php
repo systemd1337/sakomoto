@@ -2,12 +2,13 @@
 if(basename(__FILE__) == basename($_SERVER["SCRIPT_FILENAME"]))
         die("This file is not to be called directly.");
 
+ignore_user_abort(true);
+
 session_start();
 header("expires:0");
 header("last-modified:".gmdate("D, d M Y H:i:s")." GMT");
 header("cache-control:no-store, no-cache, must-revalidate");
 header("pragma:no-cache");
-ignore_user_abort(true);
 
 require_once(CORE_DIR."generate.inc.php");
 require_once(CORE_DIR."functions.inc.php");
@@ -20,7 +21,7 @@ require_once("config.inc.php");
 include(CORE_DIR."strings/".LANGUAGE.".inc.php");// String resource file
 
 //This software is free, all I ask in return is that you leave proper credit
-const FOOT="- GazouBBS + ".
+const FOOT="- <a href=\"http://php.loglog.jp/\" target=\"_blank\">GazouBBS</a> + ".
 "<a href=\"http://www.2chan.net/\" target=\"_blank\">futaba</a> + ".
 "<a href=\"http://www.1chan.net/futallaby/\" target=\"_blank\">futallaby</a> + ".
 "<a href=\"https://github.com/knarka/fikaba\" target=\"_blank\">fikaba</a> + ".
@@ -114,6 +115,7 @@ if (!table_exist(POSTTABLE)) {
 		now   text,
 		time  int,
 		email text,
+                steam text,
 		name  text,
 		trip text,
 		id    text,
@@ -167,7 +169,9 @@ if (!table_exist(MANATABLE)) {
 		candel int not null,
 		canban int not null,
 		cancap int not null,
-		canacc int not null)");
+		canacc int not null,
+		canedit int not null,
+		canflag int not null)");
 	if (!$result) {echo lang("Unable to create table!")."<br/>";}
 	$query="insert into ".MANATABLE." (name,password,capcode,candel,canban,cancap,canacc) values ('admin', '".sha1("password")."','',0,0,0,1)";
 	if (!$result=mysqli_call($query))echo lang("Critical SQL problem!")."<br/>"; // Post registration
@@ -188,9 +192,12 @@ if (!table_exist(REPORTTABLE)) {
 
 $ip = $_SERVER['REMOTE_ADDR'];
 
+if(!is_dir(CACHE_DIR))mkdir(CACHE_DIR);
+
 //Prevent notices for unset variables
-$iniv=['mode','name','email','sub','com','pwd','resto','pass','res','post','no',"res",
-        "capcode","spoiler","admin","pass","pwdc","q","json_response","paintsizew","paintsizeh"];
+$iniv=['mode','name','email','sub','com','pwd','resto','pass','res','post','no',"res","steam",
+        "capcode","spoiler","admin","pass","pwdc","q","json_response","paintsizew","paintsizeh",
+        "cmd","pic","start"];
 foreach($iniv as $iniva){
         if(!isset($$iniva))$$iniva=false;
 }

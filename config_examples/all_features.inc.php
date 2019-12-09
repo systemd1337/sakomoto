@@ -125,6 +125,7 @@ const TRIPCAP = [ //Custom tripcode capcodes
 //Trip => cap
 "!Ep8pui8Vw2"=>"<font color=\"pink\">## Faggot</font>"
 ];
+const STEAM = true;
 //Default posting values
 const DEFAULT_SUBJECT = "No subject";
 const DEFAULT_NAME = "Anonymous";
