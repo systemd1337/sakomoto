@@ -6,7 +6,7 @@ Sakomoto is an imageboard script based on fikaba
 * Knarka (for making the script which this was based on, fikaba)
 * Moot + Thatdog (for making the script which fikaba was based on, futallaby)
 * Developers of 2chan.net (for making the script which futallaby was based on, futaba)
-* LetsPHP (for making the script which futaba was based on, GouzouBBS)
+* LetsPHP (for making the script which futaba was based on, GazouBBS)
 * Developers of Vichan (Some code was ported from Vichan/tinyboard)
 * Team4chan (for accidently leaking yotsuba, the script 4chan runs on. Some code was ported from there)
 * Yushe (some code and tips)
