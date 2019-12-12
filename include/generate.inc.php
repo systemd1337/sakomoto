@@ -386,6 +386,11 @@ function head(&$dat,$extra='') {
 <html lang="{$lang}" xmlns="http://www.w3.org/1999/xhtml">
 	<head>
                 <meta http-equiv="content-type"  content="text/html;charset=utf-8"/>
+                <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+                <meta name="DC.Format" content="text/html"/>
+                <meta name="DC.Type" content="imageboard">
+                <meta name="DC.Coverage" content="Worldwide">
+                <meta name="application-name" content="{$title}"/>
                 <meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate"/>
                 <meta http-equiv="pragma" content="no-cache"/>
                 <meta http-equiv="expires" content="0"/>
@@ -393,8 +398,10 @@ function head(&$dat,$extra='') {
                 <meta http-equiv="content-language" content="{$lang}"/>
                 <meta name="language" content="{$lang}"/>
                 <meta property="og:locale" content="{$lang}"/>
+                <meta name="DC.Language" content="en"/>
                 <meta name="keywords" content="{$keywords}"/>
                 <meta name="description" content="{$description}"/>
+                <meta name="DC.Description" content="Description"/>
                 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes"/>
                 <meta name="revisit-after" content="15 days"/>
                 <meta name="referrer" content="origin"/>
@@ -455,6 +462,7 @@ EOF;
         $head.="<link rel=\"preload\" as=\"image\" href=\"".TITLEIMG."\"/>";
         $head.="<link rel=\"preload\" as=\"image\" href=\"".CAPTCHA_IMG."\"/>";
         $head.="<title>".TITLE."</title>";
+        $head.="<meta property=\"DC.title\" content=\"".TITLE."\"/>";
         $head.="<meta property=\"og:title\" content=\"".TITLE."\"/>";
         $head.="<meta name=\"twitter:title\" content=\"".TITLE."\"/>";
         $head.="<meta property=\"og:description\" content=\"".substr(DESCRIPTION,0,255)."\"/>";
@@ -463,6 +471,7 @@ EOF;
                 $head.="<link rel=\"apple-touch-icon\" href=\"".ICON."\"/>";
                 $head.="<link rel=\"shortcut icon\" href=\"".ICON."\"/>";
                 $head.="<link rel=\"icon\" href=\"".ICON."\"/>";
+                $head.="<meta itemprop=\"image\" content=\"".ICON."\">";
         }
         $head.="<meta property=\"og:url\" content=\"".HERE."\"/>";
         if(HEAD_EXTRA)$head.=HEAD_EXTRA;
