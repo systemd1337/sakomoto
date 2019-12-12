@@ -6,6 +6,11 @@ document.write(`
         border-style:solid;
         border-width:1px;
         cursor:pointer;
+        box-shadow:2px 2px 3px 0px #777;
+        border-radius:5px;
+        white-space:nowrap;
+        padding:3px;
+        font-size:small;
 }
 </style>
 `);
