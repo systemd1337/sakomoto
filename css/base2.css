@@ -31,7 +31,12 @@ hr{
         border-radius:6px;
 }
 #catalog td{padding:20px;}
-#catalog img[alt="***"]{box-shadow:0 0 5px rgba(0,0,0,.25);}
+#catalog img[alt="***"]{
+        box-shadow:0 0 5px rgba(0,0,0,.25);
+        border-radius:5px;
+        transition: 0.2s;
+}
+#catalog img[alt="***"]:hover{border-radius:0;}
 .file a,.quotelink{text-decoration:underline;}
 .boardNav a{padding:1px;}
 .postblock,.postlists th,.reply,input[type="text"],input[type="password"],textarea,hr{border-width:1px;}
