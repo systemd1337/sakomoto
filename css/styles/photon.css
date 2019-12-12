@@ -85,3 +85,4 @@ hr{
 .backlink a{font-size:1.2em;}
 .file a,.quotelink{text-decoration:underline;}
 .quotelink{color:#f60;}
+#errormsg{color:red;}

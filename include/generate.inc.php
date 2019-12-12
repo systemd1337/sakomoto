@@ -160,7 +160,13 @@ function buildPost($post,$res=0){
 	$postinfo="<span class=\"postInfo\">";
 	$postinfo.="<label><input class=\"del\" id=\"delcheck".$post["no"]."\" type=\"checkbox\" name=\"".$post["no"]."\" value=\"delete\"/>";
 	if($post["sub"])$postinfo.="<font size=\"+1\"><b class=\"subject\">".$post["sub"]."</b></font> ";
-        if($post["steam"])$postinfo.="<a href=\"".$post["steam"]."\" target=\"_blank\"><img src=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAA7DAAAOwwHHb6hkAAABHElEQVQ4jd2SMYrCUBCGvxcWooVC2ngBLQRPoJWIYJc+hxDEwkoEi7Se4HVibyPiGTyBjU16IRCI799icdmwFq5a7cBUM98/8w9jAAcYngsZQE/CAHivwG8R+Hi0sVarEccxxhistVwuF+DreA/dYLFY4HkekjDGMJvNyhuMRiM6nQ7n8xlrbQmuVCpUq1XG4zEASZL8ttDtdhkOh4RhSBAErNdr0jQFYDAY0O/3WS6XSMI5VxogQKvVSsfjUbcoikKHw0GbzUan00nOOV2vV83nc/m+rxv3LVCv1xVFkZrNpuI41na7VZ7nkqQsy7Tf7zWdTn+CZYF72Wg0ZK1VkiTa7XZqtVp/EwDUbrc1mUzU6/Xu1v/BK3u8aOETWfygttVpCfcAAAAASUVORK5CYII=\" alt=\"Steam\"/></a> ";
+        if($post["steam"]){
+                $profid=array_filter(explode("/",$post["steam"]));
+                $tip=false;
+                if($badge=base64_encode(file_get_contents("https://badges.steamprofile.com/profile/default/steam/".end($profid).".png")))
+                        $tip="onmouseover=\"Tip('<img src=\\'data:image/jpg;base64,".$badge."\\' alt=\\'\\'/>');\" onmouseout=\"UnTip();\" ";
+                $postinfo.="<a href=\"".$post["steam"]."\" target=\"_blank\"><img ".$tip."src=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAA7DAAAOwwHHb6hkAAABHElEQVQ4jd2SMYrCUBCGvxcWooVC2ngBLQRPoJWIYJc+hxDEwkoEi7Se4HVibyPiGTyBjU16IRCI799icdmwFq5a7cBUM98/8w9jAAcYngsZQE/CAHivwG8R+Hi0sVarEccxxhistVwuF+DreA/dYLFY4HkekjDGMJvNyhuMRiM6nQ7n8xlrbQmuVCpUq1XG4zEASZL8ttDtdhkOh4RhSBAErNdr0jQFYDAY0O/3WS6XSMI5VxogQKvVSsfjUbcoikKHw0GbzUan00nOOV2vV83nc/m+rxv3LVCv1xVFkZrNpuI41na7VZ7nkqQsy7Tf7zWdTn+CZYF72Wg0ZK1VkiTa7XZqtVp/EwDUbrc1mUzU6/Xu1v/BK3u8aOETWfygttVpCfcAAAAASUVORK5CYII=\" alt=\"Steam\"/></a> ";
+        }
         if($post["email"])$post["name"]="<a href=\"email:".$post["email"]."\">".$post["name"]."</a>";
         if($post["trip"]||$post["name"])$postinfo.="<span class=\"nameBlock\">";
 	if($post["name"])$postinfo.="<b class=\"name\">".$post["name"]."</b>";
@@ -189,7 +195,7 @@ function buildPost($post,$res=0){
         if($post["closed"])$postinfo.=" <img src=\"closed.gif\" alt=\"".lang("Closed")."\" title=\"".lang("Closed")."\" class=\"retina\"/>";
 	if(!($post["resto"]||$res))$postinfo.="&nbsp;[<a href=\"".RES_DIR.$post["no"].PHP_EXT."\">".lang("Reply")."</a>]";
         $postinfo.="&nbsp;<small class=\"backlink\">";
-        $results=mysqli_call("SELECT no,resto FROM ".POSTTABLE." WHERE com LIKE '%&gt;&gt;".$post["no"]."%'");
+        $results=mysqli_call("SELECT no,resto FROM ".POSTTABLE." WHERE com LIKE '%&gt;&gt;".$post["no"]."</a>%'");
         while($link=mysqli_fetch_assoc($results)){
                 $postinfo.="<a class=\"quotelink\" href=\"".PHP_SELF."?res=".$link["resto"]."#p".$link["no"]."\">&gt;&gt;".$link["no"]."</a> ";
         }
@@ -529,7 +535,7 @@ function form(&$dat,$resno=0,$admin="",$manapost=false,$paintcom=false) {
         //Subject
         $inputs.="<tr><td class=\"postblock\"><label for=\"sub\"><b>".lang("Subject")."</b></label></td>";
         $inputs.="<td><input type=\"text\" name=\"sub\" id=\"sub\" size=\"28\" tabindex=\"6\"/>".
-                "<button type=\"submit\" name=\"post\" value=\"post\" tabindex=\"11\" id=\"postsubmit\">".lang(($resno?"New Reply":"New Topic"))."</button></td></tr>";
+                "<button type=\"submit\" name=\"post\" value=\"post\" tabindex=\"12\" id=\"postsubmit\">".lang(($resno?"New Reply":"New Topic"))."</button></td></tr>";
         //Comment
         $inputs.="<tr><td class=\"postblock\"><label for=\"com\"><b>".lang("Comment")."</b></label></td>";
         $inputs.="<td><textarea name=\"com\" id=\"com\" cols=\"48\" style=\"width:300px\" rows=\"6\" tabindex=\"7\"".
@@ -551,7 +557,7 @@ function form(&$dat,$resno=0,$admin="",$manapost=false,$paintcom=false) {
                 $inputs.="<tr id=\"filerow\"><td class=\"postblock\"><label".(MAX_FILES>1?'':" for=\"upfile\"")."><b>".lang("File")."</b></label></td><td>";
                 $files=MAX_FILES;
                 while($files--){
-                        $inputs.="<div ".($files?"class=\"unimportant\"":"style=\"display:table-row;\"")."><input type=\"file\" name=\"upfile".$files."\" ".(MAX_FILES>1?"class":"id")."=\"upfile\" tabindex=\"9\"/>";
+                        $inputs.="<div id=\"upload\" ".($files?"class=\"unimportant\"":"style=\"display:table-row;\"")."><input type=\"file\" name=\"upfile".$files."\" ".(MAX_FILES>1?"class":"id")."=\"upfile\" tabindex=\"9\"/>";
                         $inputs.= <<<EOF
         <script type="text/javascript" async="async">
 /*<!--*/
@@ -561,8 +567,7 @@ document.write('<button type="button" onclick="document.querySelector(\'input[na
 </div>
 EOF;
                 }
-                $inputs.="</td></tr>";
-                //
+                //Oekaki
                 if(OEKAKI_DRIVER){
                         $needjsdraw="<noscript>".lang("You need JavaScript to use the painter.")."</noscript>";
                         switch(OEKAKI_DRIVER){
@@ -615,19 +620,18 @@ EOF;
         }
         //Toggle unimportant
         $inputs.= <<<EOF
-<tr><td colspan="2"><script type="text/javascript" async="async">
+<script type="text/javascript" async="async">
 /*<!--*/
-document.write('<button type="button" onclick="toggleHidden();">Toggle hidden feilds</button>');
+document.write('<tr><td colspan="2"><button type="button" onclick="toggleHidden();">Toggle hidden feilds</button></td></tr>');
 /*-->*/
 </script>
-<noscript><hr/></noscript></td></tr>
 EOF;
         //Password
         $inputs.="<tr class=\"unimportant\"><td class=\"postblock\"><label for=\"pwd\"><b>".lang("Password")."</b></label></td>";
         $passtxt=lang("(Password used for file deletion)");
         $inputs.= <<<EOF
         <td>
-                <input type="password" name="pwd" id="pwd" size="8" tabindex="10"/> 
+                <input type="password" name="pwd" id="pwd" size="8" tabindex="11"/> 
                 <small>{$passtxt}</small>
                 <script type="text/javascript" async="async">
 /*<!--*/
@@ -696,15 +700,16 @@ function foot(&$dat){
 EOF;
 }
 
-function error($mes) { /* Basically a fancy die() */
-	global $upfile_name,$json_response;
+function error($mes){ /* Basically a fancy die() */
+	global $upfile_name,$json_response,$dat;
         if($json_response){
                 header('Content-Type: application/json');
                 die(json_encode(["status"=>"error","error"=>$mes]));
         }
-	head($dat,"<meta name=\"robots\" content=\"noindex, nofollow\">");
+	if(!$dat)head($dat,"<meta name=\"robots\" content=\"noindex, nofollow\">");
 	echo $dat;
-	die("<center><h2 id=\"errormsg\">".$mes."</h2><big>[<a href=\"".PHP_SELF2."\">".lang("Return")."</a>]</big></center>".fakefoot());
+	die("<table width=\"100%\" height=\"200\"><tbody><tr valign=\"middle\"><td><center><h2 id=\"errormsg\">".$mes."</h2><big>[<a href=\"".PHP_SELF2."\">".lang("Return")."</a>]</big></center></td></tr></tbody></table>".fakefoot());
+        die(fakefoot());
 }
 
 function auto_link($proto) {
