@@ -385,6 +385,9 @@ function head(&$dat,$extra='') {
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html lang="{$lang}" xmlns="http://www.w3.org/1999/xhtml">
 	<head>
+                <meta charset="UTF-8"/>
+                <meta http-equiv="Content-Script-Type" content="text/javascript"/>
+                <meta http-equiv="Content-Style-Type" content="text/css"/>
                 <meta http-equiv="content-type"  content="text/html;charset=utf-8"/>
                 <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
                 <meta name="DC.Format" content="text/html"/>
@@ -446,18 +449,18 @@ EOF;
         $head.="js_dir='".JS_DIR."',";
         $head.="cssdef='".CSSDEFAULT."';";
         $head.="</script>";
-        $head.="<script src=\"".JS_DIR."jquery/jquery.min.js\" type=\"text/javascript\"></script>";
-        $head.="<script src=\"".JS_DIR."futaba.js\" type=\"text/javascript\"></script>";
-        $head.="<script src=\"".JS_DIR."sakomoto.js\" type=\"text/javascript\"></script>";
+        $head.="<script charset=\"UTF-8\" src=\"".JS_DIR."jquery/jquery.min.js\" type=\"text/javascript\"></script>";
+        $head.="<script charset=\"UTF-8\" src=\"".JS_DIR."futaba.js\" type=\"text/javascript\"></script>";
+        $head.="<script charset=\"UTF-8\" src=\"".JS_DIR."sakomoto.js\" type=\"text/javascript\"></script>";
         foreach(JSPLUGINS as $js){
-                $head.="<script src=\"".JS_DIR.$js."\" type=\"text/javascript\"></script>";
+                $head.="<script charset=\"UTF-8\" src=\"".JS_DIR.$js."\" type=\"text/javascript\"></script>";
         }
 	foreach(STYLES as $stylename => $stylefile) {
-		$head.="<link rel=\"".($stylename==CSSDEFAULT?'':"alternate ")."stylesheet\" type=\"text/css\" ".
+		$head.="<link charset=\"UTF-8\" rel=\"".($stylename==CSSDEFAULT?'':"alternate ")."stylesheet\" type=\"text/css\" ".
                         "href=\"".CSS_DIR."styles/".$stylefile."\" title=\"".$stylename."\"/>";
 	}
-        $head.="<link rel=\"stylesheet\" type=\"text/css\" href=\"".CSS_DIR."mobile.css\"/>";
-        if(USE_RSS)$head.="<link rel=\"alternate\" type=\"application/rss+xml\" href=\"".RSS."\"/>";
+        $head.="<link charset=\"UTF-8\" rel=\"stylesheet\" type=\"text/css\" href=\"".CSS_DIR."mobile.css\"/>";
+        if(USE_RSS)$head.="<link charset=\"UTF-8\" rel=\"alternate\" type=\"application/rss+xml\" href=\"".RSS."\"/>";
         $head.="<meta name=\"distribution\" content=\"".($mode=="admin"?"iu":"global")."\"/>";
         $head.="<link rel=\"preload\" as=\"image\" href=\"".TITLEIMG."\"/>";
         $head.="<link rel=\"preload\" as=\"image\" href=\"".CAPTCHA_IMG."\"/>";
