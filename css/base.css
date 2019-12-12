@@ -16,3 +16,7 @@
         display:block;
         padding:2px;
 }
+.post{
+        overflow-wrap:break-word;
+        word-break:break-word;
+}
