@@ -10,14 +10,14 @@ repod.image_hover = {
 			selector: ".postimg"
 		}
 		repod.suite_settings && repod.suite_settings.info.push({mode:'modern',menu:{category:'Images',read:this.config.enabled,variable:'repod_image_hover_enabled',label:'Image hover',hover:'Expand images on hover, limited to browser size'}});
-		repod.suite_settings && repod.suite_settings.info.push({mode:'modern',menu:{category:'Images',read:this.config.enabled,variable:'repod_image_hover_follow_enabled',label:'Image hover follows cursor',hover:'Hovered image follows cursor'}});
+//		repod.suite_settings && repod.suite_settings.info.push({mode:'modern',menu:{category:'Images',read:this.config.enabled,variable:'repod_image_hover_follow_enabled',label:'Image hover follows cursor',hover:'Hovered image follows cursor'}});
 		this.update();
 	},
 	update: function() {
 		if (this.config.enabled) {
-			$(document).on("mouseover", this.config.selector, function() { repod.image_hover.display($(this)); });
-			$(document).on("mouseout", this.config.selector, function() { repod.image_hover.remove_display() });
-                        if(this.config.follow_enabled)$(this.config.selector).mousemove(function(event){
+			$(document).on("mouseover", this.config.selector, function() { Tip('<img src="'+$(this).parent().attr("href")+'"/>'); /*repod.image_hover.display($(this));*/ });
+			$(document).on("mouseout", this.config.selector, function() { UnTip(); /*repod.image_hover.remove_display();*/ });
+                        /*if(this.config.follow_enabled)$(this.config.selector).mousemove(function(event){
                                 repod.image_hover.curpos.x=event.clientX;
                                 repod.image_hover.curpos.y=event.clientY;
                                 hoverimg=$("img#img_hover_element");
@@ -29,7 +29,7 @@ repod.image_hover = {
                                 if(repod.image_hover.curpos.y+himgh>$(window).height())
                                         hoverimg.css("bottom","0px");
                                 else hoverimg.css("top",(repod.image_hover.curpos.y+10)+"px");
-                        });
+                        });*/
 		}
 	},
         curpos:{x:0,y:0},
