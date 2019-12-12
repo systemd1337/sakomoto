@@ -1,3 +1,5 @@
+@charset "UTF-8";
+
 .thread_nav,#repod_thread_stats_container,.navtopright{float:right;}
 .postblock,.postlists th{
         width:4.5em;
