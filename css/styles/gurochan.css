@@ -1,3 +1,5 @@
+@import "../base.css";
+
 body{background:#EDDAD2;}
 input,textarea,button{
         background-color:#E6CBC0;
@@ -26,8 +28,7 @@ a:hover{color:#D00;}
 .omittedposts{color:#070707;}
 .postNum a{text-decoration:none;}
 .name{color:#117743;}
-.navtopright,#repod_thread_stats_container{float:right;}
 hr{
-        border-color: #888;
-        height: 2px;
+        border-color:#888;
+        height:2px;
 }

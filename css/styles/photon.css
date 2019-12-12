@@ -1,88 +1,36 @@
-body{
-        background-color:#eee;
-        min-height:200px;
-        font-family:arial,helvetica,sans-serif;
-        font-size: 10pt;
-}
-small{font-size:9pt;}
-.boardNav a{padding:1px;}
+@import "../base2.css";
+
+body{background-color:#eee;}
 .postNum a,.reflink,.postNum a:visited,.reflink:visited,body{color:#333;}
-.logo{
-        font-family:Tahoma,sans-serif;
-        letter-spacing: -1px;
-}
-a,a:visited{
-        color:#f60;
-        text-decoration:none;
-}
+a,a:visited{color:#f60;}
 #pager,.reply{
         border-style:solid;
-        padding:2px;
         border-color:#ccc;
 }
-.reply,input[type="text"],input[type="password"],textarea,.postblock,.postlists th,hr{border-width:1px;}
 input[type="text"],input[type="password"],textarea{
         border-style:solid;
         border-color:#aaa;
-        padding:2px;
-        margin-right:2px;
 }
 input[type="text"]:focus,input[type="password"]:focus,textarea:focus{border-color:#ea8;}
 a:hover{color:#f30!important;}
-.thread_nav,#repod_thread_stats_container,.navtopright{float:right;}
 .postblock,.postlists th{
         background-color:#ddd;
         border-color:#ccc;
-        width:4.5em;
-        white-space:nowrap;
         border-style:solid;
-        padding:5px;
-        padding-top:0;
-        padding-bottom:0;
 }
-hr{
-        border-style:none;
-        border-top-style:solid;
-        border-color:#ddd;
-}
-.subject{
-        color:#111;
-        font-size:10pt
-}
-.postertrip{font-weight:400;}
+hr{border-color:#ddd;}
+.subject{color:#111;}
 .postlists tr:nth-of-type(odd),.reply,#pager{background-color:#ddd;}
 .postlists tr:target,table:target .post.reply{
         background-color:#ccc;
         border-color:#ccc;
 }
-.post.reply{
-        border-color:#ccc;
-        padding-right:8px;
-}
-#catalog td center{
-        overflow:hidden;
-        max-height:250px;
-        max-width:100px;
-        word-wrap:break-word;
-}
+.post.reply{border-color:#ccc;}
 .omittedposts{color:#707070}
 .replymode{
         background-color:#ccc;
-        color:black;display:block;
-        padding:2px;
+        color:black;
 }
 .unkfunc{color:#789922;}
-.posteruid b{
-        font-size:0.9em;
-        padding-left:5px;
-        padding-right:5px;
-        border-radius:6px;
-}
-#pager td,#catalog,#catalog td{border-style:none;}
-#catalog td{padding:20px;}
-#catalog img[alt="***"]{box-shadow:0 0 5px rgba(0,0,0,.25);}
-#catalog font[size="1"]{font-size:12pt;}
-.backlink a{font-size:1.2em;}
-.file a,.quotelink{text-decoration:underline;}
 .quotelink{color:#f60;}
 #errormsg{color:red;}

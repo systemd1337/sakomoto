@@ -1,0 +1,39 @@
+@import "base.css";
+
+body{
+        min-height:200px;
+        font-family:arial,helvetica,sans-serif;
+        font-size: 10pt;
+}
+.logo{
+        font-family:Tahoma,sans-serif;
+        letter-spacing: -1px;
+}
+.postblock,.postlists th{
+        padding:5px;
+        padding-top:0;
+        padding-bottom:0;
+}
+small{font-size:9pt;}
+a,a:visited{text-decoration:none;}
+#pager,.reply,input[type="text"],input[type="password"],textarea{padding:2px;}
+input[type="text"],input[type="password"],textarea{margin-right:2px;}
+hr{
+        border-style:none;
+        border-top-style:solid;
+}
+.subject{font-size:10pt;}
+#pager td,#catalog,#catalog td{border-style:none;}
+.posteruid b{
+        font-size:0.9em;
+        padding-left:5px;
+        padding-right:5px;
+        border-radius:6px;
+}
+#catalog td{padding:20px;}
+#catalog img[alt="***"]{box-shadow:0 0 5px rgba(0,0,0,.25);}
+.file a,.quotelink{text-decoration:underline;}
+.boardNav a{padding:1px;}
+.postblock,.postlists th,.reply,input[type="text"],input[type="password"],textarea,hr{border-width:1px;}
+#catalog font[size="1"]{font-size:12pt;}
+.filesize,.nameBlock,.subject{unicode-bidi:embed;}

@@ -1,12 +1,10 @@
+@import "../base2.css";
+
 table{
         border-spacing:0;
         border-collapse:separate;
 }
-#repod_thread_stats_container,.navtopright,.thread_nav{float:right;}
-.postblock,.postlists th{
-        width:30%;
-        white-space:nowrap;
-}
+.postblock,.postlists th{width:30%;}
 #postform td,.reply{
         border-style:solid;
         border-width:1px;
@@ -14,16 +12,8 @@ table{
 }
 #postform td{padding:5px;}
 #postform table{width:100%}
-.postertrip{font-weight:400;}
 .reply{background-color:#f0f8ff}
 table:target .post.reply{background-color:#ffe7dc}
-#catalog td center{
-        overflow:hidden;
-        max-height:250px;
-        max-width:100px;
-        word-wrap:break-word;
-}
-.replymode{padding:2px;}
 .unkfunc{color:#789922;}
 body{
         background-color:#f8fdff;
@@ -31,8 +21,6 @@ body{
         padding-top:5px;
         padding-bottom:5px;
         background-image:linear-gradient(#eff,transparent 200px);
-        font-family:arial,helvetica,sans-serif;
-        font-size:10pt;
         background-repeat:repeat-x;
 }
 #pager,button,input,select{
@@ -45,7 +33,6 @@ button,input,select{
         background-color:#ddd;
 }
 .postblock,.postlists th,button:hover,input:hover,select:hover{background-color:#eee;}
-.logo{padding-top:1em;}
 hr{
         height:2px;
         background-color:#ccc;
