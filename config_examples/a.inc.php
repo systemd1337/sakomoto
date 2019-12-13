@@ -24,6 +24,7 @@ const RULES = <<<EOF
         <li>Rule 1</li>
         <li>Rule 2</li>
         <li>Rule 3</li>
+        <li><iframe src="./count.php" width="100%" height="15" scrolling="no" frameborder="0" marginwidth="0" marginheight="0" border="0"></iframe></li>
 </ul>
 EOF;
 
