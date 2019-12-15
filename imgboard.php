@@ -4,6 +4,10 @@
 # Based on GazouBBS, Futaba, Futallaby, Fikaba
 # Much code also from Saguaro
 
+if (!file_exists('config.inc.php')){
+        header("content-type:text/plain");
+	die("Error: Imageboard must be configured before usage.");
+}
 require_once("config.inc.php");
 require_once(CORE_DIR."init.inc.php");
 
@@ -17,7 +21,7 @@ switch(strtolower($mode)){
 	case 'regist':
 	case "post":
                 require_once(CORE_DIR."regist.inc.php");
-		regist($ip,$name,$capcode,$email,$sub,$com,'',$pwd,$resto,$spoiler);
+		regist($ip,$name,$capcode,$email,$sub,$com,'',$pwd,$resto,$spoiler,$steam);
 		break;
 	case 'admin':
                 require_once(CORE_DIR."admin.inc.php");
