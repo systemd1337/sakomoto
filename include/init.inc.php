@@ -10,15 +10,10 @@ header("last-modified:".gmdate("D, d M Y H:i:s")." GMT");
 header("cache-control:no-store, no-cache, must-revalidate");
 header("pragma:no-cache");
 
-require_once(CORE_DIR."generate.inc.php");
-require_once(CORE_DIR."functions.inc.php");
-if (!file_exists('config.inc.php')) {
-	include CORE_DIR.'strings/en.inc.php';
-        header("content-type:text/plain");
-	die(lang("Error: Imageboard must be configured before usage."));
-}
 require_once("config.inc.php");
 include(CORE_DIR."strings/".LANGUAGE.".inc.php");// String resource file
+require_once(CORE_DIR."functions.inc.php");
+require_once(CORE_DIR."generate.inc.php");
 
 //This software is free, all I ask in return is that you leave proper credit
 const FOOT="- <a href=\"http://php.loglog.jp/\" target=\"_blank\">GazouBBS</a> + ".
