@@ -100,7 +100,7 @@ if (!file_exists(RES_DIR) && !is_dir(RES_DIR)) {
 
 $db_id = mysqli_select_db($con, SQLDB);
 if (!$db_id)
-	echo lang("Database error, check SQL settings.")."<br/>";
+	error(lang("Database error, check SQL settings."));
 
 if (!table_exist(POSTTABLE)) {
 	echo POSTTABLE.': '.lang("Creating table!")."<br/>";
