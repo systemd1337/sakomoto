@@ -192,6 +192,8 @@ if (!table_exist(REPORTTABLE)) {
 
 $ip = $_SERVER['REMOTE_ADDR'];
 
+if(stat(CACHE_DIR)["mtime"]<stat(CORE_DIR."generate.inc.php")["mtime"]||stat(CACHE_DIR)["mtime"]<"config.inc.php")
+        rmdir2(CACHE_DIR);
 if(!is_dir(CACHE_DIR))mkdir(CACHE_DIR);
 
 //Prevent notices for unset variables

@@ -258,3 +258,17 @@ function checkban($ip) {
 	}
 	mysqli_free_result($result);
 }
+
+function rmdir2($dirname) {
+        $dir_handle = opendir($dirname);
+        while($file = readdir($dir_handle)) {
+                if ($file != "." && $file != "..") {
+                        if (is_file($dirname."/".$file))
+                                unlink($dirname."/".$file);
+                        else
+                                rmdir2($dirname.'/'.$file);
+                }
+        }
+        closedir($dir_handle);
+        rmdir($dirname);
+}
