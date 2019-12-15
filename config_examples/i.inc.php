@@ -141,6 +141,7 @@ const PHP_EXT = '.html'; //Extension used for board pages after first
 const PHP_SELF = 'imgboard.php'; //Name of main script file
 const PHP_SELF2 = 'index'.PHP_EXT; //Name of main html file
 const PHP_CAT = "catalog".PHP_EXT; //Name of catalog file
+const PHP_LIST = "list".PHP_EXT; //Name of thread list file
 const PHP_API = "api.php"; //Name of api script file
 const PHP_PLAYER = "player.php"; //Name of webm player script file
 const RSS="index.rss"; //Name of RSS index file

@@ -147,6 +147,7 @@ const PHP_CAT = "catalog".PHP_EXT; //Name of catalog file
 const PHP_API = "api.php"; //Name of api script file
 const PHP_PLAYER = "player.php"; //Name of webm player script file
 const RSS="index.rss"; //Name of RSS index file
+const PHP_LIST = "list".PHP_EXT; //Name of thread list file
 const PHP_BLOTTER="blotter.php"; //Name of blotter script file
 const PHP_BANNED="banned.php"; //Name of b& script
 const DUPECHECK = true; //Check for duplicate images

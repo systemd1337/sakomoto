@@ -17,7 +17,7 @@ switch(strtolower($mode)){
 	case 'regist':
 	case "post":
                 require_once(CORE_DIR."regist.inc.php");
-		regist($ip,$name,$capcode,$email,$sub,$com,'',$pwd,$resto,$spoiler,$steam);
+		regist($ip,$name,$capcode,$email,$sub,$com,'',$pwd,$resto,$spoiler);
 		break;
 	case 'admin':
                 require_once(CORE_DIR."admin.inc.php");
@@ -176,6 +176,9 @@ EOF;
 	case "cat":
 		die(catalog());
 		break;
+        case "list":
+                echo listlog();
+                break;
         case "error":
         case "err"://Note: Do NOT redirect here from the script, this is for testing
                 if(!isset($msg))$msg=lang("That happend");

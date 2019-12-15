@@ -225,6 +225,7 @@ function ctrlnav($mode,$top=false){
         $ctrl.="<input type=\"text\" name=\"q\" value=\"\" size=\"8\"/><input type=\"submit\" value=\"".lang("Search")."\"/> ";
         if($mode!="page")$ctrl.="[<a href=\"".PHP_SELF2."\">".lang("Return")."</a>] ";
         if($mode!="catalog")$ctrl.="[<a href=\"".PHP_CAT."\">".lang("Catalog")."</a>] ";
+        if($mode!="list")$ctrl.="[<a href=\"".PHP_LIST."\">".lang("List")."</a>] ";
         if($mode=="thread"){
                 if($top)$ctrl.="[<a href=\"#bottom\">".lang("Bottom")."</a>] ";
                 else $ctrl.="[<a href=\"#top\">".lang("Top")."</a>] ";
@@ -393,7 +394,6 @@ function head(&$dat,$extra='') {
                 <meta name="DC.Format" content="text/html"/>
                 <meta name="DC.Type" content="imageboard">
                 <meta name="DC.Coverage" content="Worldwide">
-                <meta name="application-name" content="{$title}"/>
                 <meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate"/>
                 <meta http-equiv="pragma" content="no-cache"/>
                 <meta http-equiv="expires" content="0"/>
@@ -468,6 +468,7 @@ EOF;
         $head.="<meta property=\"DC.title\" content=\"".TITLE."\"/>";
         $head.="<meta property=\"og:title\" content=\"".TITLE."\"/>";
         $head.="<meta name=\"twitter:title\" content=\"".TITLE."\"/>";
+        $head.="<meta name=\"application-name\" content=\"".TITLE."\"/>";
         $head.="<meta property=\"og:description\" content=\"".substr(DESCRIPTION,0,255)."\"/>";
         $head.="<meta name=\"twitter:description\" content=\"".substr(DESCRIPTION,0,200)."\"/>";
         if(ICON){
@@ -550,7 +551,7 @@ function form(&$dat,$resno=0,$admin="",$manapost=false,$paintcom=false) {
                 "<button type=\"submit\" name=\"post\" value=\"post\" tabindex=\"12\" id=\"postsubmit\">".lang(($resno?"New Reply":"New Topic"))."</button></td></tr>";
         //Comment
         $inputs.="<tr><td class=\"postblock\"><label for=\"com\"><b>".lang("Comment")."</b></label></td>";
-        $inputs.="<td><textarea name=\"com\" id=\"com\" cols=\"48\" style=\"width:300px\" rows=\"6\" tabindex=\"7\"".
+        $inputs.="<td><textarea name=\"com\" id=\"com\" cols=\"48\" rows=\"6\" tabindex=\"7\"".
                 ($resno&&$q?" autofocus>&gt;&gt".$q."\n":">")."</textarea></td></tr>";
         //Verification
         switch(CAPTCHA_DRIVER){
@@ -829,6 +830,84 @@ EOF;
         return $rss;
 }
 
+function listlog(){
+        $dat="";
+        head($dat,<<<EOF
+<style>
+.postlists th,.postlists td{border-style:none;}
+.com{word-break: break-word;}
+.replies{
+        border-top-style:solid!important;
+        border-width:1px;
+        display:none;
+}
+.postlists>table:hover .replies{display:table-cell;}
+.postlists th{width:94px;}
+</style>
+EOF);
+//        form($dat);
+        $dat.=ctrlnav("list",true);
+        $dat.= <<<EOF
+<center class="postlists">
+        <table border="1" cellspacing="0" cellpadding="3" width="95%">
+                <tbody><tr><td width="100%" class="reply"><small>
+EOF;
+        $threads=mysqli_call("SELECT * FROM ".POSTTABLE." WHERE `resto`=0".
+                " ORDER BY `sticky` DESC,`root` DESC");
+        while($thread=mysqli_fetch_assoc($threads)){
+                $dat.="<a href=\"".PHP_SELF."?resto=".$thread["no"]."\">";
+                $dat.="<b>".$thread["no"]."</b>:";
+                $dat.=($thread["sub"]?$thread["sub"]:
+                        (DEFAULT_SUBJECT?DEFAULT_SUBJECT:
+                        lang("No subject")));
+                $dat.="</a> ";
+        }
+        $dat.="</small></td></tr></tbody></table><hr width=\"95%\"/>";
+        mysqli_data_seek($threads,0);
+        $threadcount=mysqli_num_rows($threads);
+        $i=0;
+        while($thread=mysqli_fetch_assoc($threads)){
+                $i++;
+                $dat.="<table width=\"95%\" cellpadding=\"3\" cellspacing=\"0\"><tbody><tr><th width=\"94\"><center>";
+                $dat.="<b>[<a href=\"".PHP_SELF."?res=".$thread["no"]."\">".$thread["no"]."</a>]</b><br/>";
+                $dat.="(".$i.":".$threadcount.")";
+                $dat.="</center></th><td class=\"reply\" align=\"left\" valign=\"top\">";
+                $dat.="<span class=\"postInfo\">";
+                if($thread["sub"])$dat.="<div><b class=\"subject\"><big>".$thread["sub"]."</big></b></div>";
+                if($thread["email"])$thread["name"]="<a href=\"email:".$thread["email"]."\">".$thread["name"]."</a>";
+                if($thread["trip"]||$thread["name"])$dat.="<span class=\"nameBlock\">";
+                if($thread["name"])$dat.="<b class=\"name\">".$thread["name"]."</b>";
+                if($thread["trip"])$dat.="<span class=\"postertrip\">".$thread["trip"]."</span>";
+                if($thread["capcode"])$dat.=" ".$thread["capcode"];
+                if($thread["trip"]||$thread["name"])$dat.="</span> ";
+                if($thread["now"])$dat.="<span class=\"dateTime\">".$thread["now"]."</span>";
+                $dat.=" <span class=\"postNum\">No.".$thread["no"]."</span>";
+                $dat.="</span>";
+                $dat.="<div class=\"com\">".closetags($thread["com"])."&hellip;</div>";
+                $replies=mysqli_call("SELECT * FROM ".POSTTABLE." WHERE `resto`=".$thread["no"]." ORDER BY `no` ASC");
+                $num_replies=mysqli_num_rows($replies);
+                if($num_replies)$dat.="<div align=\"right\" class=\"omittedposts\">".$num_replies.lang(" replie(s).")."</div>";
+                $dat.="</td></tr>";
+                while($reply=mysqli_fetch_assoc($replies)){
+                        $dat.="<tr><td colspan=\"2\" class=\"replies reply\"><font size=\"-2\">";
+                        if($reply["sub"])$dat.="<font size=\"+1\"><b class=\"subject\">".$reply["sub"]."</b></font> ";
+                        if($reply["email"])$reply["name"]="<a href=\"email:".$reply["email"]."\">".$reply["name"]."</a>";
+                        if($reply["trip"]||$reply["name"])$dat.="<span class=\"nameBlock\">";
+                        if($reply["name"])$dat.="<b class=\"name\">".$reply["name"]."</b>";
+                        if($reply["trip"])$dat.="<span class=\"postertrip\">".$reply["trip"]."</span>";
+                        if($reply["capcode"])$dat.=" ".$reply["capcode"];
+                        if($reply["trip"]||$thread["name"])$dat.="</span> ";
+                        if($reply["now"])$dat.="<span class=\"dateTime\">".$reply["now"]."</span>";
+                        $dat.=" <span class=\"postNum\">No.".$reply["no"]."</span>";
+                        $dat.="</font></td></tr>";
+                }
+                $dat.="</tbody></table><hr width=\"95%\"/>";
+        }
+        $dat.="</center>";
+        $dat.=fakefoot();
+        return $dat;
+}
+
 function rebuild($output_started=false,$echo=true){
         global $q;
         $q=false;
@@ -857,6 +936,9 @@ function rebuild($output_started=false,$echo=true){
         
         file_put_contents(PHP_CAT,catalog());
         if($echo)echo lang("Catalog created")."<br/>";
+        
+        file_put_contents(PHP_LIST,listlog());
+        if($echo)echo lang("Thread list created")."<br/>";
         
         if(USE_RSS){
                 file_put_contents(RSS,rss());
