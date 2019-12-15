@@ -17,7 +17,7 @@ switch(strtolower($mode)){
 	case 'regist':
 	case "post":
                 require_once(CORE_DIR."regist.inc.php");
-		regist($ip,$name,$capcode,$email,$sub,$com,'',$pwd,$resto,$spoiler);
+		regist($ip,$name,$capcode,$email,$sub,$com,'',$pwd,$resto,$spoiler,$steam);
 		break;
 	case 'admin':
                 require_once(CORE_DIR."admin.inc.php");
