@@ -855,7 +855,7 @@ EOF;
         $threads=mysqli_call("SELECT * FROM ".POSTTABLE." WHERE `resto`=0".
                 " ORDER BY `sticky` DESC,`root` DESC");
         while($thread=mysqli_fetch_assoc($threads)){
-                $dat.="<a href=\"".PHP_SELF."?resto=".$thread["no"]."\">";
+                $dat.="<a href=\"".PHP_SELF."?res=".$thread["no"]."\">";
                 $dat.="<b>".$thread["no"]."</b>:";
                 $dat.=($thread["sub"]?$thread["sub"]:
                         (DEFAULT_SUBJECT?DEFAULT_SUBJECT:
