@@ -156,7 +156,7 @@ function usrdel($no,$pwd,$report=false) {
 }
 
 function insertban($target,$days,$pubmsg,$privmsg,$bantype,$rmp,$rmallp,$unban) {
-	$time = time();
+	global $time;
 	$daylength = 60*60*24;
 	$expires = $time + ($daylength * $days);
 	if ($bantype==0) {
@@ -168,21 +168,19 @@ function insertban($target,$days,$pubmsg,$privmsg,$bantype,$rmp,$rmallp,$unban) 
 				break;
 			}
 		}
-		if (!isset($banip)) {die(lang("The post you\'re trying to ban for does not exist."));}
-	} else {
-		$banip=$target;
-	}
-	mysqli_free_result($result);
-
-	if ($pubmsg && !$unban) {
-		$pubmsg = strtoupper($pubmsg);
-		$pubmsg = "<br /><br /><span style=\"color: red; font-weight: bold;\">($pubmsg)</span>";
-		$query="update ".POSTTABLE."
-			set com=concat(com,'$pubmsg')
-			where no='$no'";
-		if (!$result=mysqli_call($query))error(lang("Critical SQL problem!"));
-		mysqli_free_result($result);
-	}
+		if(!isset($banip))error(lang("The post you\'re trying to ban for does not exist."));
+                mysqli_free_result($result);
+                
+                if ($pubmsg && !$unban) {
+                        $pubmsg = strtoupper($pubmsg);
+                        $pubmsg = "<br /><br /><font color=\"red\"><b>(".$pubmsg.")</b></font>";
+                        $query="update ".POSTTABLE."
+                                set com=concat(com,'$pubmsg')
+                                where no='".$no."'";
+                        if (!$result=mysqli_call($query))error(lang("Critical SQL problem!"));
+                        mysqli_free_result($result);
+                }
+	} else $banip=$target;
 
 	if (!$unban) {
 		$query="insert into ".BANTABLE." (ip,start,expires,reason) values (
@@ -191,22 +189,18 @@ function insertban($target,$days,$pubmsg,$privmsg,$bantype,$rmp,$rmallp,$unban) 
 			'$expires',
 			'$privmsg')";
 		if (!$result=mysqli_call($query))error(lang("Critical SQL problem!"));
-		mysqli_free_result($result);
 	} else {
 		$query="delete from ".BANTABLE." where `ip`='$banip'";
 		if (!$result=mysqli_call($query))error(lang("Critical SQL problem!"));
-		mysqli_free_result($result);
 	}
 
 	if ($rmp && $bantype==0) {
 		$query="delete from ".POSTTABLE." where `no`='$target'";
 		if (!$result=mysqli_call($query))error(lang("Critical SQL problem!"));
-		mysqli_free_result($result);
 	}
 	if ($rmallp) {
 		$query="delete from ".POSTTABLE." where `ip`='$banip'";
 		if (!$result=mysqli_call($query))error(lang("Critical SQL problem!"));
-		mysqli_free_result($result);
 	}
 }
 
