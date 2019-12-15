@@ -925,7 +925,7 @@ function rebuild($output_started=false,$echo=true){
                 $thread_htm=updatelog($thread["no"]);
                 $fix_dirs=array_unique([HOME,RES_DIR,JS_DIR,CSS_DIR,THUMB_DIR,IMG_DIR,EMOTES_DIR,FLAGS_DIR,PHP_PLAYER,
                         CAPTCHA_IMG,PHP_SELF,PHP_SELF2,PHP_CAT,PHP_API,PHP_BANNED,PHP_BLOTTER,"sticky.gif","closed.gif","file.png",
-                        "filedeleted.gif","filedeleted-res.gif","filedeleted-cat.gif",TITLEIMG,RSS]);
+                        "filedeleted.gif","filedeleted-res.gif","filedeleted-cat.gif",TITLEIMG,RSS,"count.php"]);
                 foreach($fix_dirs as $dir){
                         if(strpos($dir,'/')||substr($dir,-1)!='/')$thread_htm=str_replace($dir,"../".$dir,$thread_htm);
                 }
