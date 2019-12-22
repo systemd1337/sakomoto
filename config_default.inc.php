@@ -26,9 +26,9 @@ const USE_GZIP=true; //Output buffer compression
 const ENABLEAPI = true; //Enable the JSON API?
 const JSVARS = [ //Extra vars for JS
 //var=>val
-"jsPath"=>"../js/jquery"
+"jsPath"=>"js/jquery"
 ];
-const JSPLUGINS=[ //Aditional JavaScripts (Relative to jsdir)
+const JSPLUGINS=[ //Aditional JavaScripts (Relative to JS_DIR)
 "jquery/stylebuttons.js",
 "jquery/main.js",
 "jquery/suite_settings.js",
