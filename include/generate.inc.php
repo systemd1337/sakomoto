@@ -977,7 +977,6 @@ function rebuild($output_started=false,$echo=true){
                 }
                 file_put_contents(RES_DIR.$thread["no"].PHP_EXT,$thread_htm);
         }
-        file_put_contents(RES_DIR."index".PHP_EXT,"<meta http-equiv=\"refresh\" content=\"0;URL=../".PHP_SELF2."\"/>");
         if($echo)echo lang("Threads created")."<br/>";
         
         file_put_contents(PHP_CAT,catalog());
@@ -990,6 +989,11 @@ function rebuild($output_started=false,$echo=true){
                 file_put_contents(RSS,rss());
                 if($echo)echo lang("RSS feed created")."<br/>";
         }
+        
+        $return="<html><meta http-equiv=\"refresh\" content=\"0;URL=../".PHP_SELF2."\"/></head></html>";
+        file_put_contents(RES_DIR."index".PHP_EXT,$return);
+        file_put_contents(THUMB_DIR."index".PHP_EXT,$return);
+        file_put_contents(IMG_DIR."index".PHP_EXT,$return);
         
         if(!$echo)return;
         if(error_get_last())
