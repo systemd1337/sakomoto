@@ -25,7 +25,7 @@ define("IMG_REF_DIR", 'ref/');		// 経由先html格納ディレクトリ
 define("RE_COL", '#789922');		// ＞が付いた時の色
 
 // VIEW設定基本項目 -----------------------------------------------------------
-define("PHP_SELF_IMG", 'view.php');	// このスクリプト名
+define("PHP_SELF_IMG", PHP_SELF);	// このスクリプト名
 define("PAGE_COLS", 4);			// 1行に表示する画像数
 define("HSIZE", 180);			// サムネ表示の横サイズ
 define("VSIZE", 180);			// サムネ表示の縦サイズ
@@ -102,7 +102,7 @@ function fakeflatsql($table,$map){
 
 /* 画像一覧 */
 function img_view(){
-  global $path,$thumb_path,$bbte;
+  global $path,$thumb_path,$bbte;$page_cnt=0;
 
   // ツリーファイルからスレ元の記事No.とレス数を取得し配列に格納
 //  $tree = file(TREEFILE);
@@ -287,20 +287,20 @@ function img_view(){
     $prev = $_GET['pg'] - 1;
     $next = $_GET['pg'] + 1;
 //    $pages .= sprintf(" %d 番目から %d 番目の画像を表示<br>", $psta, $psta+$counter-1);
-    ($_GET['pg'] > 1) ? $pages .=" <a href=\"".PHP_SELF_IMG."?pg=".$prev."\">&lt;&lt;Previous</a> " : $pages .= "&lt;&lt;Previous ";
+    ($_GET['pg'] > 1) ? $pages .=" <a href=\"".PHP_SELF_IMG."?mode=view_a&pg=".$prev."\">&lt;&lt;Previous</a> " : $pages .= "&lt;&lt;Previous ";
     for($i = 1; $i <= $page_cnt; $i++) {
       if ($_GET['pg'] == $i) { // 今表示しているのはリンクしない
         $pages .= " [<b>$i</b>] ";
       } else {
-        $pages .= sprintf(" [<a href=\"%s?pg=%d\"><b>%d</b></a>] ", PHP_SELF_IMG, $i, $i); // 他はリンク
+        $pages .= sprintf(" [<a href=\"%s?mode=view_a&pg=%d\"><b>%d</b></a>] ", PHP_SELF_IMG, $i, $i); // 他はリンク
       }
     }
-    (($image_cnt - $pend) >= 1) ? $pages .= " <a href=\"".PHP_SELF_IMG."?pg=".$next."\">Next&gt;&gt;</a>" : $pages .= " Nextgt;&gt;";
+    (($image_cnt - $pend) >= 1) ? $pages .= " <a href=\"".PHP_SELF_IMG."?mode=view_a&pg=".$next."\">Next&gt;&gt;</a>" : $pages .= " Nextgt;&gt;";
   }
 
   // 表示項目選択
   $fselect = "";
-  $fselect .= "<form action=\"".PHP_SELF_IMG."?pg=".$_GET['pg']."\" method=\"POST\">\n";
+  $fselect .= "<form action=\"".PHP_SELF_IMG."?mode=view_a&pg=".$_GET['pg']."\" method=\"POST\">\n";
   $fselect .= '[<label><input type="checkbox" name="fileinfo" value="on"';
   if ($info_flag) { $fselect .= " checked"; } $fselect .= ">Show file information</label>]\n";
   $fselect .= '<BR><input type="submit" name="submit" class="potype"></form>';
@@ -353,7 +353,8 @@ $dispmsg</table>
 <p>
 $pages
 </p>
-<form action="$self_img_path" method="GET">
+<form action="{$self_img_path}" method="GET">
+<input type="hidden" name="mode" value="view_a"/>
 <table bgcolor="#F6F6F6">
 <tr><th bgcolor="#D6D6F6" colspan=3>Information</th></tr>
 <tr><td align="center">Total images:</td><td align="right"> <b>$image_cnt</b></td><!--<td>枚</td>--></tr>
@@ -361,7 +362,7 @@ $pages
 <tr><td align="center">Response images:</td><td align="right"> <b>$image_cnt_res</b></td><!--<td>枚</td>--></tr>
 <tr><td align="center">Images per page: </td><td align="right"> <b>$pgdeftxt</b></td><!--<td>枚</td>--></tr>
 <tr><td align="center" colspan=3><small>$outnotxt</small></td></tr>
-<tr><td align="center" colspan=3><input type="hidden" name="mode" value="s">
+<tr><td align="center" colspan=3><input type="hidden" name="mode2" value="s">
 <input type="text" name="w" value="" size=14 onFocus="this.style.backgroundColor='#FEF1C0';" onBlur="this.style.backgroundColor='#FFFFFF';">
 <input type="submit" value="Search">
 </td></tr>
@@ -442,7 +443,7 @@ winName.focus();
 <p align="center">
 <font color="#800000" size=5><b><SPAN>$title2_str</SPAN></b></font>
 <p align="left">
-[<a href="$self_img_path">Return</a>]
+[<a href="{$self_img_path}?mode=view_a">Return</a>]
 <table width="100%"><tr><th bgcolor="#BFB08F" align="center">
 <font color="#551133">View mode: Search</font>
 </th></tr></table>
@@ -458,7 +459,8 @@ winName.focus();
 </td></tr></table>-->
 <hr width="90%" size=1>
 <form action="$self_img_path" method="GET">
-<input type="hidden" name="mode" value="s">
+<input type="hidden" name="mode" value="view_a">
+<input type="hidden" name="mode2" value="s">
 <input type="text" name="w" value="$word" class="ctext" size=60 onFocus="this.style.backgroundColor='#BFBFFF';" onBlur="this.style.backgroundColor='#FFFFFF';">
 <input type="submit" value="Search" class="csubmit" onmouseover="this.style.backgroundColor='#A2E391';" onmouseout="this.style.backgroundColor='#E6E6FA';">
 <input type="reset" value="Reset" class="csubmit" onmouseover="this.style.backgroundColor='#A2E3E1';" onmouseout="this.style.backgroundColor='#E6E6FA';">
@@ -541,7 +543,7 @@ __HEAD__;
       // prevページ
       if ($start > 0) {
         $prevstart = $start - $page_def;
-        $pages .= "<a href=\"".PHP_SELF_IMG."?mode=s&w=$word2&pp=$page_def&st=$prevstart\">&lt;&lt;Previous</a>　";
+        $pages .= "<a href=\"".PHP_SELF_IMG."?mode2=s&mode=view_a&w=$word2&pp=$page_def&st=$prevstart\">&lt;&lt;Previous</a>　";
       } else { $pages .= "&lt;&lt;Previous　"; }
       // ページズ
       $ima = ceil($start / $page_def); // イマノトコロ
@@ -557,12 +559,12 @@ __HEAD__;
       if (!LINK_LIM) { $go = 0; $stop = $goukei; }
       for ($a = $go; $a < $stop; $a++) {
         if ($a == $ima) { $pages .= "[<b>$a</b>] "; }
-        else { $pages .= "[<a href=\"".PHP_SELF_IMG."?mode=s&w=$word2&pp=$page_def&st=".($a*$page_def)."\"><b>$a</b></a>] "; }
+        else { $pages .= "[<a href=\"".PHP_SELF_IMG."?mode2=s&mode=view_a&w=$word2&pp=$page_def&st=".($a*$page_def)."\"><b>$a</b></a>] "; }
       }
       // nextページ
       if ($ends < $maxs) {
         $nextstart = $ends+1;
-        $pages .= "　<a href=\"".PHP_SELF_IMG."?mode=s&w=$word2&pp=$page_def&st=$nextstart\">Next&gt;&gt;</a><br>";
+        $pages .= "　<a href=\"".PHP_SELF_IMG."?mode2=s&mode=view_a&w=$word2&pp=$page_def&st=$nextstart\">Next&gt;&gt;</a><br>";
       } else { $pages .= "　Next&gt;&gt;<br>"; }
     }
 
@@ -706,7 +708,7 @@ END_OF_TR;
           <input type="hidden" name="pp" value="$page_def">
         </font></td></tr>
       </table>
-      <br><font size="-1"><a href="$self_img_path">View images</a> | <a href="$self_img_path?mode=s">Search</a><!-- | <a style="text-decoration:underline;color:#0000EE;">ヘルプ</a>--></font><br><br>
+      <br><font size="-1"><a href="{$self_img_path}?mode=view_a">View images</a> | <a href="{$self_img_path}?mode2=s&mode=view_a">Search</a><!-- | <a style="text-decoration:underline;color:#0000EE;">ヘルプ</a>--></font><br><br>
     </td>
   </tr>
   <tr><td bgcolor="#3366cc"></td></tr>
@@ -789,11 +791,11 @@ function getmicrotime(){
 }
 
 /*-----------Main-------------*/
-if (!isset($_REQUEST['mode'])) $_REQUEST['mode'] = "";
+if (!isset($_REQUEST['mode2'])) $_REQUEST['mode2'] = "";
 if (!isset($_GET["w"])) $_GET["w"] = "";
 if (!isset($_GET["st"])) $_GET["st"] = 0;
 if (!isset($_GET["pp"])) $_GET["pp"] = 20;
-switch ($_REQUEST['mode']) {
+switch ($_REQUEST['mode2']) {
   // 検索モード
   case 's':
     search($_GET["w"], $_GET["st"], $_GET["pp"]);
