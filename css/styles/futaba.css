@@ -11,8 +11,9 @@ a:hover{color:#d00;}
 .postlists tr:target,table:target .post.reply{background-color:#f0c0b0;}
 #errormsg{color:red}
 .omittedposts{color:#707070}
-.replymode{
-        background-color:#e04000;
-        color:#fff;
-}
+.replymode{background-color:#e04000;}
+.viewmode{background-color:#e08000;}
+.viewmode,.replymode{color:white;}
 .unkfunc{color:#789922;}
+.unkfunc2{color:#FF69B3;}
+.newsbody{color:black;}

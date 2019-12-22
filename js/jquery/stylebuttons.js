@@ -26,7 +26,8 @@ repod.buttons = {
                                 "giko":"burichan",
                                 "yotsuba":"futaba",
                                 "yotsuba_b":"burichan",
-                                "miku":"burichan"
+                                "miku":"burichan",
+                                "sakomoto":"futaba"
                         }
 		};
                 buttonStyle=(repod_jsuite_getCookie("style")?repod_jsuite_getCookie("style"):cssdef).toLowerCase().replace(' ','_');

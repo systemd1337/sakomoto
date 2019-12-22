@@ -28,9 +28,10 @@ hr{border-color:#B7D9C5;}
 .postlists tr:target,table:target .post.reply{background-color:#a9d8ff;}
 #errormsg,h1,h2,h3{color:maroon;}
 .omittedposts{color:#707070}
-.replymode{
+.viewmode,.replymode{
         background-color:#e04000;
         color:#fff;
 }
 .unkfunc{color:#789922;}
+.unkfunc2{color:#FF69B3;}
 .quotelink{color:#D00;}

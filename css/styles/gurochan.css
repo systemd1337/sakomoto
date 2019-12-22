@@ -17,11 +17,12 @@ a:hover{color:#D00;}
         border-color:#D9AF9E;
         padding:2px;
 }
-.replymode,.postlists tr:target,table:target .reply,.postblock,.postlists th{
+.viewmode,.replymode,.postlists tr:target,table:target .reply,.postblock,.postlists th{
         border-color:#CA927B;
         background-color:#D9AF9E;
 }
 .unkfunc{color:#789922;}
+.unkfunc2{color:#FF69B3;}
 .subject{color:#0F0C5D;}
 .postername{color:#117743;}
 .postertrip{color:#228854;}

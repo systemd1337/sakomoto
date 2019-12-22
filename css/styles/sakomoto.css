@@ -1,0 +1,77 @@
+@import "../base2.css";
+
+body{
+        background-color:#ffe;
+        background-image:linear-gradient(#fed6af,transparent 500px);
+        background-repeat:repeat-x;
+        color:#800043;
+        font-family:"MS UI Gothic",Osaka;
+        min-height:500px;
+}
+.logo>img{margin-top:1em;}
+.logo{color:#AF0A0F;}
+.logo h1{margin:0;}
+.logo,.logo>img{margin-bottom:1em;}
+.navtopright a,.navtopright a:visited,.thread_nav a,.thread_nav a:visited{color:#080;}
+.postNum a,a,a:visited,#repod_jquery_suite_settings_open{color:#00f;}
+#repod_jquery_suite_settings_open{font-size:small;}
+.navtopright a:hover,.thread_nav a:hover{
+        background-color:#ff0;
+        color:#000!important;
+}
+.quotelink:hover{color:navy!important;}
+.post blockquote,body{font-size:14px;}
+.rules a,a:hover{text-decoration:underline;}
+a:hover{color:red;}
+#com{font-family:MS Gothic;}
+#pager,.reply{
+        border-right-style:solid;
+        border-bottom-style:solid;
+        border-color:#d9bfb7;
+}
+button,input[type=button],input[type=reset],input[type=submit],select{
+        background-color:#fff;
+        border-width:1px;
+        border-style:solid;
+        border-color:#800043;
+}
+.logo>img[border="1"],.postblock,.postlists th,input[type=password],input[type=text],textarea{
+        border-style:outset;
+        border-color:maroon;
+}
+input[type=password]:focus,input[type=text]:focus,textarea:focus{border-color:#ea8;}
+.postblock,.postlists th{
+        background-color:#ea8;
+        padding:2px;
+}
+hr{border-color:#d9bfb7;}
+.logohr{
+        background-image:-webkit-linear-gradient(left,transparent,rgba(128,0,0,0.75),transparent);
+        background-image:-moz-linear-gradient(left,transparent,rgba(128,0,0,0.75),transparent);
+        background-image:-ms-linear-gradient(left,transparent,rgba(128,0,0,0.75),transparent);
+        background-image:-o-linear-gradient(left,transparent,rgba(128,0,0,0.75),transparent);
+        height:1px;
+        border-top-style:none;
+}
+.boardNav{color:maroon!important;}
+.headsub{color:maroon;}
+.subject{
+        color:#cc1105;
+        font-size:16px;
+}
+.nameBlock{color:#117743;}
+#pager,.postlists tr:nth-of-type(odd),.reply{background-color:#f0e0d6;}
+.postlists tr:target,table:target .post.reply{
+        background-color:#f0c0b0;
+        border-color:#d99f91;
+}
+#errormsg{color:red;}
+.omittedposts{color:#707070;}
+.replymode{background-color:#e04000;}
+.viewmode{background-color:#e08000;}
+.viewmode,.replymode{color:white;}
+.unkfunc{color:#789922;}
+.unkfunc2{color:#FF69B3;}
+.quotelink{color:navy;}
+.quotelink b{font-size:small;}
+.newsbody{color:#3c0020;}

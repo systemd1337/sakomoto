@@ -34,9 +34,10 @@ hr{border-color:#d9bfb7;}
 }
 #errormsg{color:red}
 .omittedposts{color:#707070}
-.replymode{
-        background-color:#e04000;
-        color:#fff;
-}
+.replymode{background-color:#e04000;}
+.viewmode{background-color:#e08000;}
+.viewmode,.replymode{color:white;}
 .unkfunc{color:#789922;}
+.unkfunc2{color:#FF69B3;}
 .quotelink{color:navy;}
+.newsbody{color:black;}

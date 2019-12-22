@@ -4,11 +4,12 @@ body{
         min-height:200px;
         font-family:arial,helvetica,sans-serif;
         font-size: 10pt;
+        margin-top:2px;
+        padding-left:2px;
+        padding-right:2px;
 }
-.logo{
-        font-family:Tahoma,sans-serif;
-        letter-spacing: -1px;
-}
+.logo{font-family:Tahoma,sans-serif;}
+.logo h1{letter-spacing: -1px;}
 .postblock,.postlists th{
         padding:5px;
         padding-top:0;
@@ -42,3 +43,18 @@ hr{
 .postblock,.postlists th,.reply,input[type="text"],input[type="password"],textarea,hr{border-width:1px;}
 #catalog font[size="1"]{font-size:12pt;}
 .filesize,.nameBlock,.subject{unicode-bidi:embed;}
+.rules ul{
+        width: 468px;
+        margin:0;
+        padding-left:0;
+}
+.rules li {
+        margin-left: 1em;
+        text-indent: 0em;
+}
+.viewmode,.replymode{
+        margin-top:0.2em;
+        margin-bottom:1em;
+        font-family:Arial;
+}
+.reply .replymode{margin:0;}

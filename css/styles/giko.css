@@ -15,6 +15,7 @@ table{
 .reply{background-color:#f0f8ff}
 table:target .post.reply{background-color:#ffe7dc}
 .unkfunc{color:#789922;}
+.unkfunc2{color:#FF69B3;}
 body{
         background-color:#f8fdff;
         margin:0;
@@ -59,3 +60,7 @@ a:hover{color:red;}
 .logo{color:#ea3636;}
 .sideArrows{padding-right:5px;}
 #errormsg{color:red;}
+.viewmode,.replymode{
+        background-color:#0010e0;
+        color:white;
+}

@@ -35,10 +35,11 @@ hr{border-color:#b7c5d9;}
 }
 #errormsg{color:red}
 .omittedposts{color:#707070}
-.replymode{
+.viewmode,.replymode{
         background-color:#0010E0;
         color:#fff;
 }
 .unkfunc{color:#789922;}
+.unkfunc2{color:#FF69B3;}
 .quotelink{color:#d00;}
 .backlink a{color:#34345C;}

@@ -1,5 +1,6 @@
 @charset "UTF-8";
 
+body{padding-bottom:1em;}
 .thread_nav,#repod_thread_stats_container,.navtopright{float:right;}
 .postblock,.postlists th{
         width:4.5em;
@@ -16,11 +17,11 @@
         display:block;
         padding:2px;
 }
-.post{
+/*.post{
         overflow-wrap:break-word;
         word-break:break-word;
-}
-.styleBtn {
+}*/
+.styleBtn{
         image-rendering:optimizeSpeed;
         image-rendering:-moz-crisp-edges;
         image-rendering:-o-crisp-edges;

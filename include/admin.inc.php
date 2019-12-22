@@ -13,7 +13,7 @@ function adminhead() {
         echo "<center>";
 	echo("<div class=\"replymode\"><big>".lang("Manager Mode")."</big></div>");
 	echo "<p><nav class=\"manabuttons\"> [<a href=\"".PHP_SELF2."\">".lang("Return")."</a>] ";
-        echo "[<a href=\"".PHP_SELF."\">".lang("Rebuild")."</a>] ";
+        echo "[<a href=\"".PHP_SELF."?mode=rebuild\">".lang("Rebuild")."</a>] ";
 	echo("[<a class='admd$admin' href='".PHP_SELF."?mode=admin&amp;admin=del'>".lang("Post Management")."</a>] ");
 	echo("[<a class='admb$admin' href='".PHP_SELF."?mode=admin&amp;admin=ban'>".lang("Ban Panel")."</a>] ");
 	echo("[<a class='admp$admin' href='".PHP_SELF."?mode=admin&amp;admin=post'>".lang("Manager Post")."</a>] ");
@@ -29,7 +29,8 @@ function valid($pass) {
 	if (isset($_SESSION['capcode'])) return;
 	head($dat,"<meta name=\"robots\" content=\"noindex, nofollow\">");
 	echo $dat;
-	echo "<center class=\"replymode\"><big>".lang("Manager Mode")."</big></center>";
+        echo "[<a href=\"".PHP_SELF2."\">".lang("Return")."</a>] [<a href=\"".PHP_SELF."?mode=rebuild\">".lang("Rebuild")."</a>]";
+	echo "<center class=\"viewmode\"><big>".lang("Manager Mode")."</big></center>";
 	if ($pass) {
 		$result = mysqli_call("select * from ".MANATABLE);
 		while ($row=mysqli_fetch_assoc($result)) {
@@ -53,11 +54,11 @@ function valid($pass) {
         <center>
                 <form action="{$self}" method="POST">
                         <table><tbody><tr><td><fieldset><legend>{$slogin}</legend><table><tbody><tr>
-                                                <td class="postblock"><label for="password"><b>{$spassword}</b></label></td>
-                                                <td>
-                                                        <input type="hidden" name="mode" value="admin">
-                                                        <input type="password" id="password" name="pass" size="8"><input type="submit" value="{$ssubmit}">
-                                                </td>
+                                <td class="postblock"><label for="password"><b>{$spassword}</b></label></td>
+                                <td>
+                                        <input type="hidden" name="mode" value="admin">
+                                        <input type="password" id="password" name="pass" size="8"><input type="submit" value="{$ssubmit}">
+                                </td>
                         </tr></tbody></table></fieldset></td></tr></tbody></table>
                 </form>
         </center>

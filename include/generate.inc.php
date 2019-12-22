@@ -8,7 +8,7 @@ if(basename(__FILE__) == basename($_SERVER["SCRIPT_FILENAME"]))
 
 function postLink($matches){
 	if($p=mysqli_fetch_array(mysqli_call("SELECT no,resto FROM ".POSTTABLE." WHERE `no`=".$matches[1])))
-		return "<a class=\"quotelink\" href=\"".PHP_SELF."?res=".($p["resto"]?$p["resto"]:$p["no"])."#p".$p["no"]."\">&gt;&gt;".$p["no"]."</a>";
+		return "<a hreflang=\"".LANGUAGE."\" charset=\"UTF-8\" class=\"quotelink\" href=\"".PHP_SELF."?res=".($p["resto"]?$p["resto"]:$p["no"])."#p".$p["no"]."\">&gt;&gt;".$p["no"]."</a>";
 	else return $matches[0];
 }
 
@@ -163,9 +163,9 @@ function buildPost($post,$res=0){
         if($post["steam"]){
                 $profid=array_filter(explode("/",$post["steam"]));
                 $tip=false;
-                if($badge=base64_encode(file_get_contents("https://badges.steamprofile.com/profile/default/steam/".end($profid).".png")))
+                if($badge=base64_encode(@file_get_contents("https://badges.steamprofile.com/profile/default/steam/".end($profid).".png")))
                         $tip="onmouseover=\"Tip('<img src=\\'data:image/jpg;base64,".$badge."\\' alt=\\'\\'/>');\" onmouseout=\"UnTip();\" ";
-                $postinfo.="<a href=\"".$post["steam"]."\" target=\"_blank\"><img ".$tip."src=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAA7DAAAOwwHHb6hkAAABHElEQVQ4jd2SMYrCUBCGvxcWooVC2ngBLQRPoJWIYJc+hxDEwkoEi7Se4HVibyPiGTyBjU16IRCI799icdmwFq5a7cBUM98/8w9jAAcYngsZQE/CAHivwG8R+Hi0sVarEccxxhistVwuF+DreA/dYLFY4HkekjDGMJvNyhuMRiM6nQ7n8xlrbQmuVCpUq1XG4zEASZL8ttDtdhkOh4RhSBAErNdr0jQFYDAY0O/3WS6XSMI5VxogQKvVSsfjUbcoikKHw0GbzUan00nOOV2vV83nc/m+rxv3LVCv1xVFkZrNpuI41na7VZ7nkqQsy7Tf7zWdTn+CZYF72Wg0ZK1VkiTa7XZqtVp/EwDUbrc1mUzU6/Xu1v/BK3u8aOETWfygttVpCfcAAAAASUVORK5CYII=\" alt=\"Steam\"/></a> ";
+                $postinfo.="<a charset=\"UTF-8\" href=\"".$post["steam"]."\" target=\"_blank\"><img ".$tip."src=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAA7DAAAOwwHHb6hkAAABHElEQVQ4jd2SMYrCUBCGvxcWooVC2ngBLQRPoJWIYJc+hxDEwkoEi7Se4HVibyPiGTyBjU16IRCI799icdmwFq5a7cBUM98/8w9jAAcYngsZQE/CAHivwG8R+Hi0sVarEccxxhistVwuF+DreA/dYLFY4HkekjDGMJvNyhuMRiM6nQ7n8xlrbQmuVCpUq1XG4zEASZL8ttDtdhkOh4RhSBAErNdr0jQFYDAY0O/3WS6XSMI5VxogQKvVSsfjUbcoikKHw0GbzUan00nOOV2vV83nc/m+rxv3LVCv1xVFkZrNpuI41na7VZ7nkqQsy7Tf7zWdTn+CZYF72Wg0ZK1VkiTa7XZqtVp/EwDUbrc1mUzU6/Xu1v/BK3u8aOETWfygttVpCfcAAAAASUVORK5CYII=\" alt=\"Steam\"/></a> ";
         }
         if($post["email"])$post["name"]="<a href=\"email:".$post["email"]."\">".$post["name"]."</a>";
         if($post["trip"]||$post["name"])$postinfo.="<span class=\"nameBlock\">";
@@ -188,16 +188,17 @@ function buildPost($post,$res=0){
         }
         $postinfo.="<span class=\"dateTime\">".$post["now"]."</span>";
 	$postinfo.="</label> ";
-	$postinfo.="<span class=\"postNum\"><a href=\"".$selfref."\">".lang("No.")."</a>";
-	$postinfo.="<a href=\"".($res?"":PHP_SELF."?res=".($post["resto"]?$post["resto"]:$post["no"])."&amp;q=".$post["no"])."#postform\"".
+	$postinfo.="<span class=\"postNum\"><a hreflang=\"".LANGUAGE."\" charset=\"UTF-8\" href=\"".$selfref."\">".lang("No.")."</a>";
+	$postinfo.="<a hreflang=\"".LANGUAGE."\" charset=\"UTF-8\" href=\"".($res?"":PHP_SELF."?res=".($post["resto"]?$post["resto"]:$post["no"])."&amp;q=".$post["no"])."#postform\"".
                 " onclick=\"insert('".$post["no"]."');\" class=\"qu\" title=\"".lang("Quote")."\">".$post["no"]."</a></span>";
         if($post["sticky"])$postinfo.=" <img src=\"sticky.gif\" alt=\"".lang("Sticky")."\" title=\"".lang("Sticky")."\" class=\"retina\"/>";
         if($post["closed"])$postinfo.=" <img src=\"closed.gif\" alt=\"".lang("Closed")."\" title=\"".lang("Closed")."\" class=\"retina\"/>";
-	if(!($post["resto"]||$res))$postinfo.="&nbsp;[<a href=\"".RES_DIR.$post["no"].PHP_EXT."\">".lang("Reply")."</a>]";
+	if(!($post["resto"]||$res))$postinfo.="&nbsp;[<a hreflang=\"".LANGUAGE."\" charset=\"UTF-8\" href=\"".RES_DIR.$post["no"].PHP_EXT."\">".lang("Reply")."</a>]";
         $postinfo.="&nbsp;<small class=\"backlink\">";
         $results=mysqli_call("SELECT no,resto FROM ".POSTTABLE." WHERE com LIKE '%&gt;&gt;".$post["no"]."</a>%'");
+        if(mysqli_num_rows($results))$postinfo.="<i>".lang("Replies:")."</i>&nbsp;";
         while($link=mysqli_fetch_assoc($results)){
-                $postinfo.="<a class=\"quotelink\" href=\"".PHP_SELF."?res=".$link["resto"]."#p".$link["no"]."\">&gt;&gt;".$link["no"]."</a> ";
+                $postinfo.="<a hreflang=\"".LANGUAGE."\" charset=\"UTF-8\" class=\"quotelink\" href=\"".PHP_SELF."?res=".$link["resto"]."#p".$link["no"]."\">&gt;&gt;".$link["no"]."</a> ";
         }
         $postinfo.="</small>";
 	$postinfo.="</span>";
@@ -223,12 +224,12 @@ function ctrlnav($mode,$top=false){
         $ctrl="<form action=\"".PHP_SELF."\" method=\"get\" class=\"ctrl\">";
         $ctrl.="<input type=\"hidden\" name=\"mode\" value=\"find\"/>";
         $ctrl.="<input type=\"text\" name=\"q\" value=\"\" size=\"8\"/><input type=\"submit\" value=\"".lang("Search")."\"/> ";
-        if($mode!="page")$ctrl.="[<a href=\"".PHP_SELF2."\">".lang("Return")."</a>] ";
-        if($mode!="catalog")$ctrl.="[<a href=\"".PHP_CAT."\">".lang("Catalog")."</a>] ";
-        if($mode!="list")$ctrl.="[<a href=\"".PHP_LIST."\">".lang("List")."</a>] ";
+        if($mode!="page")$ctrl.="[<a hreflang=\"".LANGUAGE."\" charset=\"UTF-8\" href=\"".PHP_SELF2."\">".lang("Return")."</a>] ";
+        if($mode!="catalog")$ctrl.="[<a hreflang=\"".LANGUAGE."\" charset=\"UTF-8\" href=\"".PHP_CAT."\">".lang("Catalog")."</a>] ";
+        if($mode!="list")$ctrl.="[<a hreflang=\"".LANGUAGE."\" charset=\"UTF-8\" href=\"".PHP_LIST."\">".lang("Thread list")."</a>] ";
         if($mode=="thread"){
-                if($top)$ctrl.="[<a href=\"#bottom\">".lang("Bottom")."</a>] ";
-                else $ctrl.="[<a href=\"#top\">".lang("Top")."</a>] ";
+                if($top)$ctrl.="[<a hreflang=\"".LANGUAGE."\" charset=\"UTF-8\" href=\"#bottom\">".lang("Bottom")."</a>] ";
+                else $ctrl.="[<a hreflang=\"".LANGUAGE."\" charset=\"UTF-8\" href=\"#top\">".lang("Top")."</a>] ";
         }
         if($mode=="thread"&&$top)$ctrl.="<span id=\"repod_thread_stats_container\"></span>";
         $ctrl.="</form><hr/>";
@@ -302,7 +303,7 @@ EOF;
                         $num_replies=mysqli_num_rows($replies);
                         if(!$resno&&($num_replies>COLLAPSENUM)){
                                 $omit=$num_replies-COLLAPSENUM;
-                                $dat.="<small class=\"omittedposts\">".$omit.lang(" post(s) omitted. ")."<a href=\"".RES_DIR.$thread["no"].PHP_EXT."\">".lang("Click here")."</a>".lang(" to view.")."</small>";
+                                $dat.="<small class=\"omittedposts\">".$omit.lang(" post(s) omitted. ")."<a hreflang=\"".LANGUAGE."\" charset=\"UTF-8\" href=\"".RES_DIR.$thread["no"].PHP_EXT."\">".lang("Click here")."</a>".lang(" to view.")."</small>";
                         }
                         while($reply=mysqli_fetch_assoc($replies)){
                                 if(!$omit)$dat.=buildPost($reply,$resno);
@@ -338,7 +339,7 @@ EOF;
                 $pager=$pages;
                 $pagel=[];
                 while($pager--){
-                        $pagel[]="[<".($pager==($realpage-1)?"b":"a href=\"".($pager+1).PHP_EXT."\"").">".
+                        $pagel[]="[<".($pager==($realpage-1)?"b":"a hreflang=\"".LANGUAGE."\" charset=\"UTF-8\" href=\"".($pager+1).PHP_EXT."\"").">".
                                 ($pager+1)."</".($pager==($realpage-1)?"b":"a").">]";
                 }
                 if($realpage-1){
@@ -372,7 +373,7 @@ EOF;
         }
 }
 
-function head(&$dat,$extra='') {
+function head(&$dat,$extra=''){
         global $mode;
         if(is_file(CACHE_DIR."head.inc.html")&&$mode!="admin"&&!$extra){
                 $dat.=file_get_contents(CACHE_DIR."head.inc.html");
@@ -394,9 +395,11 @@ function head(&$dat,$extra='') {
                 <meta name="DC.Format" content="text/html"/>
                 <meta name="DC.Type" content="imageboard">
                 <meta name="DC.Coverage" content="Worldwide">
-                <meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate"/>
+                <meta http-equiv="cache-control" content="no-cache,no-store,must-revalidate"/>
+                <meta http-equiv="cache-control" content="max-age=0"/>
                 <meta http-equiv="pragma" content="no-cache"/>
                 <meta http-equiv="expires" content="0"/>
+                <meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT"/>
                 <meta name="robots" content="noarchive"/>
                 <meta http-equiv="content-language" content="{$lang}"/>
                 <meta name="language" content="{$lang}"/>
@@ -405,9 +408,11 @@ function head(&$dat,$extra='') {
                 <meta name="keywords" content="{$keywords}"/>
                 <meta name="description" content="{$description}"/>
                 <meta name="DC.Description" content="Description"/>
-                <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes"/>
+                <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=yes"/>
                 <meta name="revisit-after" content="15 days"/>
                 <meta name="referrer" content="origin"/>
+                <meta name="referrer" content="origin-when-crossorigin"/>
+                <meta name="referrer" content="origin-when-cross-origin"/>
                 <meta name="theme-color" content="#FFD7B0"/>
                 <meta name="msapplication-TileColor" content="#FFD7B0"/>
                 <meta name="msapplication-navbutton-color" content="#FFD7B0"/>
@@ -449,11 +454,11 @@ EOF;
         $head.="js_dir='".JS_DIR."',";
         $head.="cssdef='".CSSDEFAULT."';";
         $head.="</script>";
-        $head.="<script charset=\"UTF-8\" src=\"".JS_DIR."jquery/jquery.min.js\" type=\"text/javascript\"></script>";
-        $head.="<script charset=\"UTF-8\" src=\"".JS_DIR."futaba.js\" type=\"text/javascript\"></script>";
-        $head.="<script charset=\"UTF-8\" src=\"".JS_DIR."sakomoto.js\" type=\"text/javascript\"></script>";
+        $head.="<script language=\"JavaScript\" charset=\"UTF-8\" src=\"".JS_DIR."jquery/jquery.min.js\" type=\"text/javascript\"></script>";
+        $head.="<script language=\"JavaScript\" charset=\"UTF-8\" src=\"".JS_DIR."futaba.js\" type=\"text/javascript\"></script>";
+        $head.="<script language=\"JavaScript\" charset=\"UTF-8\" src=\"".JS_DIR."sakomoto.js\" type=\"text/javascript\"></script>";
         foreach(JSPLUGINS as $js){
-                $head.="<script charset=\"UTF-8\" src=\"".JS_DIR.$js."\" type=\"text/javascript\"></script>";
+                $head.="<script language=\"JavaScript\" charset=\"UTF-8\" src=\"".JS_DIR.$js."\" type=\"text/javascript\"></script>";
         }
 	foreach(STYLES as $stylename => $stylefile) {
 		$head.="<link charset=\"UTF-8\" rel=\"".($stylename==CSSDEFAULT?'':"alternate ")."stylesheet\" type=\"text/css\" ".
@@ -474,6 +479,7 @@ EOF;
         if(ICON){
                 $head.="<link rel=\"apple-touch-icon\" href=\"".ICON."\"/>";
                 $head.="<link rel=\"shortcut icon\" href=\"".ICON."\"/>";
+                $head.="<link rel=\"favicon\" href=\"".ICON."\"/>";
                 $head.="<link rel=\"icon\" href=\"".ICON."\"/>";
                 $head.="<meta itemprop=\"image\" content=\"".ICON."\">";
         }
@@ -485,20 +491,22 @@ EOF;
         if(BOARDLINKS)$head.="<span class=\"boardlist\">".BOARDLINKS."</span>";
         $head.="<div align=\"right\" class=\"navtopright\">";
         if(HOME)$head.="[<a href=\"".HOME."\" target=\"_top\">".lang("Home")."</a>] ";
-        $head.="[<a href=\"".PHP_SELF."?mode=admin\">".lang("Manage")."</a>]";
+        $head.="[<a hreflang=\"".LANGUAGE."\" charset=\"UTF-8\" href=\"".PHP_SELF."?mode=admin\">".lang("Manage")."</a>]";
         $head.="</div></div>";
         if(SHOWTITLEIMG||SHOWTITLETXT){
                 $head.="<center class=\"logo\">";
                 if(SHOWTITLEIMG)$head.="<img src=\"".TITLEIMG."\" onload=\"this.style.opacity=1;\" onclick=\"this.style.opacity=0.5;this.src='".TITLEIMG."?'+(new Date().getTime());\" border=\"1\" alt=\"".TITLE."\"/>";
-                if(SHOWTITLETXT)$head.="<h1>".TITLE.(USE_RSS?" <a href=\"".RSS."\"><img border=\"0\" src=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAJDSURBVHjajJJNSBRhGMd/887MzrQxRSLbFuYhoUhEKsMo8paHUKFLdBDrUIdunvq4RdClOq8Hb0FBSAVCUhFR1CGD/MrIJYqs1kLUXd382N356plZFOrUO/MMz/vO83+e93n+f+1zF+kQBoOQNLBJg0CTj7z/rvWjGbEOIwKp9O7WkhtQc/wMWrlIkP8Kc1lMS8eyFHpkpo5SgWCCVO7Z5JARhuz1Qg29fh87u6/9VWL1/SPc4Qy6n8c0FehiXin6dcCQaylDMhqGz8ydS2hKkmxNkWxowWnuBLHK6G2C8X6UJkBlxUmNqLYyNbzF74QLDrgFgh9LLE0NsPKxjW1Hz2EdPIubsOFdH2HgbwAlC4S19dT13o+3pS+vcSfvUcq9YnbwA6muW9hNpym/FWBxfh0CZkKGkPBZeJFhcWQAu6EN52QGZ/8prEKW+cdXq0039UiLXhUYzdjebOJQQI30UXp6mZn+Dtam32Afu0iyrgUvN0r+ZQbr8HncSpUVJfwRhBWC0hyGV8CxXBL5SWYf9sYBidYLIG2V87/ifVjTWAX6AlxeK2C0X8e58hOr/Qa2XJ3iLMWxB1h72tHs7bgryzHAN2o2gJorTrLxRHVazd0o4TXiyV2Yjs90uzauGvvppmqcLjwmbZ3V7BO2HOrBnbgrQRqWUgTZ5+Snx4WeKfzCCrmb3axODKNH+vvUyWjqyK4DiKQ0eXSpFsgVvLJQWpH+xSpr4otg/HI0TR/t97cxTUS+QxIMRTLi/9ZYJPI/AgwAoc3W7ZrqR2IAAAAASUVORK5CYII=\" alt=\"RSS\"/></a>":"").
-                        "</h1>";
-                $head.="</center><hr class=\"logohr\"/>";
+                if(SHOWTITLETXT){
+                        if(TITLE||USE_RSS)$head.="<h1>".TITLE.(USE_RSS?" <a href=\"".RSS."\"><img border=\"0\" src=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAInSURBVCgVBcE7aF1lAADg7//PuTnH2FsxlGsqtYOC1VoCaaWi6GYGTTJ3COqgg5Od1K6Cizo3QzdBQUSFgEVFBB+DFTRpjdgYKkabVELtvWmax733vPy+cG3WeMNC3RjHXYE6BAIAAAGwgem0YSGOP3i6X9TGnn1RGGyru39xc0UrS2RZlGRR0krEWKPurH+9fDFtGsfKJkiOPur+ubcAwN6vnysunZdUXa1WJImUfZhMQxDTLErTysYHbwgxSO7pGH3olPbEDBMzhovvqy9fEEMkZiBFHVtBufWP5laboqe+ftvtqx/b/f0Z9z71suzkS4qRnJ/nNXUFUhBpDh115OwnoP/nD4rlj/TXv7e58JvO7HvyE2cMfprXbP8HkteOOZcf7uSxfUA5uGPYXXPgsedlj0xLhlvK1S/s3PjDwZNnVEWlXP3O7saWGJDf3dLWE3+Z1//qTRsXpu2v/Sh/+nWjR04p1xd1vz0ve+IVxTCAWDfUzVDdvykte9pZYaS7bPOzs2Dk9KtUDLr/gmbsOIhVw85+Tzr1tva5G7Kpd+QjCdubtpc+lT08JeT3KXZ3QJWOgVg1QoHR48+BdGJObII0BMWtNZDkh6iAZPwESJMgjuaJvZUvHXz8BcWVD6mCLEb1yje6a5fV16+qervW352zd+WSBGF1xmLnyQcmtRJBkDRBXVAOKIbUQ4b7FH2qATFUwp2/l8K1WYdxEZMAAAAAgCVM/w9xIeAFzYcQ3QAAAABJRU5ErkJggg==\" alt=\"RSS\"/></a>":"")."</h1>";
+                        if(SUBTITLE)$head.="<div class=\"headsub\">".SUBTITLE."</div>";
+                }
+                $head.="</center><hr class=\"logohr\" width=\"90%\" size=\"1\"/>";
         }
         if($mode!="admin"&&!$extra)file_put_contents(CACHE_DIR."head.inc.html",$head);
         $dat.=$head;
 }
 /* Contribution form */
-function form(&$dat,$resno=0,$admin="",$manapost=false,$paintcom=false) {
+function form(&$dat,$resno=0,$admin="",$manapost=false,$paintcom=false){
 	global $q;
         if(is_file(CACHE_DIR."form.inc.html")&&!($resno||$admin||$manapost||$paintcom||$q)){
                 $dat.=file_get_contents(CACHE_DIR."form.inc.html");
@@ -507,7 +515,7 @@ function form(&$dat,$resno=0,$admin="",$manapost=false,$paintcom=false) {
         
         $form='';
         if($resno&&mysqli_fetch_assoc(mysqli_call("SELECT closed FROM ".POSTTABLE." WHERE `no`=".$resno))["closed"]){
-                $form.="<center><h2 id=\"errormsg\">".lang("Thread closed.")."<br>".lang("You may not reply at this time.")."</h2></center><hr>";
+                $dat.="<center><h2 id=\"errormsg\">".lang("Thread closed.")."<br>".lang("You may not reply at this time.")."</h2></center><hr>";
                 return;
         }
 
@@ -516,7 +524,7 @@ function form(&$dat,$resno=0,$admin="",$manapost=false,$paintcom=false) {
         $form.="<center class=\"postarea\">";
         if($admin)$form.="<i>".lang("HTML tags are allowed.")."</i>";
         if($resno&&!$manapost)$form.="<div class=\"replymode\"><big>".lang("Posting mode: Reply")."</big></div>";
-        
+
         $inputs='';
         //Name
         if(!FORCED_ANON||$admin){
@@ -552,7 +560,14 @@ function form(&$dat,$resno=0,$admin="",$manapost=false,$paintcom=false) {
         //Comment
         $inputs.="<tr><td class=\"postblock\"><label for=\"com\"><b>".lang("Comment")."</b></label></td>";
         $inputs.="<td><textarea name=\"com\" id=\"com\" cols=\"48\" rows=\"6\" tabindex=\"7\"".
-                ($resno&&$q?" autofocus>&gt;&gt".$q."\n":">")."</textarea></td></tr>";
+                ($resno&&$q?" autofocus>&gt;&gt".$q."\n":">")."</textarea>";
+        $inputs.= <<<EOF
+<script type="text/javascript" async="async">
+/*<!--*/
+document.write('<div>[<a href="javascript:void(0);" onclick="window.open(phpself+\'?mode=bbcodes\',\'popwin\',\'width=550,height=700,scrollbars=1\');">BBcode reference</a>]</div>');
+/*-->*/
+</script></td></tr>
+EOF;
         //Verification
         switch(CAPTCHA_DRIVER){
                 case "saguaro":
@@ -654,18 +669,46 @@ document.write('<br/><label><input type="checkbox" class="noqr" onchange="docume
         </td>
 </tr>
 EOF;
+        //Options
+        $inputs.="<tr class=\"unimportant\"><td class=\"postblock\"><label><b>".lang("Options")."</b></label></td>";
+        $inputs.="<td>";
+        $inputs.="<label><input type=\"checkbox\" name=\"sage\"/>".lang("sage")."</label> ";
+        $inputs.="<label><input type=\"checkbox\" name=\"nonoko\"/>".lang("nonoko")."</label> ";
+        if(FORTUNE)$inputs.="<label><input type=\"checkbox\" name=\"fortune\"/>".lang("fortune")."</label>";
+        $inputs.="</td>";
         
         $rules = RULES;
-        
         $form.="<form id=\"postform\" action=\"".PHP_SELF."\" method=\"post\" enctype=\"multipart/form-data\">";
         $form.="<input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"".$maxbyte."\"/>";
 	$form.="<input type=\"hidden\" name=\"mode\" value=\"regist\"/>";
         if($resno&&!$manapost)$form.="<input type=\"hidden\" name=\"resto\" value=\"".$resno."\"/>";
+        $types_arr=[];
+        foreach(ALLOWED_EXT as $ext){
+                $realext=strtoupper(
+                        str_ireplace("giff","gif",
+                        str_ireplace("jpeg","jpg",
+                        str_ireplace("jfif","jpg",
+                        str_ireplace(".","",
+                                $ext)))));
+                if(!in_array($realext,$types_arr))$types_arr[]=$realext;
+        }
+        $types=implode(lang(", "),$types_arr);
+        $sallowedare=lang("Supported file types are ");$sdot=lang(".");
+        $smaxfsize=lang("Maximum file size allowed is ");$humanmaxfsize=humansize(MAX_KB*1024);
+        $sthumbinfo=lang("Images greater than ").MAX_W.lang("x").MAX_H.lang(" pixels will be thumbnailed.");
         $form.= <<<EOF
                 <table cellspacing="2">
                         <tbody>
                                 {$inputs}
-                                <tr><td colspan="2"><small>{$rules}</small></td></tr>
+                                <tr class="rules"><td colspan="2"><small>
+                                        <ul>
+                                                <li>{$sallowedare}{$types}{$sdot}</li>
+                                                <li>{$smaxfsize}{$humanmaxfsize}{$sdot}</li>
+                                                <li>{$sthumbinfo}</li>
+                                        </ul>
+                                        <hr/>
+                                        {$rules}
+                                </small></td></tr>
                         </tbody>
                 </table>
         </form>
@@ -692,20 +735,21 @@ EOF;
 
 /* Footer */
 function foot(&$dat){
-        $sfoot=FOOT;$slegal=_("All trademarks, copyrights, comments, and images on this page are owned by and are the responsibility of their respective parties.");
+        $sfoot=FOOT;$slegal=_("All trademarks and copyrights on this page are owned by their respective parties. Images uploaded are the responsibility of the Poster. Comments are owned by the Poster.");
+        $slegal2=_("The owner of this website claims no responsibility of the content posted by the posters.");
         $dat.="<br clear=\"all\"/>";
         if(BOARDLINKS)$dat.="<span class=\"boardlist\">".BOARDLINKS."</span>";
         $gentime=gentime();
         if(SHOWTITLEIMG){
-                $dat.="<h1><center class=\"logo\">";
+                $dat.="<center class=\"logo\">";
                 $dat.="<img src=\"".TITLEIMG."\" onload=\"this.style.opacity=1;\" onclick=\"this.style.opacity=0.5;this.src='".TITLEIMG."?'+(new Date().getTime());\" border=\"1\" alt=\"".TITLE."\"/>";
-                $dat.="</center></h1>";
+                $dat.="</center>";
         }
         $dat.= <<<EOF
                 <center>
                         <div>{$gentime}</div>
                         <small>{$sfoot}</small>
-                        <div class="disclaimer"><small>{$slegal}</small></div>
+                        <div class="disclaimer"><small>{$slegal}<br/>{$slegal2}</small></div>
                 </center>
                 <div id="bottom"></div>
         </body>
@@ -721,12 +765,12 @@ function error($mes){ /* Basically a fancy die() */
         }
 	if(!$dat)head($dat,"<meta name=\"robots\" content=\"noindex, nofollow\">");
 	echo $dat;
-	die("<table width=\"100%\" height=\"200\"><tbody><tr valign=\"middle\"><td><center><h2 id=\"errormsg\">".$mes."</h2><big>[<a href=\"".PHP_SELF2."\">".lang("Return")."</a>]</big></center></td></tr></tbody></table>".fakefoot());
+	die("<table width=\"100%\" height=\"200\"><tbody><tr valign=\"middle\"><td><center><h2 id=\"errormsg\">".$mes."</h2><big>[<a hreflang=\"".LANGUAGE."\" charset=\"UTF-8\" href=\"".PHP_SELF2."\">".lang("Return")."</a>]</big></center></td></tr></tbody></table>".fakefoot());
         die(fakefoot());
 }
 
 function auto_link($proto) {
-	$proto = preg_replace("#(https?|ftp|news|irc|gopher|telnet|ssh)(://[[:alnum:]\+\$\;\?\.%,!\#~*/:@&=_-]+)#","<a href=\"\\1\\2\" rel=”noreferrer” target=\"_blank\">\\1\\2</a>",$proto);
+	$proto = preg_replace("#(https?|ftp|news|irc|gopher|telnet|ssh)(://[[:alnum:]\+\$\;\?\.%,!\#~*/:@&=_-]+)#","<a href=\"\\1\\2\" rel=”noreferrer nofollow” target=\"_blank\">\\1\\2</a>",$proto);
 	return $proto;
 }
 
@@ -752,7 +796,7 @@ function closetags($html){ //https://gist.github.com/JayWood/348752b568ecd63ae5c
 function catalog() {
 	$dat = '';
 	head($dat,"<meta name=\"robots\" content=\"index, follow\"/>");
-	$dat.="<center class=\"replymode\"><big>".lang("View mode: Catalog")."</big></center>";
+	$dat.="<center class=\"viewmode\"><big>".lang("View mode: Catalog")."</big></center>";
         form($dat);
         $dat.=ctrlnav("catalog",true);
         $dat.="<center>";
@@ -761,7 +805,7 @@ function catalog() {
 	$result = mysqli_call("SELECT * FROM ".POSTTABLE." WHERE `resto`=0 ORDER BY `root` DESC");
 	while($thread=mysqli_fetch_assoc($result)){
 		$dat.="<td width=\"100\" height=\"100\" valign=\"top\">";
-                $dat.="<center><a href=\"".PHP_SELF."?res=".$thread["no"]."\">";
+                $dat.="<center><a hreflang=\"".LANGUAGE."\" charset=\"UTF-8\" href=\"".PHP_SELF."?res=".$thread["no"]."\">";
                 if($thread["md5"]){
                         $temp=explode(',',$thread["ext"]);
                         $src = IMG_DIR.$thread["tim"].end($temp);
@@ -847,7 +891,9 @@ function listlog(){
 EOF);
 //        form($dat);
         $dat.=ctrlnav("list",true);
+        $svmode=lang("View mode: Thread list");
         $dat.= <<<EOF
+<center class="viewmode"><big>{$svmode}</big></center>
 <center class="postlists">
         <table border="1" cellspacing="0" cellpadding="3" width="95%">
                 <tbody><tr><td width="100%" class="reply"><small>
@@ -855,7 +901,7 @@ EOF;
         $threads=mysqli_call("SELECT * FROM ".POSTTABLE." WHERE `resto`=0".
                 " ORDER BY `sticky` DESC,`root` DESC");
         while($thread=mysqli_fetch_assoc($threads)){
-                $dat.="<a href=\"".PHP_SELF."?res=".$thread["no"]."\">";
+                $dat.="<a hreflang=\"".LANGUAGE."\" charset=\"UTF-8\" href=\"".PHP_SELF."?res=".$thread["no"]."\">";
                 $dat.="<b>".$thread["no"]."</b>:";
                 $dat.=($thread["sub"]?$thread["sub"]:
                         (DEFAULT_SUBJECT?DEFAULT_SUBJECT:
@@ -869,7 +915,7 @@ EOF;
         while($thread=mysqli_fetch_assoc($threads)){
                 $i++;
                 $dat.="<table width=\"95%\" cellpadding=\"3\" cellspacing=\"0\"><tbody><tr><th width=\"94\"><center>";
-                $dat.="<b>[<a href=\"".PHP_SELF."?res=".$thread["no"]."\">".$thread["no"]."</a>]</b><br/>";
+                $dat.="<b>[<a hreflang=\"".LANGUAGE."\" charset=\"UTF-8\" href=\"".PHP_SELF."?res=".$thread["no"]."\">".$thread["no"]."</a>]</b><br/>";
                 $dat.="(".$i.":".$threadcount.")";
                 $dat.="</center></th><td class=\"reply\" align=\"left\" valign=\"top\">";
                 $dat.="<span class=\"postInfo\">";
@@ -924,7 +970,7 @@ function rebuild($output_started=false,$echo=true){
         while($thread=mysqli_fetch_assoc($threads)){
                 $thread_htm=updatelog($thread["no"]);
                 $fix_dirs=array_unique([HOME,RES_DIR,JS_DIR,CSS_DIR,THUMB_DIR,IMG_DIR,EMOTES_DIR,FLAGS_DIR,PHP_PLAYER,
-                        CAPTCHA_IMG,PHP_SELF,PHP_SELF2,PHP_CAT,PHP_API,PHP_BANNED,PHP_BLOTTER,"sticky.gif","closed.gif","file.png",
+                        CAPTCHA_IMG,PHP_SELF,PHP_SELF2,PHP_CAT,PHP_LIST,PHP_API,PHP_BANNED,PHP_BLOTTER,"sticky.gif","closed.gif","file.png",
                         "filedeleted.gif","filedeleted-res.gif","filedeleted-cat.gif",TITLEIMG,RSS,"count.php"]);
                 foreach($fix_dirs as $dir){
                         if(strpos($dir,'/')||substr($dir,-1)!='/')$thread_htm=str_replace($dir,"../".$dir,$thread_htm);
@@ -952,7 +998,7 @@ function rebuild($output_started=false,$echo=true){
                 echo lang("Redirecting back to board.")."<br/>";
                 echo "</body><head><meta http-equiv=\"refresh\" content=\"0;URL=".PHP_SELF2."\"/>";
         }else echo "</body><head>";//The 2 headed beast
-        echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"".
+        echo "<link rel=\"stylesheet\" type=\"text/css\" charset=\"UTF-8\" href=\"".
                 STYLES[(isset($_COOKIE["fikabastyle"])?$_COOKIE["fikabastyle"]:CSSDEFAULT)]."\"/>";
         echo "</head></html>";
 }

@@ -17,7 +17,7 @@ Sakomoto is an imageboard script based on fikaba
 * GD 2.x
 * FFMPEG (For creating webm thumbnails)
 # Installation
-1. Installing Sakomoto is easy, copy an example config to "config.inc.php" in the same directory as "imgboard.php"
+1. Installing Sakomoto is easy, copy an "config_default.inc.php" config to "config.inc.php" in the same directory as "imgboard.php"
 2. Adjust config to suit the board. MAKE SURE YOU CONFIGURE YOUR DATABASE SETTINGS.
 3. Access "imgboard.php" from a browser
 4. Login to the management panel by clicking "[Manage]" at the top right. (Default password is "password")

@@ -6,14 +6,14 @@
 if(basename(__FILE__) == basename($_SERVER["SCRIPT_FILENAME"]))
         die("This file is not to be called directly.");
 
-function regist($ip,$name,$capcode,$email,$sub,$com,$url,$pwd,$resto,$spoiler,$steam) {
+function regist($ip,$name,$capcode,$email,$sub,$com,$url,$pwd,$resto,$spoiler,$steam,$sage,$nonoko,$fortune) {
 	global $con,$path,$pwdc,$textonly,$admin,$time,$tim,$upfiles,$upfiles_names,$upfiles_errors,$upfiles_count,$verif,$json_response;
         $resto=(int)$resto;
         
 	if (isbanned($ip)) error(lang("Error: you are banned. Post discarded. ".
                 "Check on the status of your ban ")."<a href=\"".PHP_BANNED."\">".lang("here")."</a>".lang("."));
 	if ($_SERVER["REQUEST_METHOD"] != "POST") error(lang("Error: Unjust POST."));
-        if(CAPTCHA_DRIVER&&$verif!=$_SESSION['captcha_key'])error(lang("Invalid captcha."));
+        if(CAPTCHA_DRIVER&&strtolower($verif)!=strtolower($_SESSION['captcha_key']))error(lang("Invalid captcha."));
         if($resto){
                 $thread=mysqli_fetch_assoc(mysqli_call("SELECT closed,resto FROM ".POSTTABLE." WHERE `no`=".$resto));
                 if(!$thread)error(lang("Error: That thread no longer exists."));
@@ -200,8 +200,12 @@ function regist($ip,$name,$capcode,$email,$sub,$com,$url,$pwd,$resto,$spoiler,$s
 	// Continuous lines
 	$com = preg_replace("/\n((!@| )*\n) {3,}/","\n",$com);
 	$com = str_replace("\n", "<br/>", $com);	// \n is erased (is this necessary? [yes])
-	$com=preg_replace("/&gt;/i", ">", $com);
-	$com=preg_replace("/(^|>|&gt;)(\>[^<]*)/i", "\\1<span class=\"unkfunc\">\\2</span>", $com);
+        // Greentext
+        $com = preg_replace("/&gt;/i", ">", $com);
+        $com = preg_replace("/(^|>)(\>[^<]*)/i", "\\1<span class=\"unkfunc\">\\2</span>", $com);
+        // Pinktext
+        $com = preg_replace("/(^|>)(&lt;[^<]*)/i", "\\1<span class=\"unkfunc2\">\\2</span>", $com);
+        
 	$com=auto_link($com);
 	$com=preg_replace_callback("/\>\>([0-9]+)/i", "postLink", $com);
         //bbcode
@@ -215,7 +219,7 @@ function regist($ip,$name,$capcode,$email,$sub,$com,$url,$pwd,$resto,$spoiler,$s
                 $com=str_replace(":".$emote.":","<img alt=\"".$emote."\" src=\"".EMOTES_DIR.$emotefile."\" border=\"0\"/>",$com);
         }
         //Fortune
-        if(FORTUNE&&stristr($email,"fortune")){
+        if(FORTUNE&&($fortune||stristr($email,"fortune"))){
                 $fortunes = ["Bad Luck","Average Luck","Good Luck",
                         "Excellent Luck","Reply hazy, try again","Godly Luck",
                         "Very Bad Luck","Outlook good","Better not tell you now",
@@ -295,7 +299,7 @@ function regist($ip,$name,$capcode,$email,$sub,$com,$url,$pwd,$resto,$spoiler,$s
 		if (!$resline=mysqli_call("select * from ".POSTTABLE." where resto=".$resto))error("Critical SQL problem!");
 		$countres=mysqli_num_rows($resline);
 		mysqli_free_result($resline);
-		if (!stristr($email,'sage') && $countres < BUMPLIMIT) {
+		if (!(stristr($email,'sage')||$sage) && $countres < BUMPLIMIT) {
 			$query="update ".POSTTABLE." set root=now() where no=".$resto; //age
 			if (!$result=mysqli_call($query))error("Critical SQL problem!");
 		}
@@ -369,7 +373,7 @@ function regist($ip,$name,$capcode,$email,$sub,$com,$url,$pwd,$resto,$spoiler,$s
 
         if(!error_get_last()&&!$json_response)
                 echo "<html><head><meta http-equiv=\"refresh\" content=\"1;URL=".
-                        (stristr($email,"nonoko")||!$resto?PHP_SELF2:PHP_SELF."?res=".$resto)."\"/></head><body>";
+                        ($nonoko||stristr($email,"nonoko")||!$resto?PHP_SELF2:PHP_SELF."?res=".$resto)."\"/></head><body>";
 
         if($json_response){
                 rebuild(false,false);

@@ -22,8 +22,14 @@ repod.quotes_hover={
         },
         update:function(){
                 if(repod.quotes_hover.config.enabled){
-                        $(document).on("mouseover",".quotelink",function(e){ Tip($("#p"+$(this).attr("href").split("#p")[1]).html(),WIDTH,600); /*repod.quotes_hover.display_hover(e,$(this));*/});
-                        $(document).on("mouseout",".quotelink",function(e){ UnTip(); /*$(".hover_post").remove();*/});
+                        $(document).on("mouseover",".quotelink",function(e){
+                                /*Tip($("#p"+$(this).attr("href").split("#p")[1]).html(),WIDTH,600,CLICKCLOSE,true);*/
+                                repod.quotes_hover.display_hover(e,$(this));
+                        });
+                        $(document).on("mouseout",".quotelink",function(e){
+                                /*UnTip();*/
+                                $(".hover_post").remove();
+                        });
                 }
         },
         display_hover:function(event,e){

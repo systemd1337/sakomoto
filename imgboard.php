@@ -21,7 +21,7 @@ switch(strtolower($mode)){
 	case 'regist':
 	case "post":
                 require_once(CORE_DIR."regist.inc.php");
-		regist($ip,$name,$capcode,$email,$sub,$com,'',$pwd,$resto,$spoiler,$steam);
+		regist($ip,$name,$capcode,$email,$sub,$com,'',$pwd,$resto,$spoiler,$steam,$sage,$nonoko,$fortune);
 		break;
 	case 'admin':
                 require_once(CORE_DIR."admin.inc.php");
@@ -311,6 +311,108 @@ EOF;
         case "sam":
         case "thumblist":
                 require_once(CORE_DIR."sam.inc.php");
+                break;
+        case "bbcodes":
+                $dat="";
+                $dat.= <<<EOF
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+        <head>
+                <meta charset="UTF-8"/>
+                <meta http-equiv="Content-Script-Type" content="text/javascript"/>
+                <meta http-equiv="Content-Style-Type" content="text/css"/>
+                <meta http-equiv="content-type"  content="text/html;charset=utf-8"/>
+                <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+                <meta http-equiv="cache-control" content="no-cache,no-store,must-revalidate"/>
+                <meta http-equiv="cache-control" content="max-age=0"/>
+                <meta http-equiv="pragma" content="no-cache"/>
+                <meta http-equiv="expires" content="0"/>
+                <meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT"/>
+                <meta name="robots" content="noindex noarchive"/>
+                <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=yes"/>
+                <meta name="generator" content="sakomoto"/>
+                <meta name="pinterest" content="nopin"/>
+                <style>
+.emote{
+        max-height:50px;
+        max-width:100%;
+}
+blink,.blink{
+        -webkit-animation:blink 1.5s step-end infinite;
+        -moz-animation:blink 1.5s step-end infinite;
+        -o-animation:blink 1.5s step-end infinite;
+        animation:blink 1.5s step-end infinite
+}
+@keyframes blink{50%{opacity:0}}
+@-webkit-keyframes blink{50%{opacity:0}}
+
+@keyframes rainbow{
+        0%{color:rgb(255,0,0);}
+        16%{color:rgb(127,127,0);}
+        33%{color:rgb(0,255,0);}
+        49%{color:rgb(0,127,127);}
+        66%{color:rgb(0,0,255);}
+        82%{color:rgb(127,0,127);}
+        100%{color:rgb(255,0,0);}
+}
+#top{position:absolute;top:0;}
+                </style>
+EOF;
+                $dat.="<title>".TITLE."</title>";
+                $dat.="<script language=\"JavaScript\" charset=\"UTF-8\" type=\"text/javascript\">var cssdef='".CSSDEFAULT."';</script>";
+                $dat.="<script language=\"JavaScript\" charset=\"UTF-8\" src=\"".JS_DIR."sakomoto.js\" type=\"text/javascript\"></script>";
+                foreach(STYLES as $stylename => $stylefile) {
+                        $dat.="<link charset=\"UTF-8\" rel=\"".($stylename==CSSDEFAULT?'':"alternate ")."stylesheet\" type=\"text/css\" ".
+                                "href=\"".CSS_DIR."styles/".$stylefile."\" title=\"".$stylename."\"/>";
+                }
+                $dat.="</head><body><div id=\"top\"></div>";
+                $dat.="<script type=\"text/javascript\" src=\"".JS_DIR."wz_tooltip/wz_tooltip.js\"></script>";
+                $semotes=lang("Emotes");
+                $dat.= <<<EOF
+<p>
+        <table width="100%" border="1" bgcolor="white" class="set">
+                <thead><tr><th align="left" class="postblock"><b>{$semotes}</b></th></tr></thead>
+                <tbody><tr><td><font color="black">
+EOF;
+                foreach(EMOTES as $bb => $emote){
+                        $dat.="<table height=\"100\" width=\"100\" align=\"left\" border=\"1\"><tbody><tr><td><center>";
+                        $dat.="<img class=\"emote\" src=\"".EMOTES_DIR.$emote."\"/>";
+                        $dat.="<br/><br/><div>:".$bb.":</div>";
+                        $dat.="</center></td></tr></tbody></table>";
+                }
+                $dat.= <<<EOF
+                </font></td></tr></tbody>
+        </table>
+</p>
+EOF;
+                $sbbcodes=lang("BBcodes");
+                $dat.= <<<EOF
+<p>
+        <table width="100%" border="1" bgcolor="white" class="set">
+                <thead><tr><th align="left" class="postblock"><b>{$sbbcodes}</b></th></tr></thead>
+                <tbody><tr><td><font color="black">
+EOF;
+                foreach(BBCODES as $bb => $code){
+                        $dat.="<table height=\"100\" width=\"100\" align=\"left\" border=\"1\"><tbody><tr><td><center>";
+                        $dat.="<".$code.">example</".explode(" ",$code)[0].">";
+                        $dat.="<br/><br/><div>[".$bb."]".lang("example")."[/".$bb."]</div>";
+                        $dat.="</center></td></tr></tbody></table>";
+                }
+                $dat.= <<<EOF
+                </font></td></tr></tbody>
+        </table>
+</p>
+EOF;
+                $dat.="<center><button onclick=\"window.close();\">Close</button></center>";
+                $dat.= <<<EOF
+<script type="text/javascript" async="async">
+/*<!--*/
+document.write('<div align="right"><table id="delSub" align="right"><tbody></tbody></table></div>');
+/*-->*/
+</script>
+EOF;
+                $dat.="<br clear=\"all\"/><center>".FOOT."</center></body></html>";
+                echo $dat;
                 break;
         case "random":
         case "randomthread":

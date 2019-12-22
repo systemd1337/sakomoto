@@ -27,10 +27,11 @@ hr{border-color:#ddd;}
 }
 .post.reply{border-color:#ccc;}
 .omittedposts{color:#707070}
-.replymode{
+.viewmode,.replymode{
         background-color:#ccc;
         color:black;
 }
 .unkfunc{color:#789922;}
+.unkfunc2{color:#FF69B3;}
 .quotelink{color:#f60;}
 #errormsg{color:red;}

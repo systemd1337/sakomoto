@@ -1,23 +1,12 @@
 <?php
-//Example config file for a "/a/ - Anime" board
-
-//require_once("../config_global.php");
-//All features enabled by default
-const LOCKDOWN = false;	//Set to true to disable page viewing for users (not for managers)
-
+const LOCKDOWN = false;	//Set to true to disable posting for users (not for managers)
 error_reporting(E_ALL);
 
 // General settings
-const SHOWTITLETXT = true; //Show TITLE at top
-const SHOWTITLEIMG = true; //Show image at top
 const HEAD_EXTRA=""; //Extra HTML to append to the head
-const HERE="http://mysite.tld/a/"; //URL link to this board
-//Set to PHP script for rotating banners
-//Title image for SHOWTITLEIMG=1
-const TITLEIMG = "banners/index.php";
+const HERE="http://mysite.tld/b/"; //URL link to this board
 const LANGUAGE = 'en'; //Language. Fikaba provides en and ja by default
-const BOARDLINKS = "[<a href=\"/a/\">a</a>/ <a href=\"b\">b</a> ...]"; //Boardlinks at top
-const SEED = "CHANGEME";//Set to some random text (Do not change after initial run)
+const BOARDLINKS = "[<a href=\"/a/\">a</a>/ <a href=\"/b/\">b</a> ...]"; //Boardlinks at top
 //Rules under post form
 const RULES = <<<EOF
 <ul>
@@ -27,14 +16,19 @@ const RULES = <<<EOF
         <li><iframe src="./count.php" width="100%" height="15" scrolling="no" frameborder="0" marginwidth="0" marginheight="0" border="0"></iframe></li>
 </ul>
 EOF;
+const SHOWTITLEIMG = true; //Show image at top
+const SHOWTITLETXT = true; //Show TITLE at top
+const TITLEIMG = "banners/index.php"; //Banner image
+const SEED = "CHANGEME"; //Set to some random text (Do not change after initial run)
+const USE_GZIP=true; //Output buffer compression
 
 //JavaScript settings
 const ENABLEAPI = true; //Enable the JSON API?
 const JSVARS = [ //Extra vars for JS
 //var=>val
-"jsPath"=>"js/jquery"
+"jsPath"=>"../js/jquery"
 ];
-const JSPLUGINS=[ //Aditional JavaScripts (Relative to ./js/)
+const JSPLUGINS=[ //Aditional JavaScripts (Relative to jsdir)
 "jquery/stylebuttons.js",
 "jquery/main.js",
 "jquery/suite_settings.js",
@@ -57,15 +51,11 @@ const JSPLUGINS=[ //Aditional JavaScripts (Relative to ./js/)
 "jquery/thread_nav.js",
 "jquery/persistent_boards.js",
 "jquery/thread_expansion.js",
-"jquery/quick_reply.js",
 "jquery/thread_watcher.js",
 "jquery/tree_view.js",
 "jquery/infinite_scroll.js",
 "jquery/wysibb.js",
-"jquery/op_only.js",
 "jquery/nav_arrows.js",
-"jquery/ajax_post.js",
-"jquery/file_selector.js",
 ];
 
 /* Posting */
@@ -84,14 +74,61 @@ const BBCODES = [
 ];
 const EMOTES = [
 //emote=>file
+"nigra"=>"nigra.gif",
 "sage"=>"sage.gif",
+"longcat"=>"longcat.gif",
+"tacgnol"=>"tacgnol.gif",
+"angry"=>"emo-yotsuba-angry.gif",
+"astonish"=>"emo-yotsuba-astonish.gif",
+"biggrin"=>"emo-yotsuba-biggrin.gif",
+"closed-eyes"=>"emo-yotsuba-closed-eyes.gif",
+"closed-eyes2"=>"emo-yotsuba-closed-eyes2.gif",
+"cool"=>"emo-yotsuba-cool.gif",
+"cry"=>"emo-yotsuba-cry.gif",
+"dark"=>"emo-yotsuba-dark.gif",
+"dizzy"=>"emo-yotsuba-dizzy.gif",
+"drool"=>"emo-yotsuba-drool.gif",
+"glare"=>"emo-yotsuba-glare.gif",
+"glare1"=>"emo-yotsuba-glare-01.gif",
+"glare2"=>"emo-yotsuba-glare-02.gif",
+"happy"=>"emo-yotsuba-happy.gif",
+"huh"=>"emo-yotsuba-huh.gif",
+"nosebleed"=>"emo-yotsuba-nosebleed.gif",
+"nyaoo-closedeyes"=>"emo-yotsuba-nyaoo-closedeyes.gif",
+"nyaoo-closed-eyes"=>"emo-yotsuba-nyaoo-closedeyes.gif",
+"nyaoo"=>"emo-yotsuba-nyaoo.gif",
+"nyaoo2"=>"emo-yotsuba-nyaoo2.gif",
+"ph34r"=>"emo-yotsuba-ph34r.gif",
+"ninja"=>"emo-yotsuba-ph34r.gif",
+"rolleyes"=>"emo-yotsuba-rolleyes.gif",
+"rollseyes"=>"emo-yotsuba-rolleyes.gif",
+"sad"=>"emo-yotsuba-sad.gif",
+"smile"=>"emo-yotsuba-smile.gif",
+"sweat"=>"emo-yotsuba-sweat.gif",
+"sweat2"=>"emo-yotsuba-sweat2.gif",
+"sweat3"=>"emo-yotsuba-sweat3.gif",
+"tongue"=>"emo-yotsuba-tongue.gif",
+"unsure"=>"emo-yotsuba-unsure.gif",
+"wink"=>"emo-yotsuba-wink.gif",
+"x3"=>"emo-yotsuba-x3.gif",
+"xd"=>"emo-yotsuba-xd.gif",
+"xp"=>"emo-yotsuba-xp.gif",
 ];
-const TRIPCAP = [ //Custom tripcode capcodes
-//Trip => cap
+const TRIPCAP=[ //Give tripcodes a capcode
+"!Ep8pui8Vw2"=>"<font color=\"pink\">## Faggot</font>",
 ];
-const STEAM = false;
+const FILTERS = array( // Filters, in the format of IN => OUT
+"spacechan"=>"spacecuck",
+"basedpilled"=>"epic",
+"unbased"=>"wow",
+"based"=>"epic",
+);
+const BADSTRING = array(); //Posts containing any of these strings will be discarded (can be a nuisance, use with care);
+const BADFILE = array(); //Files to be discarded (md5 hashes)
+const PROXY_CHECK = true; //Enable proxy check
+const STEAM = true; //Enable users to link to their steam profile?
 //Default posting values
-const DEFAULT_SUBJECT = "";
+const DEFAULT_SUBJECT = "No subject";
 const DEFAULT_NAME = "Anonymous";
 const DEFAULT_COMMENT = "キターーー(゜∀゜)ーーーー!!!!!";
 
@@ -100,32 +137,39 @@ const USE_RSS = true;
 const RSS_LIMIT=15;
 
 /* Meta */
-const KEYWORDS = "anonymous,imageboard,image,board,chan,forum,anime,manga,moe";
-const DESCRIPTION = "&quot;/a/ - Anime&amp;Manga&quot; A board for discussion on anime and manga";
-const TITLE = "/a/ - Anime&amp;Manga"; //Name of this imageboard
-const ICON = ""; //URL to icon (Leave empty for none)
+const KEYWORDS = "anonymous,imageboard,image,board,chan,forum"; //SEO keywords
+const DESCRIPTION = "Sakomoto powered image board!"; //SEO description
+const TITLE = "Sakomoto powered image board!"; //Name of this imageboard
+const SUBTITLE = "Only fools would post facts."; //Subtitle below title
+const ICON = ""; //URL to favicon (Leave empty for none)
 
 // Database settings
-const POSTTABLE = "CHANGEME"; //Post table (NOT DATABASE)
-const BANTABLE = "CHANGEME"; //Bans table (NOT DATABASE)
-const MANATABLE = "CHANGEME"; //Manager (admin, mod, janitor) table
-const REPORTTABLE = "CHANGEME"; //Reports table (NOT DATABASE)
 const BLOTTERTABLE = "CHANGEME"; //Blotter table
 const SQLHOST = "CHANGEME"; //MySQL server address, usually localhost
 const SQLUSER = "CHANGEME"; //MySQL user (must be changed)
 const SQLPASS = "CHANGEME"; //MySQL user's password (must be changed)
 const SQLDB = "CHANGEME"; //Database used by image board
+const BANTABLE = "CHANGEME"; //Bans table (NOT DATABASE)
+const MANATABLE = "CHANGEME"; //Manager (admin, mod, janitor) table
+const POSTTABLE = "CHANGEME"; //Post table (NOT DATABASE)
+const REPORTTABLE = "CHANGEME"; //Reports table (NOT DATABASE)
 
 // File-related settings
-const IMG_DIR = 'src/'; //Image directory (needs to be 777)
-const THUMB_DIR = 'src/'; //Thumbnail directory (needs to be 777)
-const RES_DIR = "thread/"; //Thread directory (needs to be 777)
 const JS_DIR = "js/";
 const CSS_DIR = "css/";
 const HOME = '../'; //Site home directory (up one level by default
 const EMOTES_DIR="emotes/";
 const FLAGS_DIR="flags/";
 const CORE_DIR="include/";
+const PHP_PLAYER = "player.php"; //Name of webm player script file
+const PHP_BLOTTER="blotter.php"; //Name of blotter script file
+const PHP_BANNED="banned.php"; //Name of b& script
+const PHP_LIST="list.html";
+const FFMPEG = "ffmpeg"; //ffmpeg command
+const CACHE_DIR="cache/";
+const IMG_DIR = 'src/'; //Image directory (needs to be 777)
+const THUMB_DIR = 'src/'; //Thumbnail directory (needs to be 777)
+const RES_DIR = "thread/"; //Thread directory (needs to be 777)
 const MAX_KB = 2000; //Maximum upload size in KB
 const MAX_W = 250; //Images exceeding this width will be thumbnailed
 const MAX_H = 250; //Images exceeding this height will be thumbnailed
@@ -136,24 +180,18 @@ const ALLOWED_EXT = [ //List of allowed file extensions
         ".gif",
         ".png",
         ".webm",
-        ".swf"
 ];
-const OEKAKI_DRIVER = ""; //Leave blank to disable. Oekaki driver, available drivers are: tegaki[4chan],neo
+const OEKAKI_DRIVER = "neo"; //Leave blank to disable. Oekaki driver, available drivers are: tegaki[4chan],neo
 const FORCEIMAGE = true; //Whether or not threads must start with an image
 const PHP_EXT = '.html'; //Extension used for board pages after first
 const PHP_SELF = 'imgboard.php'; //Name of main script file
 const PHP_SELF2 = 'index'.PHP_EXT; //Name of main html file
 const PHP_CAT = "catalog".PHP_EXT; //Name of catalog file
 const PHP_API = "api.php"; //Name of api script file
-const PHP_PLAYER = "player.php"; //Name of webm player script file
 const RSS="index.rss"; //Name of RSS index file
-const PHP_LIST = "list".PHP_EXT; //Name of thread list file
-const PHP_BLOTTER="blotter.php"; //Name of blotter script file
-const PHP_BANNED="banned.php"; //Name of b& script
 const DUPECHECK = true; //Check for duplicate images
 const MAX_FILES = 5; //Maximum number of files
 const THUMBBACK = array(255,255,238); //Thumbnail background for transp. images. Usually the background of your body element.
-const FFMPEG = "ffmpeg"; //ffmpeg command
 
 /* Look and behavior */
 const PAGE_DEF = 15; //Threads per page
@@ -170,19 +208,18 @@ const RENZOKU3 = 15; //Seconds between threads (floodcheck)
 const RENZOKU4 = 3; //Maximum active threads (floodcheck)
 const RENZOKU5 = 1; //Seconds between requests (DDOS)
 const BR_CHECK = 15; //Max lines per post (0 = no limit)
-const PROXY_CHECK = true; //Enable proxy check
 const DISP_ID = false; //Display user IDs
 const FORCED_ANON = false; //Force anonymous posting (except for managers)
-const BADSTRING = array(); //Posts containing any of these strings will be discarded (can be a nuisance, use with care)
-const BADFILE = array(); //Files to be discarded (md5 hashes)
 //Captcha
 const CAPTCHA_DRIVER="saguaro"; //Leave blank to disable. Enable captcha verification, available drivers are: saguaro
 const USE_CAPTCHA=true; //Captcha validation
 const CAPTCHA_IMG="captcha.php"; //Captcha generator
 
 /* CSS */
-const CSSDEFAULT = "Futaba"; // The name of the stylesheet to be used by default
+const CSSDEFAULT = "Sakomoto"; // The name of the stylesheet to be used by default
 const STYLES = array( // Array containing NAME => FILE of stylesheets
+	"Giko"	=>	"giko.css",
+	"Sakomoto"	=>	"sakomoto.css",
 	"Yotsuba"	=>	"yotsuba.css",
 	"Yotsuba B"	=>	"yotsublue.css",
 	"Miku"     	=>	"miku.css",
@@ -191,8 +228,4 @@ const STYLES = array( // Array containing NAME => FILE of stylesheets
 	"Tomorrow"	=>	"tomorrow.css",
 	"Photon"	=>	"photon.css",
 	"Gurochan"	=>	"gurochan.css"
-);
-
-const FILTERS = array( // Filters, in the format of IN => OUT
-"spacechan"=>"spacecuck"
 );

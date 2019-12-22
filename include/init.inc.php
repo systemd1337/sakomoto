@@ -16,12 +16,16 @@ require_once(CORE_DIR."functions.inc.php");
 require_once(CORE_DIR."generate.inc.php");
 
 //This software is free, all I ask in return is that you leave proper credit
-const FOOT="- <a href=\"http://php.loglog.jp/\" target=\"_blank\">GazouBBS</a> + ".
-"<a href=\"http://www.2chan.net/\" target=\"_blank\">futaba</a> + ".
-"<a href=\"http://www.1chan.net/futallaby/\" target=\"_blank\">futallaby</a> + ".
-"<a href=\"https://github.com/knarka/fikaba\" target=\"_blank\">fikaba</a> + ".
-"<a href=\"https://github.com/rileyjamesbell/sakomoto\" target=\"_blank\">sakomoto</a> -";
+const FOOT="- <a href=\"http://php.loglog.jp/\" target=\"_blank\" hreflang=\"ja\">GazouBBS</a> + ".
+"<a href=\"http://www.2chan.net/\" target=\"_blank\" hreflang=\"ja\" charset=\"Shift_JIS\">futaba</a> + ".
+"<a href=\"http://www.1chan.net/futallaby/\" target=\"_blank\" hreflang=\"en\" charset=\"UTF-8\">futallaby</a> + ".
+"<a href=\"https://github.com/knarka/fikaba\" target=\"_blank\" charset=\"UTF-8\">fikaba</a> + ".
+"<a href=\"https://github.com/rileyjamesbell/sakomoto\" target=\"_blank\" charset=\"UTF-8\">sakomoto</a> -";
 
+if(USE_GZIP){
+        header("content-encoding:gzip");
+        ob_start("ob_gzhandler");
+}else ob_start();
 if (LOCKDOWN||file_exists(".lockdown")) {
 	// if not trying to do something other than managing, die
 	if (!isset($_SESSION['capcode']) && !($_GET['mode'] == 'admin' || $_POST['mode'] == 'admin'))
@@ -187,12 +191,14 @@ if (!table_exist(REPORTTABLE)) {
 
 $ip = $_SERVER['REMOTE_ADDR'];
 
-if(stat(CACHE_DIR)["mtime"]<stat(CORE_DIR."generate.inc.php")["mtime"]||stat(CACHE_DIR)["mtime"]<"config.inc.php")
-        rmdir2(CACHE_DIR);
 if(!is_dir(CACHE_DIR))mkdir(CACHE_DIR);
+if(stat(CACHE_DIR)["mtime"]<stat(CORE_DIR."generate.inc.php")["mtime"]||stat(CACHE_DIR)["mtime"]<"config.inc.php"){
+        rmdir2(CACHE_DIR);
+        mkdir(CACHE_DIR);
+}
 
 //Prevent notices for unset variables
-$iniv=['mode','name','email','sub','com','pwd','resto','pass','res','post','no',"res","steam",
+$iniv=['mode','name','email','sub','com','pwd','resto','pass','res','post','no',"res","steam","sage","nonoko","noko","fortune",
         "capcode","spoiler","admin","pass","pwdc","q","json_response","paintsizew","paintsizeh",
         "cmd","pic","start"];
 foreach($iniv as $iniva){
