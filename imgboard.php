@@ -312,6 +312,9 @@ EOF;
         case "thumblist":
                 require_once(CORE_DIR."sam.inc.php");
                 break;
+        case "view_a":
+                require_once(CORE_DIR."view.inc.php");
+                break;
         case "bbcodes":
                 $dat="";
                 $dat.= <<<EOF

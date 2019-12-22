@@ -200,7 +200,7 @@ if(stat(CACHE_DIR)["mtime"]<stat(CORE_DIR."generate.inc.php")["mtime"]||stat(CAC
 //Prevent notices for unset variables
 $iniv=['mode','name','email','sub','com','pwd','resto','pass','res','post','no',"res","steam","sage","nonoko","noko","fortune",
         "capcode","spoiler","admin","pass","pwdc","q","json_response","paintsizew","paintsizeh",
-        "cmd","pic","start"];
+        "cmd","pic","start","page_cnt"];
 foreach($iniv as $iniva){
         if(!isset($$iniva))$$iniva=false;
 }
