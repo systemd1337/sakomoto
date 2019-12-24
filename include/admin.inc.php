@@ -11,7 +11,7 @@ function adminhead() {
 	head($dat);
 	echo $dat;
         echo "<center>";
-	echo("<div class=\"replymode\"><big>".lang("Manager Mode")."</big></div>");
+	echo("<div class=\"viewmode\"><big>".lang("Manager Mode")."</big></div>");
 	echo "<p><nav class=\"manabuttons\"> [<a href=\"".PHP_SELF2."\">".lang("Return")."</a>] ";
         echo "[<a href=\"".PHP_SELF."?mode=rebuild\">".lang("Rebuild")."</a>] ";
 	echo("[<a class='admd$admin' href='".PHP_SELF."?mode=admin&amp;admin=del'>".lang("Post Management")."</a>] ");
