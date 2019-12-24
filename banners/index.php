@@ -5,7 +5,7 @@ error_reporting(E_ALL);
 
 $mime="null/null";
 while(explode("/",$mime)[0]!="image"){
-        $banners=array_diff(scandir('.'), array('.', '..'));
+        $banners=array_diff(scandir('.'),array('.','..'));
         $selected=$banners[array_rand($banners)];
         if(is_dir($selected))continue;
         $mime=mime_content_type($selected);
@@ -13,7 +13,7 @@ while(explode("/",$mime)[0]!="image"){
 
 if(error_get_last())exit;
 
-header("content-type:".mime_content_type($selected));
+header("content-type:".$mime);
 header("content-disposition:inline;filename=".$selected);
 header("expires:0");
 header("last-modified:".gmdate("D, d M Y H:i:s")." GMT");
