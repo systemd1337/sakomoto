@@ -48,7 +48,7 @@ repod.suite_settings = {
                                 "Custom":{}
                         }
                 }
-		$(".navtopright").prepend("[<a href='#' id='repod_jquery_suite_settings_open'>Settings</a>] ");
+		$(".navtopright").prepend("<small>[<a href='#' id='repod_jquery_suite_settings_open'>Settings</a>]</small> ");
 		$("a#repod_jquery_suite_settings_open").click(function() { repod.suite_settings.spawn.settings_window(); });
 	},
         preset:function(preset){

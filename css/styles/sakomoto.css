@@ -14,7 +14,6 @@ body{
 .logo,.logo>img{margin-bottom:1em;}
 .navtopright a,.navtopright a:visited,.thread_nav a,.thread_nav a:visited{color:#080;}
 .postNum a,a,a:visited,#repod_jquery_suite_settings_open{color:#00f;}
-#repod_jquery_suite_settings_open{font-size:small;}
 .navtopright a:hover,.thread_nav a:hover{
         background-color:#ff0;
         color:#000!important;
