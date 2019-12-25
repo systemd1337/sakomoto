@@ -193,7 +193,8 @@ function buildPost($post,$res=0){
                 " onclick=\"insert('".$post["no"]."');\" class=\"qu\" title=\"".lang("Quote")."\">".$post["no"]."</a></span>";
         if($post["sticky"])$postinfo.=" <img src=\"sticky.gif\" alt=\"".lang("Sticky")."\" title=\"".lang("Sticky")."\" class=\"retina\"/>";
         if($post["closed"])$postinfo.=" <img src=\"closed.gif\" alt=\"".lang("Closed")."\" title=\"".lang("Closed")."\" class=\"retina\"/>";
-	if(!($post["resto"]||$res))$postinfo.="&nbsp;[<a hreflang=\"".LANGUAGE."\" charset=\"UTF-8\" href=\"".RES_DIR.$post["no"].PHP_EXT."\">".lang("Reply")."</a>]";
+//	if(!($post["resto"]||$res))$postinfo.="&nbsp;[<a hreflang=\"".LANGUAGE."\" charset=\"UTF-8\" href=\"".RES_DIR.$post["no"].PHP_EXT."\">".lang("Reply")."</a>]";
+	if(!($post["resto"]||$res))$postinfo.="&nbsp;【<a hreflang=\"".LANGUAGE."\" charset=\"UTF-8\" href=\"".RES_DIR.$post["no"].PHP_EXT."\">".lang("Reply")."</a>】";
         $postinfo.="&nbsp;<small class=\"backlink\">";
         $results=mysqli_call("SELECT no,resto FROM ".POSTTABLE." WHERE com LIKE '%&gt;&gt;".$post["no"]."</a>%'");
         if(mysqli_num_rows($results))$postinfo.="<i>".lang("Replies:")."</i>&nbsp;";
@@ -242,7 +243,7 @@ function updatelog($resno=0){
                 " ORDER BY `sticky` DESC,`root` DESC");
         if(!$threads)error("Critical SQL problem!");
         
-        $delsubmit=lang("Delete Post ")."[<label><input type=\"checkbox\" name=\"onlyimgdel\" value=\"on\"/>".lang("File Only")."</label>] ".
+        $delsubmit=lang("Delete Post ")."【<label><input type=\"checkbox\" name=\"onlyimgdel\" value=\"on\"/>".lang("File Only")."</label>】 ".
                 "<label>".lang("Password: ")."<input type=\"password\" name=\"pwd\" size=\"8\"/></label> ".
                 "<button type=\"submit\" name=\"mode\" value=\"usrdel\">".lang("Delete")."</button>";
         $pages=ceil(mysqli_num_rows($threads)/PAGE_DEF);
@@ -564,7 +565,7 @@ function form(&$dat,$resno=0,$admin="",$manapost=false,$paintcom=false){
         $inputs.= <<<EOF
 <script type="text/javascript" async="async">
 /*<!--*/
-document.write('<div>[<a href="javascript:void(0);" onclick="window.open(phpself+\'?mode=bbcodes\',\'popwin\',\'width=550,height=700,scrollbars=1\');">BBcode reference</a>]</div>');
+document.write('<div>【<a href="javascript:void(0);" onclick="window.open(phpself+\'?mode=bbcodes\',\'popwin\',\'width=550,height=700,scrollbars=1\');">BBcode reference</a>】</div>');
 /*-->*/
 </script></td></tr>
 EOF;
