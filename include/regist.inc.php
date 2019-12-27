@@ -232,7 +232,7 @@ function regist($ip,$name,$capcode,$email,$sub,$com,$url,$pwd,$resto,$spoiler,$s
                         127+127*sin(2*M_PI * $fortunenum / sizeof($fortunes)),
                         127+127*sin(2*M_PI * $fortunenum / sizeof($fortunes)+ 2/3 * M_PI),
                         127+127*sin(2*M_PI * $fortunenum / sizeof($fortunes) + 4/3 * M_PI));
-                $com.="<font color=\"".$fortcol."\"><b>Your fortune: ".$fortunes[$fortunenum]."</b></font>";
+                $com.="<br/><font color=\"".$fortcol."\"><b>Your fortune: ".$fortunes[$fortunenum]."</b></font>";
         }
 
         //Filters
