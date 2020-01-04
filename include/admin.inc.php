@@ -25,7 +25,7 @@ function adminhead() {
 }
 
 /*password validation */
-function valid($pass) {
+function valid($user,$pass) {
 	if (isset($_SESSION['capcode'])) return;
 	head($dat,"<meta name=\"robots\" content=\"noindex, nofollow\">");
 	echo $dat;
@@ -34,7 +34,7 @@ function valid($pass) {
 	if ($pass) {
 		$result = mysqli_call("select * from ".MANATABLE);
 		while ($row=mysqli_fetch_assoc($result)) {
-			if (sha1($pass) == $row["password"]) {
+			if (sha1($pass)==$row["password"]&&$user==$row["name"]){
                                 unset($row["password"]);
                                 foreach($row as $u => $v){$_SESSION[$u]=$v;}
 				echo("<center class='passvalid'>".lang("You are now logged in.")."</center>");
@@ -43,22 +43,25 @@ function valid($pass) {
 			}
 		}
 		mysqli_free_result($result);
-		die("<center>".lang("Error: Management password incorrect.")."</center>".fakefoot());
+		die("<center>".lang("Error: Invalid credentials.")."</center>".fakefoot());
 	}else{
 		// Manager login form
                 $ssubmit=lang("Submit");$spassword=lang("Password");
-                $slogin=lang("Login");
+                $slogin=lang("Login");$susrname=lang("Username");
                 $self=PHP_SELF;$self2=PHP_SELF2;
                 echo <<<EOF
 <p>
         <center>
                 <form action="{$self}" method="POST">
+                        <input type="hidden" name="mode" value="admin">
                         <table><tbody><tr><td><fieldset><legend>{$slogin}</legend><table><tbody><tr>
+                                <td class="postblock"><label for="username"><b>{$susrname}</b></label></td>
+                                <td><input type="text" id="username" name="user" size="24"></td>
+                        </tr><tr>
                                 <td class="postblock"><label for="password"><b>{$spassword}</b></label></td>
-                                <td>
-                                        <input type="hidden" name="mode" value="admin">
-                                        <input type="password" id="password" name="pass" size="8"><input type="submit" value="{$ssubmit}">
-                                </td>
+                                <td><input type="password" id="password" name="pass" size="8"></td>
+                        </tr><tr>
+                                <td colspan="2"><input type="submit" value="{$ssubmit}"></td>
                         </tr></tbody></table></fieldset></td></tr></tbody></table>
                 </form>
         </center>

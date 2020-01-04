@@ -25,7 +25,7 @@ switch(strtolower($mode)){
 		break;
 	case 'admin':
                 require_once(CORE_DIR."admin.inc.php");
-		valid($pass);
+		valid($user,$pass);
 		adminhead();
                 switch($admin){
                         case "blotter":
@@ -194,14 +194,15 @@ EOF;
                 $q=htmlspecialchars(trim(rtrim($q)));
                 if(!$q)error(lang("No text entered."));
                 head($dat);
-                $dat.="<center class=\"replymode\"><big>".lang("View mode: Search")."</big></center><hr>";
-                $findcols=["com","name","id","sub","filename"];
+                $dat.="<center class=\"viewmode\"><big>".lang("View mode: Search")."</big></center><hr>";
+                $findcols=["com","name","id","sub","filename","ext"];
                 $dat.=ctrlnav("search");
                 $colsq='';
                 foreach($findcols as $col){
                         $colsq.="`".$col."` LIKE '%".$q."%' OR ";
                 }
                 $results=mysqli_call("SELECT * FROM ".POSTTABLE." WHERE ".$colsq." `no`=".(int)$q);
+                if(!mysqli_num_rows($results))error(lang("No results."));
                 while($post=mysqli_fetch_assoc($results)){
                         if($post["resto"])
                                 $dat.="<h3><a href=\"".PHP_SELF."?res=".$post["resto"]."\">".lang("Thread No.").$post["resto"]."</a></h3>";
