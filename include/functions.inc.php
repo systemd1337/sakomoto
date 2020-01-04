@@ -153,6 +153,8 @@ function usrdel($no,$pwd,$report=false) {
                                         unlink(THUMB_DIR.$post["tim"]."s".$post["ext"]);
                                 if(file_exists(THUMB_DIR.$post["tim"]."c".$post["ext"]))
                                         unlink(THUMB_DIR.$post["tim"]."c".$post["ext"]);
+                                if(is_file(RES_DIR.$row["no"].PHP_EXT))unlink(RES_DIR.$row["no"].PHP_EXT);
+                                if(is_file(RES_DIR.$row["no"].".json"))unlink(RES_DIR.$row["no"].".json");
                                 if($onlyimgdel)mysqli_call("UPDATE ".POSTTABLE." SET filedeleted=1 WHERE no=".$no);
                                 else mysqli_call("DELETE FROM ".POSTTABLE." WHERE no=".$no);
                                 echo lang("Post deleted")."<br>";

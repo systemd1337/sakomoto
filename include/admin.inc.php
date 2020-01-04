@@ -277,9 +277,15 @@ function admindel() {
 	while($row=mysqli_fetch_assoc($result)){
 		if(isset($_POST["submit"])){
 			if(isset($_POST['d'.$row["no"]])&&$_POST['d'.$row["no"]]){
-				if(!isset($_POST["onlyimgdel"])||!$_POST["onlyimgdel"])mysqli_call("DELETE FROM ".POSTTABLE." WHERE `no`=".$row["no"]);
+				if(!(isset($_POST["onlyimgdel"])||$_POST["onlyimgdel"])){
+                                        mysqli_call("DELETE FROM ".POSTTABLE." WHERE `no`=".$row["no"]);
+                                        mysqli_call("DELETE FROM ".POSTTABLE." WHERE `resto`=".$row["no"]);
+                                }else mysqli_call("UPDATE ".POSTTABLE." SET filedeleted=1 WHERE no=".$no);
 				if(is_file(THUMB_DIR.$tim.'s.jpg'))unlink(THUMB_DIR.$tim.'s.jpg');
+				if(is_file(THUMB_DIR.$tim.'c.jpg'))unlink(THUMB_DIR.$tim.'c.jpg');
 				if(is_file(IMG_DIR.$row["tim"].'.'.$row["ext"]))unlink(IMG_DIR.$row["tim"].'.'.$row["ext"]);
+                                if(is_file(RES_DIR.$row["no"].PHP_EXT))unlink(RES_DIR.$row["no"].PHP_EXT);
+                                if(is_file(RES_DIR.$row["no"].".json"))unlink(RES_DIR.$row["no"].".json");
 				continue;
 			}
                         if($_SESSION['canflag']){
@@ -318,6 +324,8 @@ function admindel() {
 	<input type="submit" name="submit" value="'.lang("Submit").'">
 	<input type="reset">
 </form>';
+
+        rebuild(true,false);
 
 	die(fakefoot());
 }
