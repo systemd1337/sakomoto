@@ -222,9 +222,11 @@ function gentime(){
 }
 
 function ctrlnav($mode,$top=false){
+        if($mode=="search")global $q;
+        else $q="";
         $ctrl="<form action=\"".PHP_SELF."\" method=\"get\" class=\"ctrl\">";
         $ctrl.="<input type=\"hidden\" name=\"mode\" value=\"find\"/>";
-        $ctrl.="<input type=\"text\" name=\"q\" value=\"\" size=\"8\"/><input type=\"submit\" value=\"".lang("Search")."\"/> ";
+        $ctrl.="<input type=\"text\" name=\"q\" value=\"".$q."\" size=\"8\"/><input type=\"submit\" value=\"".lang("Search")."\"/> ";
         if($mode!="page")$ctrl.="[<a hreflang=\"".LANGUAGE."\" charset=\"UTF-8\" href=\"".PHP_SELF2."\">".lang("Return")."</a>] ";
         if($mode!="catalog")$ctrl.="[<a hreflang=\"".LANGUAGE."\" charset=\"UTF-8\" href=\"".PHP_CAT."\">".lang("Catalog")."</a>] ";
         if($mode!="list")$ctrl.="[<a hreflang=\"".LANGUAGE."\" charset=\"UTF-8\" href=\"".PHP_LIST."\">".lang("Thread list")."</a>] ";
@@ -985,6 +987,28 @@ function rebuild($output_started=false,$echo=true){
         
         file_put_contents(PHP_LIST,listlog());
         if($echo)echo lang("Thread list created")."<br/>";
+        
+        if(ENABLEAPI){
+                $threads=[];
+                $threads["threads"]=[];
+                $threadsresults=mysqli_call("SELECT * FROM ".POSTTABLE." WHERE `resto`=0");
+                while($thread=mysqli_fetch_assoc($threadsresults)){
+                        $thread=unsetUnsafe($thread);
+                        $threads["threads"][]=$thread;
+                        
+                        $resline=[];
+                        $resline["posts"]=[];
+                        $resline["posts"][]=$thread;
+                        $results=mysqli_call("SELECT * FROM ".POSTTABLE." WHERE `resto`=".$thread["no"]);
+                        while($reply=mysqli_fetch_assoc($results)){
+                                $reply=unsetUnsafe($reply);
+                                $resline["posts"][]=$reply;
+                        }
+                        file_put_contents(RES_DIR.$thread["no"].".json",json_encode($resline));
+                }
+                file_put_contents("index.json",json_encode($threads));
+                if($echo)echo lang("JSONs created")."<br/>";
+        }
         
         if(USE_RSS){
                 file_put_contents(RSS,rss());

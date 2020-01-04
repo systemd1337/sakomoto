@@ -8,6 +8,14 @@ function lang($str){
         return $str;
 }
 
+function unsetUnsafe($safe){ //For the API
+        unset($safe["pwd"]);
+        unset($safe["ip"]);
+        unset($safe["host"]);
+        if(!DISP_ID)unset($safe["id"]);
+        return $safe;
+}
+
 function humantime($time) {
 	$youbi = array(lang("Sun"),lang("Mon"),lang("Tue"),lang("Wed"),lang("Thu"),lang("Fri"),lang("Sat"));
 	$yd = $youbi[gmdate("w", $time+9*60*60)];
