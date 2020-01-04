@@ -9,7 +9,7 @@ require_once(CORE_DIR."init.inc.php");
 
 if(!ENABLEAPI)die(lang("API is currently disabled."));
 $db=new mysqli(SQLHOST, SQLUSER, SQLPASS, SQLDB);
-if($db->connect_errno)die(_("Unable to connect to MySQL database ;_;")."<br>".$db->connect_errno);
+if($db->connect_errno)die(lang("Unable to connect to MySQL database ;_;")."<br>".$db->connect_errno);
 
 function unsetUnsafe($safe){
         unset($safe["pwd"]);
