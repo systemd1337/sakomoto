@@ -31,7 +31,7 @@ function regist($ip,$name,$capcode,$email,$sub,$com,$url,$pwd,$resto,$spoiler,$s
                         error(lang("Error: String refused."));
         }
         
-	// upload processing
+	// Upload processing
         $file=[];
         $files=$upfiles_count;
         $file["filename"]=$file["ext"]=$file["md5"]=$file["fsize"]=$file["spoiler"]=
@@ -40,32 +40,39 @@ function regist($ip,$name,$capcode,$email,$sub,$com,$url,$pwd,$resto,$spoiler,$s
         if($files){
                 require_once(CORE_DIR."thumbnail.inc.php");
                 while($files--){
-//                      $filename=$mes=$ext=$md5='';
-//                      $w=$h=$tn_w=$tn_h=$fsize=0;
-                        if($upfiles[$files]){
-                                switch ($upfiles_errors[$files]) {
-                                        case UPLOAD_ERR_OK:
-                                                break;
-                                        case UPLOAD_ERR_FORM_SIZE:
-                                                error(lang("This image is too large! Upload something smaller!"));
-                                                break;
-                                        case UPLOAD_ERR_INI_SIZE:
-                                                error(lang("This image is too large! Upload something smaller!"));
-                                                break;
-                                        case UPLOAD_ERR_PARTIAL:
-                                                error(lang("The uploaded file was only partially uploaded."));
-                                                break;
-                                        case UPLOAD_ERR_NO_TMP_DIR:
-                                                error(lang("Missing a temporary folder."));
-                                                break;
-                                        case UPLOAD_ERR_CANT_WRITE:
-                                                error(lang("Failed to write file to disk"));
-                                                break;
-                                        default:
-                                                error(lang("Unable to save the uploaded file."));
-                                }
+                        switch($upfiles_errors[$files]) {
+                                case UPLOAD_ERR_OK:
+                                        break;
+                                case UPLOAD_ERR_NO_FILE:
+                                        if(!$resto&&FORCEIMAGE) error(lang("Error: No file selected."));
+                                        break;
+                                case UPLOAD_ERR_NO_TMP_DIR:
+                                        error(lang("Error: No /tmp/ directory."));
+                                        break;
+                                case UPLOAD_ERR_INI_SIZE:
+                                case UPLOAD_ERR_FORM_SIZE:
+                                        error(lang("Error: This image is too large! Upload something smaller!"));
+                                        break;
+                                case UPLOAD_ERR_INI_SIZE:
+                                        error(lang("Error: This image is too large! Upload something smaller!"));
+                                        break;
+                                case UPLOAD_ERR_PARTIAL:
+                                        error(lang("Error: The uploaded file was only partially uploaded."));
+                                        break;
+                                case UPLOAD_ERR_NO_TMP_DIR:
+                                        error(lang("Error: Missing a temporary folder."));
+                                        break;
+                                case UPLOAD_ERR_CANT_WRITE:
+                                        error(lang("Error: Failed to write file to disk."));
+                                        break;
+                                case UPLOAD_ERR_EXTENSION:
+                                        error(lang("Error: A PHP extension has stopped the upload."));
+                                        break;
+                                default:
+                                        error(lang("Error: Unable to save the uploaded file."));
+                                        break;
                         }
-                        if (file_exists($upfiles[$files])) {
+                        if(file_exists($upfiles[$files])){
                                 $md5=$file["md5"][] = md5_of_file($upfiles[$files]);
                                 foreach(BADFILE as $value) {
                                         if (preg_match("/^".$value."/",$md5))
@@ -81,19 +88,20 @@ function regist($ip,$name,$capcode,$email,$sub,$com,$url,$pwd,$resto,$spoiler,$s
                                         }
                                 }
                                 $fsize=$file["fsize"][] = filesize($upfiles[$files]);
-                                if ($fsize>MAX_KB * 1024) error(lang("This image is too large! Upload something smaller!"));
+                                if ($fsize>MAX_KB * 1024)error(lang("Error: This image is too large! Upload something smaller!"));
                                 
                                 $upfile_name = CleanStr($upfiles_names[$files]);
                                 $ext='.'.strtolower(pathinfo(basename($upfiles_names[$files]),PATHINFO_EXTENSION));
                                 $filename=$file["filename"][]=strtolower(pathinfo(basename($upfiles_names[$files]),PATHINFO_FILENAME));
                                 if(!$ext)$ext='.'.end(explode('.',$filename));
                                 $file["ext"][]=$ext;
+                                if(!in_array($ext,ALLOWED_EXT)) error(lang("Error: Unknown file extension."));
                                 
                                 $size = getimagesize($upfiles[$files]);
                                 if($size&&$ext!=".webm"){
                                         $w=$file["w"][] = $size[0];
                                         $h=$file["h"][] = $size[1];
-                                        if($w<MIN_W&&$h<MIN_H)error(lang("Error: Image is too small."));
+                                        if($w<MIN_W&&$h<MIN_H) error(lang("Error: Image is too small."));
                                 }else $w=$file["w"][]=$h=$file["h"][]=0;
                                 
                                 $fileno=($files?'_'.($files+1):'');
@@ -111,9 +119,7 @@ function regist($ip,$name,$capcode,$email,$sub,$com,$url,$pwd,$resto,$spoiler,$s
                                 }
                                 $mes.=$upfiles_names[$files]." uploaded<br/><br/>";
                                 $file["spoiler"][]=$spoiler=($spoiler=="on");
-                        }else if(!$resto&&FORCEIMAGE) error(lang("Error: No file selected."));
-                        else if(!$com) error(lang("Error: No text entered."));
-                        else $spoiler=false;
+                        }else error(lang("Error: Something went wrong."));
                 }
         }
         
