@@ -161,7 +161,6 @@ const HOME = '../'; //Site home directory (up one level by default
 const EMOTES_DIR="emotes/";
 const FLAGS_DIR="flags/";
 const CORE_DIR="include/";
-const PHP_PLAYER = "player.php"; //Name of webm player script file
 const PHP_BLOTTER="blotter.php"; //Name of blotter script file
 const PHP_BANNED="banned.php"; //Name of b& script
 const PHP_LIST="list.html";

@@ -30,7 +30,7 @@ repod.buttons = {
                                 "sakomoto":"futaba"
                         }
 		};
-                buttonStyle=(repod_jsuite_getCookie("style")?repod_jsuite_getCookie("style"):cssdef).toLowerCase().replace(' ','_');
+                buttonStyle=(localStorage.getItem("style")?localStorage.getItem("style"):cssdef).toLowerCase().replace(' ','_');
                 for(style in repod.buttons.config.switch){
                         buttonStyle=buttonStyle.replace(style,repod.buttons.config.switch[style]);
                 }

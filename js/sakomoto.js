@@ -149,7 +149,7 @@ window.onload=function(){
                 opt.innerHTML=style.title;
                 stylesel.appendChild(opt);
         });
-        stylesel.value=getCookie("style");
+        stylesel.value=localStorage.getItem("style");
         stylesel.addEventListener("change",function(ev){
                 changeStyle(stylesel.value);
         });
