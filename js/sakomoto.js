@@ -56,10 +56,11 @@ function changeStyle(title) {
 			links[i].disabled = true;
 			if (links[i].getAttribute('title') == title) {
 				links[i].disabled = false;
-				var d = new Date();
+                                localStorage.setItem("style",links[i].getAttribute('title'));
+/*				var d = new Date();
 				d.setTime(d.getTime() + (24 * 60 * 60 * 1000));
 				var expires = "expires=" + d.toUTCString();
-				document.cookie = "style=" + links[i].getAttribute('title') + ";" + expires + "; path=/";
+				document.cookie = "style=" + links[i].getAttribute('title') + ";" + expires + "; path=/";*/
 			}
 		}
 	}
@@ -82,8 +83,8 @@ function getCookie(cname) {
 }
 
 function getUserFav(defstyle) {
-	if (getCookie('style')) {
-		changeStyle(getCookie('style'));
+	if (localStorage.getItem('style')) {
+		changeStyle(localStorage.getItem('style'));
 	} else {
 		changeStyle(defstyle);
 	}
@@ -97,7 +98,7 @@ function toggleHidden(){
 
 function closeWebm(thisclose){
         thisclose.parentNode.parentNode.getElementsByClassName("fileWebm")[0].style.display="";
-        frame=thisclose.parentNode.parentNode.getElementsByTagName("iframe")[0];
+        frame=thisclose.parentNode.parentNode.getElementsByTagName("video")[0];
         frame.parentNode.removeChild(frame);
         thisclose.parentNode.parentNode.removeChild(thisclose.parentNode);
 }
@@ -156,33 +157,22 @@ window.onload=function(){
         
         [].slice.call(document.getElementsByClassName("fileWebm")).forEach(function(webmthumb){
                 webmlink=webmthumb.parentNode.getAttribute("href");
-                webmthumb.parentNode.href=phpplayer+"?v="+webmlink.replace(/^..\//,'');
+//                webmthumb.parentNode.href=phpplayer+"?v="+webmlink.replace(/^..\//,'');
                 webmthumb.addEventListener("click",function(e){
                         e.preventDefault();
-                        player=document.createElement("iframe");
+                        this.style.display="none";
+                        this.parentNode.parentNode.innerHTML+='<video controls="" autoplay="" name="media"><source src="'+webmlink+'" type="video/webm"></video>';
+/*                        player=document.createElement("iframe");
                         player.src=this.parentNode.href;
                         this.parentNode.appendChild(player);
                         this.style.display="none";
                         player.frameBorder=0;
-                        
-                        closespan=document.createElement("span");
-                        closespan.style.verticalAlign="top";
-                        closespan.innerHTML+="&nbsp;[";
-                        close=document.createElement("a");
-                        close.innerText="Close";
-                        close.href="javascript:void(0);";
-                        close.setAttribute("onclick","closeWebm(this);");
-                        
-                        closespan.appendChild(close);
-                        closespan.innerHTML+="]";
-                        this.parentNode.parentNode.appendChild(closespan);
-                        
                         player.onload=function(){
 //                                player.style.width=player.contentWindow.document.querySelector("#playercontent video").videoWidth+"px";
 //                                player.style.height=player.contentWindow.document.querySelector("#playercontent video").videoHeight+"px";
                                 player.style.minWidth="calc( 200px + 1.6em )";
                                 player.style.margin="5px";
-                        }
+                        }*/
                 });
         });
         

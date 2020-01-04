@@ -52,10 +52,7 @@ function gd_thumb($m_w,$m_h,$im_in){
 
 function thumb($path,$tim,$ext,$append) {
 	$fname = $path.$tim.$append.$ext;
-	$thumb_dir = THUMB_DIR; // Thumbnail directory
-	$width = MAX_W; // Output width
-	$height = MAX_H; // Output height
-
+        
         $im_in=false;
         if(!file_exists($fname)) return false;
         switch(strtolower($ext)){
