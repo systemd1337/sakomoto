@@ -13,7 +13,7 @@ function regist($ip,$name,$capcode,$email,$sub,$com,$url,$pwd,$resto,$spoiler,$s
 	if (isbanned($ip)) error(lang("Error: you are banned. Post discarded. ".
                 "Check on the status of your ban ")."<a href=\"".PHP_BANNED."\">".lang("here")."</a>".lang("."));
 	if ($_SERVER["REQUEST_METHOD"] != "POST") error(lang("Error: Unjust POST."));
-        if(CAPTCHA_DRIVER&&strtolower($verif)!=strtolower($_SESSION['captcha_key']))error(lang("Invalid captcha."));
+        if((!isset($_SESSION["name"]))&&CAPTCHA_DRIVER&&strtolower($verif)!=strtolower($_SESSION['captcha_key']))error(lang("Invalid captcha."));
         if($resto){
                 $thread=mysqli_fetch_assoc(mysqli_call("SELECT closed,resto FROM ".POSTTABLE." WHERE `no`=".$resto));
                 if(!$thread)error(lang("Error: That thread no longer exists."));

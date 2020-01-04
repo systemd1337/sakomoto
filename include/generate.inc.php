@@ -572,16 +572,18 @@ document.write('<div>【<a href="javascript:void(0);" onclick="window.open(phpse
 </script></td></tr>
 EOF;
         //Verification
-        switch(CAPTCHA_DRIVER){
-                case "saguaro":
-                        $inputs.="<tr><td class=\"postblock\"><label for=\"verif\"><b>".lang("Verification")."</b></label></td>";
-                        $inputs.="<td><div><img id=\"verifimg\" src=\"".CAPTCHA_IMG."\" alt=\"Captcha\" onclick=\"this.src=this.src+'?'+Date.now();this.style.opacity=0.5;\" onload=\"this.style.opacity=1;\"/>";
-                        $inputs.="<script type=\"text/javascript\"  async=\"async\">/*<!--*/document.write(\"&nbsp;".lang("(Click for new captcha)")."\");/*-->*/</script></div>";
-                        $inputs.="<input type=\"text\" id=\"verif\" tabindex=\"8\" name=\"verif\" value=\"\"/></td></tr>";
-                        break;
-                case "":
-                default:
-                        break;
+        if(!$admin){
+                switch(CAPTCHA_DRIVER){
+                        case "saguaro":
+                                $inputs.="<tr><td class=\"postblock\"><label for=\"verif\"><b>".lang("Verification")."</b></label></td>";
+                                $inputs.="<td><div><img id=\"verifimg\" src=\"".CAPTCHA_IMG."\" alt=\"Captcha\" onclick=\"this.src=this.src+'?'+Date.now();this.style.opacity=0.5;\" onload=\"this.style.opacity=1;\"/>";
+                                $inputs.="<script type=\"text/javascript\"  async=\"async\">/*<!--*/document.write(\"&nbsp;".lang("(Click for new captcha)")."\");/*-->*/</script></div>";
+                                $inputs.="<input type=\"text\" id=\"verif\" tabindex=\"8\" name=\"verif\" value=\"\"/></td></tr>";
+                                break;
+                        case "":
+                        default:
+                                break;
+                }
         }
         //File(s) and oekaki
         if(MAX_FILES&&!$paintcom){
