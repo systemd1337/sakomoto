@@ -699,6 +699,7 @@ EOF;
         $sallowedare=lang("Supported file types are ");$sdot=lang(".");
         $smaxfsize=lang("Maximum file size allowed is ");$humanmaxfsize=humansize(MAX_KB*1024);
         $sthumbinfo=lang("Images greater than ").MAX_W.lang("x").MAX_H.lang(" pixels will be thumbnailed.");
+        $sthumbinfo2=lang("Images smaller than ").MIN_W.lang("x").MIN_H.lang(" pixels will be refused.");
         $form.= <<<EOF
                 <table cellspacing="2">
                         <tbody>
@@ -708,6 +709,7 @@ EOF;
                                                 <li>{$sallowedare}{$types}{$sdot}</li>
                                                 <li>{$smaxfsize}{$humanmaxfsize}{$sdot}</li>
                                                 <li>{$sthumbinfo}</li>
+                                                <li>{$sthumbinfo2}</li>
                                         </ul>
                                         <hr/>
                                         {$rules}

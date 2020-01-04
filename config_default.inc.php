@@ -173,6 +173,8 @@ const RES_DIR = "thread/"; //Thread directory (needs to be 777)
 const MAX_KB = 2000; //Maximum upload size in KB
 const MAX_W = 250; //Images exceeding this width will be thumbnailed
 const MAX_H = 250; //Images exceeding this height will be thumbnailed
+const MIN_W = 30; //Images smaller than this width will be refused
+const MIN_H = 30; //Images smaller than this height will be refused
 const ALLOWED_EXT = [ //List of allowed file extensions
         ".jpg",
         ".jpeg",

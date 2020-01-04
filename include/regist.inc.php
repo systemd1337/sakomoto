@@ -93,6 +93,7 @@ function regist($ip,$name,$capcode,$email,$sub,$com,$url,$pwd,$resto,$spoiler,$s
                                 if($size&&$ext!=".webm"){
                                         $w=$file["w"][] = $size[0];
                                         $h=$file["h"][] = $size[1];
+                                        if($w<MIN_W&&$h<MIN_H)error(lang("Error: Image is too small."));
                                 }else $w=$file["w"][]=$h=$file["h"][]=0;
                                 
                                 $fileno=($files?'_'.($files+1):'');

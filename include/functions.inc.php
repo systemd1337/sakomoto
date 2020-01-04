@@ -163,6 +163,7 @@ function usrdel($no,$pwd,$report=false) {
                         mysqli_free_result($result);
                 }
         }
+        rebuild(true,false);
 }
 
 function insertban($target,$days,$pubmsg,$privmsg,$bantype,$rmp,$rmallp,$unban) {
