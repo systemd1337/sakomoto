@@ -52,9 +52,6 @@ function gd_thumb($m_w,$m_h,$im_in){
 
 function thumb($path,$tim,$ext,$append) {
 	$fname = $path.$tim.$append.$ext;
-
-//ffmpeg -y -strict -2 -ss 0  -i ~/music/01\ -\ constellation-dirtbike-head.mp3 -v quiet -an -filter_complex "showwavespic=colors=#00FF00|black" -vframes 1 test.jpg
-
         $im_in=false;
         if(!file_exists($fname)) return false;
         switch(strtolower($ext)){
