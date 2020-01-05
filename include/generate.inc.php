@@ -117,6 +117,10 @@ function buildPost($post,$res=0){
                                                         $ftpreview="data:image/gif;base64,R0lGODlhEAAQALMAAAQCBISChPzWjPz+/PwCBMTCxBIAAAAAAGgB398A2hYA0QAAd3CsAN/rABYSAAAAACH5BAEAAAIALAAAAAAQABAAAwRPUEgRqrUzh8H7KEEmbR5XDKFWckALqKsJpFQsV+BVcfjcFkAAMDAjFloCl3AI+AhfFKAU1DJCA4TgkTj4QZXgzhEWG09IZehoyjZLwHBABAA7";
                                                         break;
                                                 case "audio":
+                                                        if($ext==".mp3"&&file_exists($thumbsrc)){
+                                                                $ftpreview=$thumbsrc."\" class=\"fileMp3";
+                                                                break;
+                                                        }
                                                         $ftpreview="data:image/gif;base64,R0lGODlhEAAQALMAAAQCBLy+BISChMTCxIQChPz+/Pz+BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEAAAQALAAAAAAQABAAAwRZkEgiqrUzi8J7GUImbR43FKEWCIAHvEAWFABYDjERzCzKkTjdzFDzkT6A2cBA2xxNL4OA+TJWkIRXgHh6YilJorETnCQDABIwN4KVvqM3mU0Z2O94OmzPjwAAOw==";
                                                         break;
                                                 case "text":
@@ -697,6 +701,7 @@ EOF;
                                 $ext)))));
                 if(!in_array($realext,$types_arr))$types_arr[]=$realext;
         }
+        sort($types_arr);
         $types=implode(lang(", "),$types_arr);
         $sallowedare=lang("Supported file types are ");$sdot=lang(".");
         $smaxfsize=lang("Maximum file size allowed is ");$humanmaxfsize=humansize(MAX_KB*1024);

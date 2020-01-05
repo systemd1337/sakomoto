@@ -52,7 +52,9 @@ function gd_thumb($m_w,$m_h,$im_in){
 
 function thumb($path,$tim,$ext,$append) {
 	$fname = $path.$tim.$append.$ext;
-        
+
+//ffmpeg -y -strict -2 -ss 0  -i ~/music/01\ -\ constellation-dirtbike-head.mp3 -v quiet -an -filter_complex "showwavespic=colors=#00FF00|black" -vframes 1 test.jpg
+
         $im_in=false;
         if(!file_exists($fname)) return false;
         switch(strtolower($ext)){
@@ -73,7 +75,30 @@ function thumb($path,$tim,$ext,$append) {
                                         error(lang("Error: Unkown ffmpeg error."));
                                         break;
                         }
-                        $fname=$webmname;
+                        $fname=$webmname;$ext=".jpg";
+                        break;
+                case ".mp3":
+                        if(!FFMPEG) break;
+                        $ret=1;
+                        $out=[];
+                        $mp3name=THUMB_DIR.$tim.".jpg";
+                        exec(FFMPEG." -y -strict -2 -ss 0 -i ".$fname." -v quiet -an -filter_complex \"showwavespic=colors=#00FF00|black\" -vframes 1 ".$mp3name,$out,$ret);
+                        switch($ret){
+                                case 0://Success
+                                        break;
+                                case 127://Command not found
+                                        error(lang("Error: ffmpeg is not installed."));
+                                        break;
+                                case 1:
+                                default:
+                                        error(lang("Error: Unkown ffmpeg error."));
+                                        break;
+                        }
+                        $fname=$mp3name;$ext=".jpg";
+                        break;
+                default:
+                        break;
+        }switch(strtolower($ext)){
                 case ".jpg":
                 case ".jpeg":
                 case ".jfif":
