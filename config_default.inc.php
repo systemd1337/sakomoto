@@ -201,6 +201,7 @@ const BUMPLIMIT = 100; //Maximum topic bumps
 const COLLAPSENUM = 5; //Number of replies to show in the index
 const FORTUNE=false; //Enable fortune in the email field
 const COUNTRY_FLAGS=false; //Display poster's country flag with each post
+const RES_MARK="&gt;&gt;";
 
 /* Spam/flood protection */
 const RENZOKU = 5; //Seconds between posts (floodcheck)

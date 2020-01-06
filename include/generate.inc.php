@@ -60,7 +60,7 @@ function buildPost($post,$res=0){
                 return file_get_contents(CACHE_DIR.$post["no"].".inc.html");
         
 	$htm="<".($post["resto"]?"table":"div class=\"post op\"")." id=\"p".$post["no"]."\">";
-	if($post["resto"])$htm.="<tr><td class=\"sideArrows\" valign=\"top\">&gt;&gt;</td><td class=\"post reply\">";
+	if($post["resto"])$htm.="<tr><td class=\"sideArrows\" valign=\"top\">".RES_MARK."</td><td class=\"post reply\">";
 	$file='';
         $selfref=PHP_SELF."?res=".($post["resto"]?$post["resto"]:$post["no"])."#p".$post["no"];
         if($post["num_files"]>1)$file.="<table class=\"files\" cellpadding=\"5\"><tbody><tr>";
