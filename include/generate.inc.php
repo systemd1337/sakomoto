@@ -496,7 +496,7 @@ EOF;
         }
         $head.="<meta property=\"og:url\" content=\"".HERE."\"/>";
         if(HEAD_EXTRA)$head.=HEAD_EXTRA;
-        $head.=$extra."</head><body><div id=\"top\"></div>";
+        $head.=$extra."</head><body class=\"sakomoto\"><div id=\"top\"></div>";
         $head.="<script type=\"text/javascript\" src=\"".JS_DIR."wz_tooltip/wz_tooltip.js\"></script>";
         $head.="<div class=\"boardNav\">";
         if(BOARDLINKS)$head.="<span class=\"boardlist\">".BOARDLINKS."</span>";
