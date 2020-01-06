@@ -124,7 +124,11 @@ function buildPost($post,$res=0){
                                                         $ftpreview="data:image/gif;base64,R0lGODlhEAAQALMAAAQCBLy+BISChMTCxIQChPz+/Pz+BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEAAAQALAAAAAAQABAAAwRZkEgiqrUzi8J7GUImbR43FKEWCIAHvEAWFABYDjERzCzKkTjdzFDzkT6A2cBA2xxNL4OA+TJWkIRXgHh6YilJorETnCQDABIwN4KVvqM3mU0Z2O94OmzPjwAAOw==";
                                                         break;
                                                 case "text":
-                                                        $gtpreview="data:image/gif;base64,R0lGODlhEAAQALMAAAQCBAT+BISChMTCxERCRPz+/AAAsQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEAAAEALAAAAAAQABAAAwRFMARQqK0yzyK474LWXSQmdUWqqgOQoevavgVh33Yxn3G8Bx0cTufi9VhFYE2Y+8GOziWTSDumolbqacDten8TgHhM1kQAADs=";
+                                                        if($ext==".txt"&&file_exists($thumbsrc)){
+                                                                $ftpreview=$thumbsrc."\" class=\"fileTxt";
+                                                                break;
+                                                        }
+                                                        $ftpreview="data:image/gif;base64,R0lGODlhEAAQALMAAAQCBAT+BISChMTCxERCRPz+/AAAsQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEAAAEALAAAAAAQABAAAwRFMARQqK0yzyK474LWXSQmdUWqqgOQoevavgVh33Yxn3G8Bx0cTufi9VhFYE2Y+8GOziWTSDumolbqacDten8TgHhM1kQAADs=";
                                                         break;
                                         }
                                         if(!"file.png"){
@@ -147,7 +151,7 @@ function buildPost($post,$res=0){
                                                                 break;
                                                 }
                                         }
-                                        if(!$ftpreview)$ftpreview="file.png";
+                                        if(!(isset($ftpreview)&&$ftpreview))$ftpreview="file.png";
                                         $file.="<a href=\"".$src."\" target=\"_blank\">".
                                         "<img src=\"".$ftpreview."\" ".$imgatts."/></a>";
                                         break;

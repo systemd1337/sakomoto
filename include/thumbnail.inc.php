@@ -54,48 +54,50 @@ function thumb($path,$tim,$ext,$append) {
 	$fname = $path.$tim.$append.$ext;
         $im_in=false;
         if(!file_exists($fname)) return false;
+        $ret=0;
         switch(strtolower($ext)){
                 case ".webm":
-                        if(!FFMPEG) break;
+                        if(!FFMPEG) return false;
                         $ret=1;
                         $out=[];
                         $webmname=THUMB_DIR.$tim.".jpg";
                         exec(FFMPEG." -y -strict -2 -ss 0 -i ".$fname." -v quiet -an -vframes 1 -f mjpeg ".$webmname,$out,$ret);
-                        switch($ret){
-                                case 0://Success
-                                        break;
-                                case 127://Command not found
-                                        error(lang("Error: ffmpeg is not installed."));
-                                        break;
-                                case 1:
-                                default:
-                                        error(lang("Error: Unkown ffmpeg error."));
-                                        break;
-                        }
+                        $checkret=true;
                         $fname=$webmname;$ext=".jpg";
                         break;
                 case ".mp3":
-                        if(!FFMPEG) break;
+                        if(!FFMPEG) return false;
                         $ret=1;
                         $out=[];
                         $mp3name=THUMB_DIR.$tim.".jpg";
                         exec(FFMPEG." -y -strict -2 -ss 0 -i ".$fname." -v quiet -an -filter_complex \"showwavespic=colors=#00FF00|black\" -vframes 1 ".$mp3name,$out,$ret);
-                        switch($ret){
-                                case 0://Success
-                                        break;
-                                case 127://Command not found
-                                        error(lang("Error: ffmpeg is not installed."));
-                                        break;
-                                case 1:
-                                default:
-                                        error(lang("Error: Unkown ffmpeg error."));
-                                        break;
-                        }
+                        $checkret=true;
                         $fname=$mp3name;$ext=".jpg";
+                        break;
+                case ".txt":
+                        if(!FFMPEG) return false;
+                        $ret=1;
+                        $out=[];
+                        $txtname=THUMB_DIR.$tim.".jpg";
+                        exec(FFMPEG." -y -strict -2 -i ".$fname." -v quiet -vframes 1 ".$txtname,$out,$ret);
+                        $checkret=true;
+                        $fname=$txtname;$ext=".jpg";
                         break;
                 default:
                         break;
-        }switch(strtolower($ext)){
+        }
+        switch($ret){
+                case 0://Success
+                        break;
+                case 127://Command not found
+                        error(lang("Error: ffmpeg is not installed."));
+                        break;
+                case 1:
+                default:
+                        error(lang("Error: Unkown ffmpeg error."));
+                        break;
+        }
+        switch(strtolower($ext)){
                 case ".jpg":
                 case ".jpeg":
                 case ".jfif":
