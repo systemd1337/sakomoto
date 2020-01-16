@@ -268,8 +268,9 @@ function admindel() {
 <form action="'.PHP_SELF.'?mode=admin" method="post">
 	<table class="postlists">
 		<thead><tr class="managehead"><th>'.lang("Delete?").'</th>';
-        if($_SESSION['canflag'])echo '<th>'.lang("Sticky?").'</th>
+        if($_SESSION["canflag"])echo '<th>'.lang("Sticky?").'</th>
                 <th>'.lang("Closed?").'</th>';
+        if($_SESSION["canedit"])echo "<th>".lang("Edit")."</th>";
         echo '<th>'.lang("Post No.").'</th><th>'.lang("Time").'</th><th>'.lang("Subject").'</th>
                 <th>'.lang("Name").'</th><th>'.lang("IP").'</th><th>'.lang("Comment").'</th><th>'.lang("Host").
                 '</th><th>'.lang("Filename").'</th><th>'.lang("Size").'<br />'.lang("(Bytes)").'</th>
@@ -300,9 +301,10 @@ function admindel() {
 		echo '
 			<tr id="'.$row["no"].'">
 				<td><label><center><input type="checkbox" name="d'.$row["no"].'" value="delete"></center></label></td>';
-                if($_SESSION['canflag'])echo '
+                if($_SESSION["canflag"])echo '
 				<td><label><center><input type="checkbox" name="s'.$row["no"].'"'.($row["sticky"]?" checked":'').' value="sticky"></center></label></td>
 				<td><label><center><input type="checkbox" name="c'.$row["no"].'"'.($row["closed"]?" checked":'').' value="closed"></center></label></td>';
+                if($_SESSION["canedit"])echo "<td><a href=\"?mode=admin&admin=edit&q=".$row["no"]."\">Edit</a></td>";
 		echo '
 				<td>'.$row["no"].'</td>
 				<td>'.$row["now"].'</td>

@@ -517,61 +517,76 @@ EOF;
         $dat.=$head;
 }
 /* Contribution form */
-function form(&$dat,$resno=0,$admin="",$manapost=false,$paintcom=false){
+function form(&$dat,$resno=0,$admin="",$manapost=false,$paintcom=false,$edit=false){
 	global $q;
         if(is_file(CACHE_DIR."form.inc.html")&&!($resno||$admin||$manapost||$paintcom||$q)){
                 $dat.=file_get_contents(CACHE_DIR."form.inc.html");
                 return;
         }
         
-        $form='';
-        if($resno&&mysqli_fetch_assoc(mysqli_call("SELECT closed FROM ".POSTTABLE." WHERE `no`=".$resno))["closed"]){
+        if($resno&&mysqli_fetch_assoc(mysqli_call("SELECT closed FROM ".POSTTABLE." WHERE `no`=".$resno))["closed"]&&!$admin){
                 $dat.="<center><h2 id=\"errormsg\">".lang("Thread closed.")."<br>".lang("You may not reply at this time.")."</h2></center><hr>";
                 return;
         }
+        if($edit){
+                if(!$admin){
+                        $dat.="<center><h2 id=\"errormsg\">".lang("Thread closed.")."<br>".lang("Something's not right here.")."</h2></center><hr>";
+                        return;
+                }
+                $edit_post=mysqli_fetch_assoc(mysqli_call("SELECT * FROM ".POSTTABLE." WHERE `no`=".$q));
+        }
 
-	$maxbyte = MAX_KB * 1024;
+        $form='';
+	$maxbyte=MAX_KB*1024;
         
         $form.="<center class=\"postarea\">";
         if($admin)$form.="<i>".lang("HTML tags are allowed.")."</i>";
-        if($resno&&!$manapost)$form.="<div class=\"replymode\"><big>".lang("Posting mode: Reply")."</big></div>";
+        if($resno||$edit&&!$manapost)$form.="<div class=\"replymode\"><big>".lang("Posting mode: ").($edit?lang("Edit"):lang("Reply"))."</big></div>";
 
         $inputs='';
         //Name
-        if(!FORCED_ANON||$admin){
+        if($admin||!FORCED_ANON){
                 $inputs.="<tr class=\"unimportant\"><td class=\"postblock\"><label for=\"name\"><b>".lang("Name")."</b></label></td>";
                 $inputs.= "<td><input type=\"text\" name=\"name\" id=\"name\"";
-                if($manapost)$inputs.=" value=\"".($_SESSION["name"]?$_SESSION["name"]:DEFAULT_NAME)."\"";
-                else $inputs.=" value=\"".DEFAULT_NAME."\"";
+                if($edit)
+                        $inputs.=" value=\"".$edit_post["name"]."\"";
+                else{
+                        if($manapost)$inputs.=" value=\"".($_SESSION["name"]?$_SESSION["name"]:DEFAULT_NAME)."\"";
+                        else $inputs.=" value=\"".DEFAULT_NAME."\"";
+                }
                 $inputs.=" size=\"28\" tabindex=\"1\"/></td></tr>";
         }
         if($admin){
                 //Capcode
                 if($_SESSION["cancap"]){
                         $inputs.="<tr><td class=\"postblock\"><label for=\"capcode\"><b>".lang("Capcode")."</b></label></td>";
-                        $inputs.="<td><label><input type=\"checkbox\" name=\"capcode\" id=\"capcode\" value=\"on\" checked tabindex=\"2\"/>".
+                        $inputs.="<td><label><input type=\"checkbox\" name=\"capcode\" id=\"capcode\" value=\"on\" ".($edit?"":"checked")." tabindex=\"2\"/>".
                         " (".$_SESSION["capcode"].")</label></td></tr>";
                 }
                 //Admin resto
                 $inputs.="<tr><td class=\"postblock\"><label for=\"resto\"><b>".lang("Reply to")."</b></label></td>";
-                $inputs.="<td><input type=\"number\" name=\"resto\" id=\"resto\" value=\"0\" tabindex=\"3\"/></td></tr>";
+                $inputs.="<td><input type=\"number\" name=\"resto\" id=\"resto\" value=\"".($edit?$edit_post["resto"]:0)."\" tabindex=\"3\"/></td></tr>";
         }
         //Steam
         if(STEAM){
                 $inputs.="<tr><td class=\"postblock\"><label for=\"steam\"><b>".lang("Steam")."</b></label></td>";
-                $inputs.="<td><input type=\"text\" name=\"steam\" id=\"steam\" value=\"\" size=\"48\" tabindex=\"4\"/></td></tr>";
+                $inputs.="<td><input type=\"text\" name=\"steam\" id=\"steam\" value=\"";
+                if($edit)$inputs.=$edit_post["steam"];
+                $inputs.="\" size=\"48\" tabindex=\"4\"/></td></tr>";
         }
         //E-mail
         $inputs.="<tr class=\"unimportant\"><td class=\"postblock\"><label for=\"email\"><b>".lang("E-mail")."</b></label></td>";
-        $inputs.="<td><input type=\"text\" name=\"email\" id=\"email\" value=\"\" size=\"28\" tabindex=\"5\"/></td></tr>";
+        $inputs.="<td><input type=\"text\" name=\"email\" id=\"email\" value=\"";
+        if($edit)$inputs.=$edit_post["email"];
+        $inputs.="\" size=\"28\" tabindex=\"5\"/></td></tr>";
         //Subject
         $inputs.="<tr><td class=\"postblock\"><label for=\"sub\"><b>".lang("Subject")."</b></label></td>";
-        $inputs.="<td><input type=\"text\" name=\"sub\" id=\"sub\" size=\"28\" tabindex=\"6\"/>".
-                "<button type=\"submit\" name=\"post\" value=\"post\" tabindex=\"12\" id=\"postsubmit\">".lang(($resno?"New Reply":"New Topic"))."</button></td></tr>";
+        $inputs.="<td><input type=\"text\" name=\"sub\" id=\"sub\" value=\"".($edit?$edit_post["sub"]:'')."\" size=\"28\" tabindex=\"6\"/>".
+                "<button type=\"submit\" name=\"post\" value=\"post\" tabindex=\"12\" id=\"postsubmit\">".lang($edit?"Edit ":"New ").lang(($resno?"Reply":"Topic"))."</button></td></tr>";
         //Comment
         $inputs.="<tr><td class=\"postblock\"><label for=\"com\"><b>".lang("Comment")."</b></label></td>";
         $inputs.="<td><textarea name=\"com\" id=\"com\" cols=\"48\" rows=\"6\" tabindex=\"7\"".
-                ($resno&&$q?" autofocus>&gt;&gt".$q."\n":">")."</textarea>";
+                ($edit?">".$edit_post["com"]:($resno&&$q?" autofocus>&gt;&gt".$q."\n":">"))."</textarea>";
         $inputs.= <<<EOF
 <script type="text/javascript" async="async">
 /*<!--*/
@@ -594,7 +609,7 @@ EOF;
                 }
         }
         //File(s) and oekaki
-        if(MAX_FILES&&!$paintcom){
+        if(MAX_FILES&&!($paintcom||$edit)){
                 $inputs.="<tr id=\"filerow\"><td class=\"postblock\"><label".(MAX_FILES>1?'':" for=\"upfile\"")."><b>".lang("File")."</b></label></td><td>";
                 $files=MAX_FILES;
                 while($files--){
@@ -667,10 +682,11 @@ document.write('<tr><td colspan="2"><button type="button" onclick="toggleHidden(
 /*-->*/
 </script>
 EOF;
-        //Password
-        $inputs.="<tr class=\"unimportant\"><td class=\"postblock\"><label for=\"pwd\"><b>".lang("Password")."</b></label></td>";
-        $passtxt=lang("(Password used for file deletion)");
-        $inputs.= <<<EOF
+        if(!$edit){
+                //Password
+                $inputs.="<tr class=\"unimportant\"><td class=\"postblock\"><label for=\"pwd\"><b>".lang("Password")."</b></label></td>";
+                $passtxt=lang("(Password used for file deletion)");
+                $inputs.= <<<EOF
         <td>
                 <input type="password" name="pwd" id="pwd" size="8" tabindex="11"/> 
                 <small>{$passtxt}</small>
@@ -682,18 +698,23 @@ document.write('<br/><label><input type="checkbox" class="noqr" onchange="docume
         </td>
 </tr>
 EOF;
-        //Options
-        $inputs.="<tr class=\"unimportant\"><td class=\"postblock\"><label><b>".lang("Options")."</b></label></td>";
-        $inputs.="<td>";
-        $inputs.="<label><input type=\"checkbox\" name=\"sage\"/>".lang("sage")."</label> ";
-        $inputs.="<label><input type=\"checkbox\" name=\"nonoko\"/>".lang("nonoko")."</label> ";
-        if(FORTUNE)$inputs.="<label><input type=\"checkbox\" name=\"fortune\"/>".lang("fortune")."</label>";
-        $inputs.="</td>";
+                //Options
+                $inputs.="<tr class=\"unimportant\"><td class=\"postblock\"><label><b>".lang("Options")."</b></label></td>";
+                $inputs.="<td>";
+                $inputs.="<label><input type=\"checkbox\" name=\"sage\"/>".lang("sage")."</label> ";
+                $inputs.="<label><input type=\"checkbox\" name=\"nonoko\"/>".lang("nonoko")."</label> ";
+                if(FORTUNE)$inputs.="<label><input type=\"checkbox\" name=\"fortune\"/>".lang("fortune")."</label>";
+                $inputs.="</td></tr>";
+        }
         
         $rules = RULES;
         $form.="<form id=\"postform\" action=\"".PHP_SELF."\" method=\"post\" enctype=\"multipart/form-data\">";
         $form.="<input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"".$maxbyte."\"/>";
-	$form.="<input type=\"hidden\" name=\"mode\" value=\"regist\"/>";
+	if($edit){
+                $form.="<input type=\"hidden\" name=\"mode\" value=\"admin\"/>";
+                $form.="<input type=\"hidden\" name=\"admin\" value=\"edit_submit\"/>";
+                $form.="<input type=\"hidden\" name=\"q\" value=\"".$q."\"/>";
+        }else $form.="<input type=\"hidden\" name=\"mode\" value=\"regist\"/>";
         if($resno&&!$manapost)$form.="<input type=\"hidden\" name=\"resto\" value=\"".$resno."\"/>";
         $types_arr=[];
         foreach(ALLOWED_EXT as $ext){

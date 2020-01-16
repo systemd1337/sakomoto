@@ -166,6 +166,37 @@ EOF;
                                 echo "</tbody></table><input type=\"submit\"/></form>";
                                 echo fakefoot();
                                 break;
+                        case "edit":
+                                if (!$_SESSION['canedit'])
+                                        die(lang("You do not have the necessary permissions to do that."));
+                                        
+                                $dat='';
+                                form($dat,0,1,true,false,true);
+                                echo $dat;
+                                echo fakefoot();
+                                break;
+                        case "edit_submit":
+                                if (!$_SESSION['canedit'])
+                                        die(lang("You do not have the necessary permissions to do that."));
+
+                                preg_replace("/<!-- MOD EDIT -->.*/im","",$com);
+                                $com.="<p align=\"right\"><small><i>".lang("Last edited by moderators on ").humantime($time).lang(".")."</i></small></p>";
+
+                                $query="UPDATE ".POSTTABLE.
+                                        " SET".
+                                        " name='".$name.
+                                        "',resto=".$resto.
+                                        ",steam='".$steam.
+                                        "',email='".$email.
+                                        "',com='".$com.
+                                        "',sub='".$sub.
+                                        "',capcode='".($_SESSION['cancap']&&$capcode?$_SESSION['capcode']:"").
+                                        "' WHERE `no`=".(int)$q;
+                                if(!$result=mysqli_call($query))error(lang("Critical SQL problem!"));
+                                echo lang("The post has been updated.");
+                                if(is_file(CACHE_DIR.$q.".inc.html"))unlink(CACHE_DIR.$q.".inc.html");
+                                rebuild(false,false);
+                                break;
                         case "del":
                         default:
                                 admindel();
