@@ -231,3 +231,8 @@ const STYLES = array( // Array containing NAME => FILE of stylesheets
 	"Photon"	=>	"photon.css",
 	"Gurochan"	=>	"gurochan.css"
 );
+
+/* IP count script */
+const USE_IP_COUNT = true; // Whether or not to enable the script
+const USR_LST = "user.db.txt"; // File to record users with
+const IP_COUNT_TIMEOUT = 300; // When to refresh the count in seconds

@@ -2,7 +2,7 @@
 # Sakomoto
 #
 # Based on GazouBBS, Futaba, Futallaby, Fikaba
-# Much code also from Saguaro
+# Much code also ported from Saguaro
 
 if (!file_exists('config.inc.php')){
         header("content-type:text/plain");
@@ -12,7 +12,6 @@ require_once("config.inc.php");
 require_once(CORE_DIR."init.inc.php");
 
 /*-----------Main-------------*/
-$ip = $_SERVER['REMOTE_ADDR'];
 
 if(!isset($res))$res=(isset($thread)?$thread:0);
 switch(strtolower($mode)){
@@ -323,9 +322,9 @@ EOF;
 <html xmlns="http://www.w3.org/1999/xhtml">
         <head>
                 <meta charset="UTF-8"/>
+                <meta http-equiv="content-type"  content="text/html;charset=utf-8"/>
                 <meta http-equiv="Content-Script-Type" content="text/javascript"/>
                 <meta http-equiv="Content-Style-Type" content="text/css"/>
-                <meta http-equiv="content-type"  content="text/html;charset=utf-8"/>
                 <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
                 <meta http-equiv="cache-control" content="no-cache,no-store,must-revalidate"/>
                 <meta http-equiv="cache-control" content="max-age=0"/>
@@ -417,6 +416,11 @@ document.write('<div align="right"><table id="delSub" align="right"><tbody></tbo
 EOF;
                 $dat.="<br clear=\"all\"/><center>".FOOT."</center></body></html>";
                 echo $dat;
+                break;
+        case "ipcount":
+        case "usrcount":
+                if(!USE_IP_COUNT)die(lang("IP count is disabled."));
+                require_once(CORE_DIR."count.inc.php");
                 break;
         case "random":
         case "randomthread":
