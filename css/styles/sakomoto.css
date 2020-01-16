@@ -74,3 +74,8 @@ hr{border-color:#d9bfb7;}
 .quotelink{color:navy;}
 .quotelink b{font-size:small;}
 .newsbody{color:#3c0020;}
+.file img:hover{
+        position:relative;
+        top:1px;
+        left:1px;
+}
