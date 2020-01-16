@@ -16,11 +16,11 @@ require_once(CORE_DIR."functions.inc.php");
 require_once(CORE_DIR."generate.inc.php");
 
 //This software is free, all I ask in return is that you leave proper credit
-const FOOT="- <a href=\"http://php.loglog.jp/\" target=\"_blank\" hreflang=\"ja\">GazouBBS</a> + ".
-"<a href=\"http://www.2chan.net/\" target=\"_blank\" hreflang=\"ja\" charset=\"Shift_JIS\">futaba</a> + ".
-"<a href=\"http://www.1chan.net/futallaby/\" target=\"_blank\" hreflang=\"en\" charset=\"UTF-8\">futallaby</a> + ".
-"<a href=\"https://github.com/knarka/fikaba\" target=\"_blank\" charset=\"UTF-8\">fikaba</a> + ".
-"<a href=\"https://github.com/rileyjamesbell/sakomoto\" target=\"_blank\" charset=\"UTF-8\">sakomoto</a> -";
+const FOOT="- <a href=\"http://php.loglog.jp/\" target=\"_blank\" rel=\"noopener\" hreflang=\"ja\">GazouBBS</a> + ".
+"<a href=\"http://www.2chan.net/\" target=\"_blank\" hreflang=\"ja\" rel=\"noopener\" charset=\"Shift_JIS\">futaba</a> + ".
+"<a href=\"http://www.1chan.net/futallaby/\" target=\"_blank\" hreflang=\"en\" rel=\"noopener\" charset=\"UTF-8\">futallaby</a> + ".
+"<a href=\"https://github.com/knarka/fikaba\" target=\"_blank\" rel=\"noopener\" charset=\"UTF-8\">fikaba</a> + ".
+"<a href=\"https://github.com/rileyjamesbell/sakomoto\" target=\"_blank\" rel=\"noopener\" charset=\"UTF-8\">sakomoto</a> -";
 
 if(USE_GZIP){
         header("content-encoding:gzip");

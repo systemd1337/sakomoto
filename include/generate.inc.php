@@ -234,7 +234,7 @@ function ctrlnav($mode,$top=false){
         else $q="";
         $ctrl="<form action=\"".PHP_SELF."\" method=\"get\" class=\"ctrl\">";
         $ctrl.="<input type=\"hidden\" name=\"mode\" value=\"find\"/>";
-        $ctrl.="<input type=\"text\" name=\"q\" value=\"".$q."\" size=\"8\"/><input type=\"submit\" value=\"".lang("Search")."\"/> ";
+        $ctrl.="<input type=\"search\" name=\"q\" value=\"".$q."\" size=\"8\"/><input type=\"submit\" value=\"".lang("Search")."\"/> ";
         if($mode!="page")$ctrl.="[<a hreflang=\"".LANGUAGE."\" charset=\"UTF-8\" href=\"".PHP_SELF2."\">".lang("Return")."</a>] ";
         if($mode!="catalog")$ctrl.="[<a hreflang=\"".LANGUAGE."\" charset=\"UTF-8\" href=\"".PHP_CAT."\">".lang("Catalog")."</a>] ";
         if($mode!="list")$ctrl.="[<a hreflang=\"".LANGUAGE."\" charset=\"UTF-8\" href=\"".PHP_LIST."\">".lang("Thread list")."</a>] ";
@@ -465,11 +465,11 @@ EOF;
         $head.="js_dir='".JS_DIR."',";
         $head.="cssdef='".CSSDEFAULT."';";
         $head.="</script>";
-        $head.="<script language=\"JavaScript\" charset=\"UTF-8\" src=\"".JS_DIR."jquery/jquery.min.js\" type=\"text/javascript\"></script>";
-        $head.="<script language=\"JavaScript\" charset=\"UTF-8\" src=\"".JS_DIR."futaba.js\" type=\"text/javascript\"></script>";
+        $head.="<script language=\"JavaScript\" charset=\"UTF-8\" defer=\"defer\" src=\"".JS_DIR."jquery/jquery.min.js\" type=\"text/javascript\"></script>";
+        $head.="<script language=\"JavaScript\" charset=\"UTF-8\" defer=\"defer\" src=\"".JS_DIR."futaba.js\" type=\"text/javascript\"></script>";
         $head.="<script language=\"JavaScript\" charset=\"UTF-8\" src=\"".JS_DIR."sakomoto.js\" type=\"text/javascript\"></script>";
         foreach(JSPLUGINS as $js){
-                $head.="<script language=\"JavaScript\" charset=\"UTF-8\" src=\"".JS_DIR.$js."\" type=\"text/javascript\"></script>";
+                $head.="<script language=\"JavaScript\" charset=\"UTF-8\" defer=\"defer\" src=\"".JS_DIR.$js."\" type=\"text/javascript\"></script>";
         }
 	foreach(STYLES as $stylename => $stylefile) {
 		$head.="<link charset=\"UTF-8\" rel=\"".($stylename==CSSDEFAULT?'':"alternate ")."stylesheet\" type=\"text/css\" ".
@@ -508,7 +508,7 @@ EOF;
                 $head.="<center class=\"logo\">";
                 if(SHOWTITLEIMG)$head.="<img src=\"".TITLEIMG."\" onload=\"this.style.opacity=1;\" onclick=\"this.style.opacity=0.5;this.src='".TITLEIMG."?'+(new Date().getTime());\" border=\"1\" alt=\"".TITLE."\"/>";
                 if(SHOWTITLETXT){
-                        if(TITLE||USE_RSS)$head.="<h1>".TITLE.(USE_RSS?" <a href=\"".RSS."\"><img border=\"0\" src=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAInSURBVCgVBcE7aF1lAADg7//PuTnH2FsxlGsqtYOC1VoCaaWi6GYGTTJ3COqgg5Od1K6Cizo3QzdBQUSFgEVFBB+DFTRpjdgYKkabVELtvWmax733vPy+cG3WeMNC3RjHXYE6BAIAAAGwgem0YSGOP3i6X9TGnn1RGGyru39xc0UrS2RZlGRR0krEWKPurH+9fDFtGsfKJkiOPur+ubcAwN6vnysunZdUXa1WJImUfZhMQxDTLErTysYHbwgxSO7pGH3olPbEDBMzhovvqy9fEEMkZiBFHVtBufWP5laboqe+ftvtqx/b/f0Z9z71suzkS4qRnJ/nNXUFUhBpDh115OwnoP/nD4rlj/TXv7e58JvO7HvyE2cMfprXbP8HkteOOZcf7uSxfUA5uGPYXXPgsedlj0xLhlvK1S/s3PjDwZNnVEWlXP3O7saWGJDf3dLWE3+Z1//qTRsXpu2v/Sh/+nWjR04p1xd1vz0ve+IVxTCAWDfUzVDdvykte9pZYaS7bPOzs2Dk9KtUDLr/gmbsOIhVw85+Tzr1tva5G7Kpd+QjCdubtpc+lT08JeT3KXZ3QJWOgVg1QoHR48+BdGJObII0BMWtNZDkh6iAZPwESJMgjuaJvZUvHXz8BcWVD6mCLEb1yje6a5fV16+qervW352zd+WSBGF1xmLnyQcmtRJBkDRBXVAOKIbUQ4b7FH2qATFUwp2/l8K1WYdxEZMAAAAAgCVM/w9xIeAFzYcQ3QAAAABJRU5ErkJggg==\" alt=\"RSS\"/></a>":"")."</h1>";
+                        if(TITLE||USE_RSS)$head.="<h1>".TITLE."</h1>";//.(USE_RSS?" <a href=\"".RSS."\"><img border=\"0\" src=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAInSURBVCgVBcE7aF1lAADg7//PuTnH2FsxlGsqtYOC1VoCaaWi6GYGTTJ3COqgg5Od1K6Cizo3QzdBQUSFgEVFBB+DFTRpjdgYKkabVELtvWmax733vPy+cG3WeMNC3RjHXYE6BAIAAAGwgem0YSGOP3i6X9TGnn1RGGyru39xc0UrS2RZlGRR0krEWKPurH+9fDFtGsfKJkiOPur+ubcAwN6vnysunZdUXa1WJImUfZhMQxDTLErTysYHbwgxSO7pGH3olPbEDBMzhovvqy9fEEMkZiBFHVtBufWP5laboqe+ftvtqx/b/f0Z9z71suzkS4qRnJ/nNXUFUhBpDh115OwnoP/nD4rlj/TXv7e58JvO7HvyE2cMfprXbP8HkteOOZcf7uSxfUA5uGPYXXPgsedlj0xLhlvK1S/s3PjDwZNnVEWlXP3O7saWGJDf3dLWE3+Z1//qTRsXpu2v/Sh/+nWjR04p1xd1vz0ve+IVxTCAWDfUzVDdvykte9pZYaS7bPOzs2Dk9KtUDLr/gmbsOIhVw85+Tzr1tva5G7Kpd+QjCdubtpc+lT08JeT3KXZ3QJWOgVg1QoHR48+BdGJObII0BMWtNZDkh6iAZPwESJMgjuaJvZUvHXz8BcWVD6mCLEb1yje6a5fV16+qervW352zd+WSBGF1xmLnyQcmtRJBkDRBXVAOKIbUQ4b7FH2qATFUwp2/l8K1WYdxEZMAAAAAgCVM/w9xIeAFzYcQ3QAAAABJRU5ErkJggg==\" alt=\"RSS\"/></a>":"")."</h1>";
                         if(SUBTITLE)$head.="<div class=\"headsub\">".SUBTITLE."</div>";
                 }
                 $head.="</center><hr class=\"logohr\" width=\"90%\" size=\"1\"/>";
@@ -613,7 +613,7 @@ EOF;
                 $inputs.="<tr id=\"filerow\"><td class=\"postblock\"><label".(MAX_FILES>1?'':" for=\"upfile\"")."><b>".lang("File")."</b></label></td><td>";
                 $files=MAX_FILES;
                 while($files--){
-                        $inputs.="<div id=\"upload\" ".($files?"class=\"unimportant\"":"style=\"display:table-row;\"")."><input type=\"file\" name=\"upfile".$files."\" ".(MAX_FILES>1?"class":"id")."=\"upfile\" tabindex=\"9\"/>";
+                        $inputs.="<div class=\"upload".($files?" unimportant\"":"\" style=\"display:table-row;\"")."><input type=\"file\" name=\"upfile".$files."\" ".(MAX_FILES>1?"class":"id")."=\"upfile\" tabindex=\"9\"/>";
                         $inputs.= <<<EOF
         <script type="text/javascript" async="async">
 /*<!--*/
